@@ -1,0 +1,20 @@
+{
+    "seaBattle": "Batalla Naval",
+    "createAccount": "Crea una cuenta para unirte a la batalla",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "nickname": "Apodo",
+    "repeatPassword": "Repetir contraseña",
+    "signUp": "Registrarse",
+    "signIn": "Iniciar Sesión",
+    "alreadyHaveAnAccount": "¿Ya tienes una cuenta?",
+    "signInInstead": "Iniciar Sesión en su lugar",
+    "signUpInstead": "Registrarse en su lugar",
+    "invalidEmail": "Formato de correo electrónico inválido",
+    "invalidNickName": "El apodo debe contener al menos 6 caracteres (solo letras o dígitos)",
+    "invalidPassword": "La contraseña debe contener al menos 8 caracteres (al menos 1 letra mayúscula, 1 dígito y 1 símbolo especial)",
+    "invalidSecondPassword": "Esta contraseña no coincide con la anterior",
+    "emptyFieldError": "El campo no puede estar vacío",
+    "signInToAnAccount": "Iniciar sesión en una cuenta",
+    "doNotHaveAnAccount": "¿No tienes una cuenta?"
+}

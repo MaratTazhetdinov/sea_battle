@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "646327612933",
+    "project_id": "flutter-sea-battle",
+    "storage_bucket": "flutter-sea-battle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646327612933:android:1d8500ef123f06e39fce6c",
+        "android_client_info": {
+          "package_name": "com.example.sea_battle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApn4-sDPXFshF1f3xPFlp6ryEWfsaK8Js"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

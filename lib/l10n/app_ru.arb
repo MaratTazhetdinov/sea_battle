@@ -1,0 +1,20 @@
+{
+    "seaBattle": "Морской бой",
+    "createAccount": "Создайте аккаунт для того чтобы вступить в бой",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "nickname": "Никнейм",
+    "repeatPassword": "Повторите пароль",
+    "signUp": "Регистрация",
+    "signIn": "Вход",
+    "alreadyHaveAnAccount": "Есть аккаунт?",
+    "signInInstead": "Войти в систему",
+    "signUpInstead": "Зарегестрироваться",
+    "invalidEmail": "Некорректный формат электронной почты",
+    "invalidNickName": "Никнейм должен состоять минимум из 6 символов (только буквы и цифры)",
+    "invalidPassword": "Пароль должен состоять как минимум из 8 символов (как минимум одна заглавная буква, 1 цифра и 1 специальный символ least 1 uppercase)",
+    "invalidSecondPassword": "Пароль не соответсвует предыдущему",
+    "emptyFieldError": "Поле не может быть пустым",
+    "signInToAnAccount": "Войдите в аккаунт",
+    "doNotHaveAnAccount": "Нет аккаунта?"
+}

@@ -1,0 +1,20 @@
+{
+    "seaBattle": "Sea Battle",
+    "createAccount": "Create an account to join the battle",
+    "email": "Email",
+    "password": "Password",
+    "nickname": "Nickname",
+    "repeatPassword": "Repeat your password",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "alreadyHaveAnAccount": "Already have an account?",
+    "signInInstead": "Sign In instead",
+    "signUpInstead": "Sign Up instead",
+    "invalidEmail": "Invalid Email format",
+    "invalidNickName": "Nickname must contain at least 6 characters (only letters or digits)",
+    "invalidPassword": "Password must contain at least 8 characters (at least 1 uppercase letter, 1 digit, and 1 special symbol)",
+    "invalidSecondPassword": "This password does not match with the previous one",
+    "emptyFieldError": "Field could not be empty",
+    "signInToAnAccount": "Sign In to an account",
+    "doNotHaveAnAccount": "Do not have an account?"
+}
