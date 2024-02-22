@@ -26,7 +26,7 @@ class AppTextValidators {
   static FormFieldValidator<String> passwordValidator(
           AppLocalizations locale) =>
       (value) =>
-          RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+          RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$')
                   .hasMatch(value ?? '')
               ? null
               : locale.invalidPassword;
