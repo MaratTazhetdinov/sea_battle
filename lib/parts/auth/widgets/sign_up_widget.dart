@@ -21,13 +21,24 @@ class _SignUpWidgetState extends FormValidationState<SignUpWidget> {
   final _nicknameName = 'nickname';
   final _firstPasswordName = 'first_password';
   final _secondPasswordName = 'second_password';
+  final _firstPasswordValueNotifier = ValueNotifier<String>('');
+
+  @override
+  void initState() {
+    _firstPasswordTextController.addListener(() {
+      _firstPasswordValueNotifier.value = _firstPasswordTextController.text;
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
     _emailTextController.dispose();
     _nicknameTextController.dispose();
+    _firstPasswordTextController.removeListener(() {});
     _firstPasswordTextController.dispose();
     _secondPasswordTextController.dispose();
+    _firstPasswordValueNotifier.dispose();
     super.dispose();
   }
 
@@ -87,7 +98,7 @@ class _SignUpWidgetState extends FormValidationState<SignUpWidget> {
               name: _firstPasswordName,
               validator: FormBuilderValidators.compose([
                 AppTextValidators.emptyStringValidator(locale),
-                AppTextValidators.nicknameValidator(locale)
+                AppTextValidators.passwordValidator(locale)
               ]),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               obscureText: true,
@@ -96,20 +107,25 @@ class _SignUpWidgetState extends FormValidationState<SignUpWidget> {
               textInputAction: TextInputAction.next,
             ),
           ),
-          HeaderTextInputField(
-            title: locale.repeatPassword,
-            textInputField: TextInputField(
-              name: _secondPasswordName,
-              validator: FormBuilderValidators.compose([
-                AppTextValidators.emptyStringValidator(locale),
-                AppTextValidators.nicknameValidator(locale)
-              ]),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              obscureText: true,
-              keyboardType: TextInputType.visiblePassword,
-              controller: _secondPasswordTextController,
-              textInputAction: TextInputAction.done,
-            ),
+          ValueListenableBuilder(
+            valueListenable: _firstPasswordValueNotifier,
+            builder: (context, value, child) {
+              return HeaderTextInputField(
+                title: locale.repeatPassword,
+                textInputField: TextInputField(
+                  name: _secondPasswordName,
+                  validator: FormBuilderValidators.compose([
+                    AppTextValidators.emptyStringValidator(locale),
+                    AppTextValidators.secondPasswordValidator(locale, value)
+                  ]),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  obscureText: true,
+                  keyboardType: TextInputType.visiblePassword,
+                  controller: _secondPasswordTextController,
+                  textInputAction: TextInputAction.done,
+                ),
+              );
+            },
           ),
           Padding(
             padding: const EdgeInsets.only(

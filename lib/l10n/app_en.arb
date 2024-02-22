@@ -16,5 +16,13 @@
     "invalidSecondPassword": "This password does not match with the previous one",
     "emptyFieldError": "Field could not be empty",
     "signInToAnAccount": "Sign In to an account",
-    "doNotHaveAnAccount": "Do not have an account?"
+    "doNotHaveAnAccount": "Do not have an account?",
+    "wrongPasswordError": "Wrong password",
+    "invalidEmailError": "Invalid Email format",
+    "userDisabledError": "User is disabled",
+    "userNotFoundError": "User has not been found",
+    "emailAlreadyInUseError": "Email already in use",
+    "operationNotAllowedError": "Operation has not been allowed",
+    "weakPasswordError": "Entered password is too weak",
+    "unexpectedError": "Ooops... Unexpected error has occurred"
 }
