@@ -16,5 +16,13 @@
     "invalidSecondPassword": "Esta contraseña no coincide con la anterior",
     "emptyFieldError": "El campo no puede estar vacío",
     "signInToAnAccount": "Iniciar sesión en una cuenta",
-    "doNotHaveAnAccount": "¿No tienes una cuenta?"
+    "doNotHaveAnAccount": "¿No tienes una cuenta?",
+    "wrongPasswordError": "Contraseña incorrecta",
+    "invalidEmailError": "Formato de correo electrónico no válido",
+    "userDisabledError": "Usuario desactivado",
+    "userNotFoundError": "Usuario no encontrado",
+    "emailAlreadyInUseError": "Correo electrónico ya en uso",
+    "operationNotAllowedError": "Operación no permitida",
+    "weakPasswordError": "La contraseña ingresada es demasiado débil",
+    "unexpectedError": "¡Ooops... Se ha producido un error inesperado!"
 }

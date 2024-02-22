@@ -16,5 +16,13 @@
     "invalidSecondPassword": "Пароль не соответсвует предыдущему",
     "emptyFieldError": "Поле не может быть пустым",
     "signInToAnAccount": "Войдите в аккаунт",
-    "doNotHaveAnAccount": "Нет аккаунта?"
+    "doNotHaveAnAccount": "Нет аккаунта?",
+    "wrongPasswordError": "Неверный пароль",
+    "invalidEmailError": "Неверный формат электронной почты",
+    "userDisabledError": "Пользователь заблокирован",
+    "userNotFoundError": "Пользователь не найден",
+    "emailAlreadyInUseError": "Указанная электронная почта уже используется другим пользователем",
+    "operationNotAllowedError": "Операция заблокирована",
+    "weakPasswordError": "Введенный пароль слишко слаб",
+    "unexpectedError": "Ууупс... Возникла непредвиденная ошибка"
 }
