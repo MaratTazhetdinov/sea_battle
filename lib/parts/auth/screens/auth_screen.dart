@@ -38,10 +38,10 @@ class _AuthScreenState extends State<AuthScreen> {
                 builder: (context, state) {
                   if (state.status == AuthStatus.authenticated) {
                     return Column(
-                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(state.user.email ?? 'EmptyEmail'),
+                        Text(state.user.nickname),
                         ElevatedButton(
                           onPressed: () {
                             context.readAuthBloc.add(AuthLoggedOut());
@@ -51,24 +51,28 @@ class _AuthScreenState extends State<AuthScreen> {
                       ],
                     );
                   } else {
-                    return ValueListenableBuilder(
-                      valueListenable: _selectedAuthMethodNotifier,
-                      builder: (context, value, _) {
-                        return AnimatedSwitcher(
-                          duration: const Duration(
-                              milliseconds:
-                                  defaultAnimationDurationInMilliseconds),
-                          child: switch (value) {
-                            AuthMethod.signUp => SignUpWidget(
-                                selectedAuthMethodNotifier:
-                                    _selectedAuthMethodNotifier,
-                              ),
-                            AuthMethod.signIn => SignInWidget(
-                                selectedAuthMethodNotifier:
-                                    _selectedAuthMethodNotifier),
+                    return Center(
+                      child: SingleChildScrollView(
+                        child: ValueListenableBuilder(
+                          valueListenable: _selectedAuthMethodNotifier,
+                          builder: (context, value, _) {
+                            return AnimatedSwitcher(
+                              duration: const Duration(
+                                  milliseconds:
+                                      defaultAnimationDurationInMilliseconds),
+                              child: switch (value) {
+                                AuthMethod.signUp => SignUpWidget(
+                                    selectedAuthMethodNotifier:
+                                        _selectedAuthMethodNotifier,
+                                  ),
+                                AuthMethod.signIn => SignInWidget(
+                                    selectedAuthMethodNotifier:
+                                        _selectedAuthMethodNotifier),
+                              },
+                            );
                           },
-                        );
-                      },
+                        ),
+                      ),
                     );
                   }
                 },

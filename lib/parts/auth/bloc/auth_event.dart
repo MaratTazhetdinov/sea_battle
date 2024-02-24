@@ -4,10 +4,12 @@ abstract class AuthEvent {}
 
 class AuthSignedUpByEmailAndPassword extends AuthEvent {
   final String email;
+  final String nickname;
   final String password;
 
   AuthSignedUpByEmailAndPassword({
     required this.email,
+    required this.nickname,
     required this.password,
   });
 }

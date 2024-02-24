@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sea_battle/firebase_options.dart';
 import 'package:sea_battle/l10n/l10n.dart';
 import 'package:sea_battle/parts/auth/auth_part.dart';
+import 'package:sea_battle/parts/profile/profile_part.dart';
 import 'package:sea_battle/ui_kit/ui_kit_part.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -33,11 +35,16 @@ class MyApp extends StatelessWidget {
       theme: AppTheme(colorScheme: AppColors.light()).theme,
       home: MultiRepositoryProvider(
         providers: [
-          RepositoryProvider<IAuthRepoistory>(
+          RepositoryProvider<IAuthRepository>(
             create: (context) => AuthRepository(
-              authDataProvider: FirebaseDataProvider(
-                firebaseAuth: FirebaseAuth.instance,
-              ),
+              iAuthDataProvider:
+                  FirebaseDataProvider(firebaseAuth: FirebaseAuth.instance),
+            ),
+          ),
+          RepositoryProvider<IProfileRepository>(
+            create: (context) => ProfileRepository(
+              iProfileDataProvider:
+                  FirestoreProfileDataProvider(db: FirebaseFirestore.instance),
             ),
           ),
         ],
@@ -45,7 +52,10 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider<AuthBloc>(
               create: (context) => AuthBloc(
-                authRepository: RepositoryProvider.of<IAuthRepoistory>(context),
+                iAuthRepository:
+                    RepositoryProvider.of<IAuthRepository>(context),
+                iProfileRepository:
+                    RepositoryProvider.of<IProfileRepository>(context),
               ),
             ),
           ],
