@@ -10,9 +10,13 @@ enum ErrorType {
   operationNotAllowed,
   weakPassword,
   unexpectedError,
+  nicknameAlreadyInUse,
 }
 
 ErrorType parseErrorType(Object error) {
+  if (error is ErrorType) {
+    return error;
+  }
   try {
     return switch (error) {
       FirebaseAuthException authException
@@ -59,6 +63,7 @@ extension ErrorTypeLocalization on ErrorType {
       ErrorType.operationNotAllowed => locale.operationNotAllowedError,
       ErrorType.weakPassword => locale.weakPasswordError,
       ErrorType.unexpectedError => locale.unexpectedError,
+      ErrorType.nicknameAlreadyInUse => locale.nicknameAlreadyInUseError,
     };
   }
 }

@@ -26,6 +26,9 @@ class $AuthStateCopyWith<$Return> {
 
   $AuthStateCopyWith(this._value, this._callback);
 
+  $UserModelCopyWith<$Return> get user => $UserModelCopyWith<$Return>(
+      _value.user, (value) => _callback(_value.copyWith(user: value)));
+
   $Return call({
     AuthStatus? status,
     UserModel? user,
@@ -44,6 +47,9 @@ class $AuthStateCopyWithNull<$Return> {
   final $Return Function(AuthState) _callback;
 
   $AuthStateCopyWithNull(this._value, this._callback);
+
+  $UserModelCopyWithNull<$Return> get user => $UserModelCopyWithNull<$Return>(
+      _value.user, (value) => _callback(_value.copyWith(user: value)));
 }
 
 // coverage:ignore-end

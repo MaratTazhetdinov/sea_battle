@@ -140,6 +140,7 @@ class _SignUpWidgetState extends FormValidationState<SignUpWidget> {
                       ? () => context.readAuthBloc
                               .add(AuthSignedUpByEmailAndPassword(
                             email: _emailTextController.text,
+                            nickname: _nicknameTextController.text,
                             password: _firstPasswordTextController.text,
                           ))
                       : null,

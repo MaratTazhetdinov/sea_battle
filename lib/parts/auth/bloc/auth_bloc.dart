@@ -1,14 +1,16 @@
 part of '../auth_part.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final IAuthRepoistory authRepository;
+  final IAuthRepository iAuthRepository;
+  final IProfileRepository iProfileRepository;
   StreamSubscription<UserModel>? _userSubscription;
 
   AuthBloc({
-    required this.authRepository,
+    required this.iAuthRepository,
+    required this.iProfileRepository,
   }) : super(const AuthInitial()) {
-    _userSubscription =
-        authRepository.user.listen((user) => add(_AuthUserChanged(user: user)));
+    _userSubscription = iAuthRepository.user
+        .listen((user) => add(_AuthUserChanged(user: user)));
 
     on<_AuthUserChanged>(_onUserChanged);
     on<AuthSignedUpByEmailAndPassword>(_onSignedUpByEmailAndPassword);
@@ -18,20 +20,54 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onUserChanged(
       _AuthUserChanged event, Emitter<AuthState> emit) async {
-    emit(AuthState(
-      status: event.user.isEmpty
-          ? AuthStatus.unauthenticated
-          : AuthStatus.authenticated,
-      user: event.user,
-    ));
+    try {
+      UserModel user = event.user;
+
+      if (user.isNotEmpty) {
+        final profile =
+            await iProfileRepository.getProfileById(id: event.user.id);
+        if (profile case final profile?) {
+          user = UserModel.fromProfile(profile: profile);
+        } else {
+          throw ErrorType.unexpectedError;
+        }
+      }
+      emit(AuthState(
+        status: user.isEmpty
+            ? AuthStatus.unauthenticated
+            : AuthStatus.authenticated,
+        user: user,
+      ));
+    } catch (e) {
+      emit(AuthError(
+        error: e,
+        status: state.status,
+        user: state.user,
+      ));
+    }
   }
 
   Future<void> _onSignedUpByEmailAndPassword(
       AuthSignedUpByEmailAndPassword event, Emitter<AuthState> emit) async {
     emit(AuthLoading(status: state.status, user: state.user));
     try {
-      await authRepository.signUpByEmailAndPassword(
+      final isNicknameInUse =
+          await iProfileRepository.isNicknameInUse(nickname: event.nickname);
+      if (isNicknameInUse) {
+        throw ErrorType.nicknameAlreadyInUse;
+      }
+      final userId = await iAuthRepository.signUpByEmailAndPassword(
           email: event.email, password: event.password);
+      if (userId case final id?) {
+        await iProfileRepository.createProfile(
+            profile: Profile(
+          id: id,
+          email: event.email,
+          nickname: event.nickname,
+        ));
+      } else {
+        throw ErrorType.unexpectedError;
+      }
     } catch (e) {
       emit(AuthError(
         error: e,
@@ -45,7 +81,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthSignedInByEmailAndPassword event, Emitter<AuthState> emit) async {
     emit(AuthLoading(status: state.status, user: state.user));
     try {
-      await authRepository.signInByEmailAndPassword(
+      await iAuthRepository.signInByEmailAndPassword(
           email: event.email, password: event.password);
     } catch (e) {
       emit(AuthError(
@@ -60,7 +96,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthLoggedOut event, Emitter<AuthState> emit) async {
     emit(AuthLoading(status: state.status, user: state.user));
     try {
-      await authRepository.signOut();
+      await iAuthRepository.signOut();
     } catch (e) {
       emit(AuthError(
         error: e,

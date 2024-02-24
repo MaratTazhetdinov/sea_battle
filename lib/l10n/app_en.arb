@@ -24,5 +24,6 @@
     "emailAlreadyInUseError": "Email already in use",
     "operationNotAllowedError": "Operation has not been allowed",
     "weakPasswordError": "Entered password is too weak",
-    "unexpectedError": "Ooops... Unexpected error has occurred"
+    "unexpectedError": "Ooops... Unexpected error has occurred",
+    "nicknameAlreadyInUseError": "This nickname already in use"
 }
