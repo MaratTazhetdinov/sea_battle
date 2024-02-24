@@ -66,7 +66,7 @@ class _SignInWidgetState extends FormValidationState<SignInWidget> {
               name: _passwordName,
               validator: FormBuilderValidators.compose([
                 AppTextValidators.emptyStringValidator(locale),
-                AppTextValidators.nicknameValidator(locale)
+                AppTextValidators.passwordValidator(locale)
               ]),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               obscureText: true,

@@ -48,6 +48,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           },
                           child: const Text('LogOut'),
                         ),
+                        const AppLoader(),
                       ],
                     );
                   } else {
