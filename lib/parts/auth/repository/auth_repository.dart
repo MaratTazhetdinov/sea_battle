@@ -1,29 +1,29 @@
 part of '../auth_part.dart';
 
-class AuthRepository extends IAuthRepoistory {
-  final IAuthDataProvider authDataProvider;
+class AuthRepository extends IAuthRepository {
+  final IAuthDataProvider iAuthDataProvider;
 
-  AuthRepository({required this.authDataProvider});
-
-  @override
-  Stream<UserModel> get user => authDataProvider.user;
+  AuthRepository({required this.iAuthDataProvider});
 
   @override
-  Future<void> signUpByEmailAndPassword(
+  Stream<UserModel> get user => iAuthDataProvider.user;
+
+  @override
+  Future<String?> signUpByEmailAndPassword(
       {required String email, required String password}) async {
-    await authDataProvider.signUpByEmailAndPassword(
+    return await iAuthDataProvider.signUpByEmailAndPassword(
         email: email, password: password);
   }
 
   @override
   Future<void> signInByEmailAndPassword(
       {required String email, required String password}) async {
-    await authDataProvider.signInByEmailAndPassword(
+    await iAuthDataProvider.signInByEmailAndPassword(
         email: email, password: password);
   }
 
   @override
   Future<void> signOut() async {
-    await authDataProvider.signOut();
+    await iAuthDataProvider.signOut();
   }
 }

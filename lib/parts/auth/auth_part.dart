@@ -10,6 +10,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:sea_battle/code_kit/code_kit_part.dart';
 import 'package:sea_battle/l10n/l10n.dart';
+import 'package:sea_battle/parts/profile/profile_part.dart';
 import 'package:sea_battle/parts/user/user_part.dart';
 import 'package:sea_battle/ui_kit/input_fields/header_text_input_field.dart';
 import 'package:sea_battle/ui_kit/ui_kit_part.dart';

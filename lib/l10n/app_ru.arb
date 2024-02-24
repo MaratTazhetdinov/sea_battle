@@ -24,5 +24,6 @@
     "emailAlreadyInUseError": "Указанная электронная почта уже используется другим пользователем",
     "operationNotAllowedError": "Операция заблокирована",
     "weakPasswordError": "Введенный пароль слишко слаб",
-    "unexpectedError": "Ууупс... Возникла непредвиденная ошибка"
+    "unexpectedError": "Ууупс... Возникла непредвиденная ошибка",
+    "nicknameAlreadyInUseError": "Этот никнейм уже используется"
 }

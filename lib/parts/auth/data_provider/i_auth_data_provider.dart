@@ -6,7 +6,7 @@ abstract class IAuthDataProvider {
   Future<void> signInByEmailAndPassword(
       {required String email, required String password});
 
-  Future<void> signUpByEmailAndPassword(
+  Future<String?> signUpByEmailAndPassword(
       {required String email, required String password});
 
   Future<void> signOut();

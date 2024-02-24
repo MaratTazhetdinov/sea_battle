@@ -16,10 +16,11 @@ class FirebaseDataProvider extends IAuthDataProvider {
       });
 
   @override
-  Future<void> signUpByEmailAndPassword(
+  Future<String?> signUpByEmailAndPassword(
       {required String email, required String password}) async {
-    await firebaseAuth.createUserWithEmailAndPassword(
+    final userCredentials = await firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
+    return userCredentials.user?.uid;
   }
 
   @override
