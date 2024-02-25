@@ -25,5 +25,6 @@
     "operationNotAllowedError": "Operación no permitida",
     "weakPasswordError": "La contraseña ingresada es demasiado débil",
     "unexpectedError": "¡Ooops... Se ha producido un error inesperado!",
-    "nicknameAlreadyInUseError": "Este apodo ya está en uso"
+    "nicknameAlreadyInUseError": "Este apodo ya está en uso",
+    "loading": "Cargando..."
 }

@@ -36,45 +36,29 @@ class _AuthScreenState extends State<AuthScreen> {
               },
               child: BlocBuilder<AuthBloc, AuthState>(
                 builder: (context, state) {
-                  if (state.status == AuthStatus.authenticated) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(state.user.nickname),
-                        ElevatedButton(
-                          onPressed: () {
-                            context.readAuthBloc.add(AuthLoggedOut());
-                          },
-                          child: const Text('LogOut'),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Center(
-                      child: SingleChildScrollView(
-                        child: ValueListenableBuilder(
-                          valueListenable: _selectedAuthMethodNotifier,
-                          builder: (context, value, _) {
-                            return AnimatedSwitcher(
-                              duration: const Duration(
-                                  milliseconds:
-                                      defaultAnimationDurationInMilliseconds),
-                              child: switch (value) {
-                                AuthMethod.signUp => SignUpWidget(
-                                    selectedAuthMethodNotifier:
-                                        _selectedAuthMethodNotifier,
-                                  ),
-                                AuthMethod.signIn => SignInWidget(
-                                    selectedAuthMethodNotifier:
-                                        _selectedAuthMethodNotifier),
-                              },
-                            );
-                          },
-                        ),
+                  return Center(
+                    child: SingleChildScrollView(
+                      child: ValueListenableBuilder(
+                        valueListenable: _selectedAuthMethodNotifier,
+                        builder: (context, value, _) {
+                          return AnimatedSwitcher(
+                            duration: const Duration(
+                                milliseconds:
+                                    defaultAnimationDurationInMilliseconds),
+                            child: switch (value) {
+                              AuthMethod.signUp => SignUpWidget(
+                                  selectedAuthMethodNotifier:
+                                      _selectedAuthMethodNotifier,
+                                ),
+                              AuthMethod.signIn => SignInWidget(
+                                  selectedAuthMethodNotifier:
+                                      _selectedAuthMethodNotifier),
+                            },
+                          );
+                        },
                       ),
-                    );
-                  }
+                    ),
+                  );
                 },
               ),
             ),

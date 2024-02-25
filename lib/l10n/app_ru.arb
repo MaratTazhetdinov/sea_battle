@@ -25,5 +25,6 @@
     "operationNotAllowedError": "Операция заблокирована",
     "weakPasswordError": "Введенный пароль слишко слаб",
     "unexpectedError": "Ууупс... Возникла непредвиденная ошибка",
-    "nicknameAlreadyInUseError": "Этот никнейм уже используется"
+    "nicknameAlreadyInUseError": "Этот никнейм уже используется",
+    "loading": "Загрузка..."
 }
