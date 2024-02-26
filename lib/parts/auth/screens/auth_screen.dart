@@ -2,6 +2,7 @@ part of '../auth_part.dart';
 
 enum AuthMethod { signUp, signIn }
 
+@RoutePage()
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
 
@@ -26,41 +27,32 @@ class _AuthScreenState extends State<AuthScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: BlocListener<AuthBloc, AuthState>(
-              listener: (context, state) {
-                if (state is AuthError) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(parseErrorType(state.error)
-                          .toLocalizedMessage(context.l10n))));
-                }
-              },
-              child: BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  return Center(
-                    child: SingleChildScrollView(
-                      child: ValueListenableBuilder(
-                        valueListenable: _selectedAuthMethodNotifier,
-                        builder: (context, value, _) {
-                          return AnimatedSwitcher(
-                            duration: const Duration(
-                                milliseconds:
-                                    defaultAnimationDurationInMilliseconds),
-                            child: switch (value) {
-                              AuthMethod.signUp => SignUpWidget(
-                                  selectedAuthMethodNotifier:
-                                      _selectedAuthMethodNotifier,
-                                ),
-                              AuthMethod.signIn => SignInWidget(
-                                  selectedAuthMethodNotifier:
-                                      _selectedAuthMethodNotifier),
-                            },
-                          );
-                        },
-                      ),
+            child: BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                return Center(
+                  child: SingleChildScrollView(
+                    child: ValueListenableBuilder(
+                      valueListenable: _selectedAuthMethodNotifier,
+                      builder: (context, value, _) {
+                        return AnimatedSwitcher(
+                          duration: const Duration(
+                              milliseconds:
+                                  defaultAnimationDurationInMilliseconds),
+                          child: switch (value) {
+                            AuthMethod.signUp => SignUpWidget(
+                                selectedAuthMethodNotifier:
+                                    _selectedAuthMethodNotifier,
+                              ),
+                            AuthMethod.signIn => SignInWidget(
+                                selectedAuthMethodNotifier:
+                                    _selectedAuthMethodNotifier),
+                          },
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ],

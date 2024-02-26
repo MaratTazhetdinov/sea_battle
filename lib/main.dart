@@ -8,6 +8,7 @@ import 'package:sea_battle/firebase_options.dart';
 import 'package:sea_battle/l10n/l10n.dart';
 import 'package:sea_battle/parts/auth/auth_part.dart';
 import 'package:sea_battle/parts/profile/profile_part.dart';
+import 'package:sea_battle/parts/router/router_part.dart';
 import 'package:sea_battle/ui_kit/ui_kit_part.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -16,50 +17,67 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  _runApp();
+}
+
+void _runApp() {
+  final authDataProvider =
+      FirebaseAuthDataProvider(firebaseAuth: FirebaseAuth.instance);
+  final profileDataProvider =
+      FirestoreProfileDataProvider(db: FirebaseFirestore.instance);
+  final appRouter = AppRouter();
+  runApp(MyApp(
+    iAuthDataProvider: authDataProvider,
+    iProfileDataProvider: profileDataProvider,
+    appRouter: appRouter,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final IAuthDataProvider iAuthDataProvider;
+  final IProfileDataProvider iProfileDataProvider;
+  final AppRouter appRouter;
+
+  const MyApp({
+    super.key,
+    required this.iAuthDataProvider,
+    required this.iProfileDataProvider,
+    required this.appRouter,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        AppLocalizations.delegate,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<IAuthRepository>(
+          create: (context) =>
+              AuthRepository(iAuthDataProvider: iAuthDataProvider),
+        ),
+        RepositoryProvider<IProfileRepository>(
+          create: (context) =>
+              ProfileRepository(iProfileDataProvider: iProfileDataProvider),
+        ),
       ],
-      supportedLocales: L10n.all,
-      theme: AppTheme(colorScheme: AppColors.light()).theme,
-      home: MultiRepositoryProvider(
+      child: MultiBlocProvider(
         providers: [
-          RepositoryProvider<IAuthRepository>(
-            create: (context) => AuthRepository(
-              iAuthDataProvider:
-                  FirebaseDataProvider(firebaseAuth: FirebaseAuth.instance),
-            ),
-          ),
-          RepositoryProvider<IProfileRepository>(
-            create: (context) => ProfileRepository(
-              iProfileDataProvider:
-                  FirestoreProfileDataProvider(db: FirebaseFirestore.instance),
+          BlocProvider<AuthBloc>(
+            create: (context) => AuthBloc(
+              iAuthRepository: RepositoryProvider.of<IAuthRepository>(context),
+              iProfileRepository:
+                  RepositoryProvider.of<IProfileRepository>(context),
             ),
           ),
         ],
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<AuthBloc>(
-              create: (context) => AuthBloc(
-                iAuthRepository:
-                    RepositoryProvider.of<IAuthRepository>(context),
-                iProfileRepository:
-                    RepositoryProvider.of<IProfileRepository>(context),
-              ),
-            ),
+        child: MaterialApp.router(
+          routerConfig: appRouter.config(),
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            AppLocalizations.delegate,
           ],
-          child: const AuthScreen(),
+          supportedLocales: L10n.all,
+          theme: AppTheme(colorScheme: AppColors.light()).theme,
         ),
       ),
     );

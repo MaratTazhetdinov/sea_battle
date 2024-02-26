@@ -117,13 +117,7 @@ class _AppLoaderState extends State<AppLoader> with TickerProviderStateMixin {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-              color: colors.firstTextColor,
-            ),
-            color: colors.scaffoldBackgroundColor,
-          ),
+          color: colors.scaffoldBackgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
