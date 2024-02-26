@@ -1,9 +1,9 @@
 part of '../auth_part.dart';
 
-class FirebaseDataProvider extends IAuthDataProvider {
+class FirebaseAuthDataProvider extends IAuthDataProvider {
   final FirebaseAuth firebaseAuth;
 
-  FirebaseDataProvider({required this.firebaseAuth});
+  FirebaseAuthDataProvider({required this.firebaseAuth});
 
   @override
   Stream<UserModel> get user =>
