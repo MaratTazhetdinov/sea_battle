@@ -13,6 +13,7 @@ class AppRouter extends $AppRouter {
           page: HomeRouteRoot.page,
           children: [
             AutoRoute(page: HomeRoute.page),
+            AutoRoute(page: GameRoute.page),
           ],
         ),
         AutoRoute(
