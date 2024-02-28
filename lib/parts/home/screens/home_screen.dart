@@ -13,9 +13,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             const Text('Home'),
             ElevatedButton(
-              onPressed: () {
-                context.router.push(const GameRoute());
-              },
+              onPressed: () {},
               child: const Text('Start Game'),
             ),
             ElevatedButton(

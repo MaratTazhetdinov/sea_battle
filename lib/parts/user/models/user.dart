@@ -1,8 +1,9 @@
 part of '../user_part.dart';
 
-/// [User]
+/// [UserModel]
 @copyWith
 @props
+@JsonSerializable()
 class UserModel extends Equatable {
   final String id;
   final String email;
@@ -29,6 +30,11 @@ class UserModel extends Equatable {
       nickname: profile.nickname,
     );
   }
+
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   /// Empty user which represents an unauthenticated user.
   static const empty = UserModel(
