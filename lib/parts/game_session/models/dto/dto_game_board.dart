@@ -1,10 +1,9 @@
 part of '../../game_session_part.dart';
 
-@JsonSerializable()
 class DtoGameBoard {
   final String userId;
   final String userNickname;
-  final List<DtoCell> cells;
+  final List<int> cells;
 
   const DtoGameBoard({
     required this.userId,
@@ -12,8 +11,13 @@ class DtoGameBoard {
     required this.cells,
   });
 
-  factory DtoGameBoard.fromJson(Map<String, dynamic> json) =>
-      _$DtoGameBoardFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DtoGameBoardToJson(this);
+  factory DtoGameBoard.fromFirebaseDatabase(Object? data) {
+    final json = Map<String, dynamic>.from(data! as Map<Object?, Object?>);
+    final cells = List<int>.from(json['cells'] as List<Object?>);
+    return DtoGameBoard(
+      userId: json['userId'],
+      userNickname: json['userNickname'],
+      cells: cells,
+    );
+  }
 }

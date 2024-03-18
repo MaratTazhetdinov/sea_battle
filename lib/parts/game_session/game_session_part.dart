@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 part 'data_providers/i_game_session_data_provider.dart';
@@ -12,5 +11,7 @@ part 'screens/game_session_screen.dart';
 part 'models/game_board.dart';
 part 'models/dto/dto_game_board.dart';
 part 'models/dto/dto_cell.dart';
+part 'repositories/i_game_session_repository.dart';
+part 'repositories/game_session_repository.dart';
 
 part 'game_session_part.g.dart';

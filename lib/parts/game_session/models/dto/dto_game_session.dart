@@ -1,8 +1,5 @@
 part of '../../game_session_part.dart';
 
-@JsonSerializable(
-  explicitToJson: true,
-)
 class DtoGameSession {
   final DtoGameBoard? firstPlayerBoard;
   final DtoGameBoard? secondPlayerBoard;
@@ -12,8 +9,13 @@ class DtoGameSession {
     this.secondPlayerBoard,
   });
 
-  factory DtoGameSession.fromJson(Map<String, dynamic> json) =>
-      _$DtoGameSessionFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DtoGameSessionToJson(this);
+  factory DtoGameSession.fromFirebaseDatabase(Object? data) {
+    final json = Map<String, dynamic>.from(data! as Map<Object?, Object?>);
+    return DtoGameSession(
+      firstPlayerBoard:
+          DtoGameBoard.fromFirebaseDatabase(json['firstPlayerBoard']),
+      secondPlayerBoard:
+          DtoGameBoard.fromFirebaseDatabase(json['secondPlayerBoard']),
+    );
+  }
 }

@@ -10,6 +10,10 @@ class GameSessionScreen extends StatefulWidget {
 
 class _GameSessionScreenState extends State<GameSessionScreen> {
   String value = '';
+  final dataProvider = FirebaseDatabaseGameSessionDataProvider(
+    gameSessionId: 'randomKey',
+    db: FirebaseDatabase.instance,
+  );
   @override
   Widget build(BuildContext context) {
     // final dataProvider = FirebaseDatabaseGameSessionDataProvider(
@@ -22,22 +26,19 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
         title: const Text('Game Session'),
       ),
       body: Center(
-        child: StreamBuilder<DatabaseEvent>(
-            stream: FirebaseDatabase.instance
-                .ref('games')
-                .child('123456789')
-                .onValue,
+        child: StreamBuilder<DtoGameSession>(
+            stream: dataProvider.gameSession,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text('error');
+                return const Text('error');
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text('loading');
+                return const Text('loading');
               }
               if (snapshot.hasData) {
-                return Text(snapshot.data!.snapshot.value.toString());
+                return Text(snapshot.data!.toString());
               }
-              return Text('Nothing happend');
+              return const Text('Nothing happend');
             }),
       ),
     );

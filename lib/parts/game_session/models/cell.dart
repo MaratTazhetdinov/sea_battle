@@ -16,12 +16,12 @@ class Cell {
   final CellState state;
 
   const Cell({
-    required this.index,
+    this.index = 0,
     required this.state,
   });
 
   factory Cell.fromDto(DtoCell dtoCell) => Cell(
-      index: dtoCell.index,
+      index: 0,
       state: switch (dtoCell.state) {
         1 => CellState.shooted,
         2 => CellState.occupuied,
@@ -29,5 +29,5 @@ class Cell {
         _ => CellState.empty,
       });
 
-  DtoCell toDto() => DtoCell(index: index, state: state.value);
+  DtoCell toDto() => DtoCell(state: state.value);
 }
