@@ -11,7 +11,7 @@ class GameSessionScreen extends StatefulWidget {
 class _GameSessionScreenState extends State<GameSessionScreen> {
   String value = '';
   final dataProvider = FirebaseDatabaseGameSessionDataProvider(
-    gameSessionId: 'randomKey',
+    gameSessionId: 'anotherRandomKey',
     db: FirebaseDatabase.instance,
   );
   @override
@@ -30,13 +30,15 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
             stream: dataProvider.gameSession,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return const Text('error');
+                return Text(snapshot.error?.toString() ?? '');
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Text('loading');
               }
               if (snapshot.hasData) {
-                return Text(snapshot.data!.toString());
+                return Text(
+                  snapshot.data?.gameBoards.first.userId ?? '',
+                );
               }
               return const Text('Nothing happend');
             }),

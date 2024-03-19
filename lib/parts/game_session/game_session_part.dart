@@ -13,5 +13,3 @@ part 'models/dto/dto_game_board.dart';
 part 'models/dto/dto_cell.dart';
 part 'repositories/i_game_session_repository.dart';
 part 'repositories/game_session_repository.dart';
-
-part 'game_session_part.g.dart';

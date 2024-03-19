@@ -1,21 +1,18 @@
 part of '../../game_session_part.dart';
 
 class DtoGameSession {
-  final DtoGameBoard? firstPlayerBoard;
-  final DtoGameBoard? secondPlayerBoard;
+  final List<DtoGameBoard> gameBoards;
 
-  const DtoGameSession({
-    this.firstPlayerBoard,
-    this.secondPlayerBoard,
+  DtoGameSession({
+    required this.gameBoards,
   });
 
   factory DtoGameSession.fromFirebaseDatabase(Object? data) {
-    final json = Map<String, dynamic>.from(data! as Map<Object?, Object?>);
+    final json = List<Map<Object?, Object?>>.from(data! as List<Object?>);
+
     return DtoGameSession(
-      firstPlayerBoard:
-          DtoGameBoard.fromFirebaseDatabase(json['firstPlayerBoard']),
-      secondPlayerBoard:
-          DtoGameBoard.fromFirebaseDatabase(json['secondPlayerBoard']),
+      gameBoards:
+          json.map((item) => DtoGameBoard.fromFirebaseDatabase(item)).toList(),
     );
   }
 }
