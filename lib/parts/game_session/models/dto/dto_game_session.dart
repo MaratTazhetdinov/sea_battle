@@ -8,11 +8,16 @@ class DtoGameSession {
   });
 
   factory DtoGameSession.fromFirebaseDatabase(Object? data) {
-    final json = List<Map<Object?, Object?>>.from(data! as List<Object?>);
-
+    final json = Map<String, dynamic>.from(data! as Map<Object?, Object?>);
     return DtoGameSession(
-      gameBoards:
-          json.map((item) => DtoGameBoard.fromFirebaseDatabase(item)).toList(),
+      gameBoards: json.keys
+          .map(
+            (key) => DtoGameBoard(
+              userId: key,
+              cells: List<int>.from(json[key]['cells']),
+            ),
+          )
+          .toList(),
     );
   }
 }

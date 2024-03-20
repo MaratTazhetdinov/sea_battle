@@ -9,12 +9,12 @@ class DtoGameBoard {
     required this.cells,
   });
 
-  factory DtoGameBoard.fromFirebaseDatabase(Map<Object?, Object?> data) {
-    final json = Map<String, dynamic>.from(data);
-    final cells = List<int>.from(json['cells'] as List<Object?>);
-    return DtoGameBoard(
-      userId: json['userId'],
-      cells: cells,
-    );
-  }
+  // factory DtoGameBoard.fromFirebaseDatabase(Map<Object?, Object?> data) {
+  //   final json = Map<String, dynamic>.from(data);
+  //   final cells = List<int>.from(json['cells'] as List<Object?>);
+  //   return DtoGameBoard(
+  //     userId: json['userId'],
+  //     cells: cells,
+  //   );
+  // }
 }

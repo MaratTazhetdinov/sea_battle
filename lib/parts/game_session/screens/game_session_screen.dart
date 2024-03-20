@@ -25,6 +25,11 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
       appBar: AppBar(
         title: const Text('Game Session'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          dataProvider.shoot();
+        },
+      ),
       body: Center(
         child: StreamBuilder<DtoGameSession>(
             stream: dataProvider.gameSession,

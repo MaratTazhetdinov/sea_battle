@@ -12,10 +12,12 @@ class FirebaseDatabaseGameSessionDataProvider extends IGameSessionDataProvider {
 
   @override
   Stream<DtoGameSession> get gameSession {
-    return FirebaseDatabase.instance.ref(ref).child(gameSessionId).onValue.map(
+    return db.ref(ref).child(gameSessionId).onValue.map(
         (data) => DtoGameSession.fromFirebaseDatabase(data.snapshot.value));
   }
 
   @override
-  Future<void> shoot() async {}
+  Future<void> shoot() async {
+    await db.ref(ref).child(gameSessionId).update({'userId123/cells/2': 0});
+  }
 }
