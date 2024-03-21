@@ -1,16 +1,15 @@
 part of '../game_session_part.dart';
 
-// class GameSession {
-//   final GameBoard firstPlayerBoard;
-//   final GameBoard secondPlayerBoard;
+class GameSession {
+  final List<GameBoard> gameBoards;
 
-//   const GameSession({
-//     required this.firstPlayerBoard,
-//     required this.secondPlayerBoard,
-//   });
+  const GameSession({
+    required this.gameBoards,
+  });
 
-//   factory GameSession.fromDto(DtoGameSession dtoGameSession) => GameSession(
-//         firstPlayerBoard: GameBoard.fromDto(dtoGameSession.firstPlayerBoard),
-//         secondPlayerBoard: GameBoard.fromDto(dtoGameSession.secondPlayerBoard),
-//       );
-// }
+  factory GameSession.fromDto(DtoGameSession dtoGameSession) => GameSession(
+        gameBoards: dtoGameSession.dtoGameBoards
+            .map((dtoGameBoard) => GameBoard.fromDto(dtoGameBoard))
+            .toList(),
+      );
+}
