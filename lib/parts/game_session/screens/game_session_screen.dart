@@ -9,68 +9,59 @@ class GameSessionScreen extends StatefulWidget {
 }
 
 class _GameSessionScreenState extends State<GameSessionScreen> {
-  final dataProvider = FbDbGameSessionDataProvider(
-    gameSessionId: 'anotherRandomKey',
-    db: FirebaseDatabase.instance,
-  );
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Game Session'),
+    return RepositoryProvider<IGameSessionRepository>(
+      create: (context) => FbDbGameSessionRepository(
+        fbDbDataProvider: FbDbGameSessionDataProvider(
+          gameSessionId: 'anotherRandomKey',
+          db: FirebaseDatabase.instance,
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          dataProvider.finishShipsAlignment(
-            userId: 'newUser',
-            cells: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-          );
-        },
-      ),
-      body: StreamBuilder<DtoGameSession>(
-        stream: dataProvider.gameSession,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final firstBoard = snapshot.data!.dtoGameBoards.first;
-            final cells = firstBoard.cells;
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5,
-                ),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      dataProvider.shoot(
-                        userId: firstBoard.userId,
-                        cellIndex: index,
-                        cellState: 7,
+      child: BlocProvider(
+        create: (context) => GameSessionBloc(
+          gameSessionRepository:
+              RepositoryProvider.of<IGameSessionRepository>(context),
+        ),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Game Session'),
+          ),
+          body: Center(
+            child: BlocBuilder<GameSessionBloc, GameSessionState>(
+              builder: (context, state) {
+                if (state is GameSessionLoaded) {
+                  return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                    ),
+                    itemBuilder: (context, index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            state.gameSession.gameBoards.first.cells[index]
+                                .toString(),
+                          ),
+                        ),
                       );
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          cells[index].toString(),
-                        ),
-                      ),
-                    ),
+                    itemCount: state.gameSession.gameBoards.first.cells.length,
                   );
-                },
-                itemCount: cells.length,
-              ),
-            );
-          } else {
-            return const Center(
-              child: Text('Loading'),
-            );
-          }
-        },
+                } else {
+                  return const Center(
+                    child: Text('Loading'),
+                  );
+                }
+              },
+            ),
+          ),
+        ),
       ),
     );
   }

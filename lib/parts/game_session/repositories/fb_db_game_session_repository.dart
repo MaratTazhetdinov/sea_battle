@@ -1,9 +1,9 @@
 part of '../game_session_part.dart';
 
-class FirebaseDatabaseGameSessionRepository extends IGameSessionRepository {
+class FbDbGameSessionRepository extends IGameSessionRepository {
   final FbDbGameSessionDataProvider fbDbDataProvider;
 
-  FirebaseDatabaseGameSessionRepository({required this.fbDbDataProvider});
+  FbDbGameSessionRepository({required this.fbDbDataProvider});
 
   @override
   Stream<GameSession> get gameSession => fbDbDataProvider.gameSession
