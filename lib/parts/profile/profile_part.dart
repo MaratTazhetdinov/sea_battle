@@ -6,7 +6,7 @@ part 'models/profile.dart';
 part 'models/dto/dto_profile.dart';
 part 'data_providers/i_profile_data_provider.dart';
 part 'data_providers/firestore_profile_data_provider.dart';
-part 'repository/i_profile_repository.dart';
-part 'repository/profile_repository.dart';
+part 'repositories/i_profile_repository.dart';
+part 'repositories/profile_repository.dart';
 
 part 'profile_part.g.dart';

@@ -24,6 +24,4 @@ class Profile {
         email: email,
         nickname: nickname,
       );
-
-  // Map<String, dynamic> toJson() => _$DtoProfileToJson(this);
 }
