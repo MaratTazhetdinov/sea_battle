@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sea_battle/parts/game_logic/game_logic_part.dart';
 
 part 'data_providers/i_game_session_data_provider.dart';
 part 'data_providers/fb_db_game_session_data_provider.dart';

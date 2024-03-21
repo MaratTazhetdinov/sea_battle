@@ -11,6 +11,8 @@ class GameSessionScreen extends StatefulWidget {
 class _GameSessionScreenState extends State<GameSessionScreen> {
   @override
   Widget build(BuildContext context) {
+    // final userId = context.readAuthBloc.state.user.id;
+    const userId = 'newUser';
     return RepositoryProvider<IGameSessionRepository>(
       create: (context) => FbDbGameSessionRepository(
         fbDbDataProvider: FbDbGameSessionDataProvider(
@@ -22,6 +24,7 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
         create: (context) => GameSessionBloc(
           gameSessionRepository:
               RepositoryProvider.of<IGameSessionRepository>(context),
+          userId: userId,
         ),
         child: Scaffold(
           appBar: AppBar(
@@ -30,34 +33,76 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
           body: Center(
             child: BlocBuilder<GameSessionBloc, GameSessionState>(
               builder: (context, state) {
-                if (state is GameSessionLoaded) {
-                  return GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5,
-                    ),
-                    itemBuilder: (context, index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            state.gameSession.gameBoards.first.cells[index]
-                                .toString(),
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: state.gameSession.gameBoards.first.cells.length,
-                  );
-                } else {
+                if (state.gameSession.gameBoards.isEmpty) {
                   return const Center(
                     child: Text('Loading'),
                   );
                 }
+                final userBoard = state.gameSession.gameBoards
+                    .firstWhere((gameBoard) => gameBoard.userId == userId);
+                final enemyBoard = state.gameSession.gameBoards
+                    .firstWhere((gameBoard) => gameBoard.userId != userId);
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 300,
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                        ),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            height: 10,
+                            width: 10,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                userBoard.cells[index].value.toString(),
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: userBoard.cells.length,
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    SizedBox(
+                      height: 300,
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () => context.readGameSessionBloc
+                                .add(GameSessionUserShot(index)),
+                            child: Container(
+                              height: 10,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  enemyBoard.cells[index].value.toString(),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: enemyBoard.cells.length,
+                      ),
+                    ),
+                  ],
+                );
               },
             ),
           ),

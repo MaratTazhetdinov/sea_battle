@@ -25,6 +25,13 @@ class $GameSessionStateCopyWith<$Return> {
   final $Return Function(GameSessionState) _callback;
 
   $GameSessionStateCopyWith(this._value, this._callback);
+
+  $Return call({
+    GameSession? gameSession,
+  }) =>
+      _callback(GameSessionState(
+        gameSession: gameSession ?? _value.gameSession,
+      ));
 }
 
 /// @nodoc
@@ -47,5 +54,5 @@ class $GameSessionStateCopyWithNull<$Return> {
 /// @nodoc
 List<Object?> _$GameSessionStateProps(GameSessionState instance,
         {List<Object?>? superProps}) =>
-    [...?superProps];
+    [instance.gameSession, ...?superProps];
 // coverage:ignore-end

@@ -1,10 +1,14 @@
 part of '../game_session_part.dart';
 
 enum CellState {
-  empty,
-  occupied,
-  destroyed,
-  shooted,
+  empty(0),
+  occupied(1),
+  destroyed(2),
+  shooted(3);
+
+  final int value;
+
+  const CellState(this.value);
 }
 
 class GameBoard {
