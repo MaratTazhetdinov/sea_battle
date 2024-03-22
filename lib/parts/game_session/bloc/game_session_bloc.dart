@@ -39,7 +39,6 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
       GameSessionShipsAlignmentFinished event,
       Emitter<GameSessionState> emit) async {
     try {
-      ///TODO add game logic
       gameSessionRepository.finishShipsAlignment(
           userId: '', cells: event.cells);
     } catch (e) {
