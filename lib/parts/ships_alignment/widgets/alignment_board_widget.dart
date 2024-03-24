@@ -28,13 +28,21 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
             const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 10),
         itemBuilder: (context, index) {
           return SizedBox(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black,
-                  width: 0.5,
-                ),
-              ),
+            child: DragTarget(
+              builder: (context, candidateData, rejectedData) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: candidateData.isNotEmpty
+                        ? Colors.blue
+                        : Colors.transparent,
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 0.5,
+                    ),
+                  ),
+                );
+              },
+              onMove: (details) {},
             ),
           );
         },
