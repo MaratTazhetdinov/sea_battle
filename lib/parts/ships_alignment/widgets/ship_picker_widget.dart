@@ -18,6 +18,7 @@ class ShipPickerWidget extends StatefulWidget {
 
   final ShipType shipType;
   final ValueNotifier<Map<ShipType, int>> shipCounter;
+  final ValueNotifier<bool> userIsDragging;
   const ShipPickerWidget({
     super.key,
     required this.widgetHeight,
@@ -25,6 +26,7 @@ class ShipPickerWidget extends StatefulWidget {
     required this.draggedCellHeight,
     required this.shipType,
     required this.shipCounter,
+    required this.userIsDragging,
   });
 
   @override
@@ -61,6 +63,10 @@ class _ShipPickerWidgetState extends State<ShipPickerWidget> {
                         shipType: shipType,
                         cellHeight: defaultCellHeight,
                       ),
+                      onDragStarted: () => widget.userIsDragging.value = true,
+                      onDraggableCanceled: (p0, p1) =>
+                          widget.userIsDragging.value = false,
+                      onDragEnd: (_) => widget.userIsDragging.value = false,
                     ),
                     if (shipType != ShipType.one)
                       const Padding(

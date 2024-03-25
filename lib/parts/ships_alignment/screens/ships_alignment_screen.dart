@@ -17,6 +17,8 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
     ShipType.four: 1,
   });
 
+  ValueNotifier<bool> userIsDragging = ValueNotifier<bool>(false);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +36,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                 children: [
                   AlignmentBoardWidget(
                     boardSize: Size(constraints.maxWidth, constraints.maxWidth),
+                    userIsDragging: userIsDragging,
                   ),
                   const SizedBox(height: 20),
                   Builder(
@@ -59,6 +62,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                               draggedCellHeight: draggedCellHeight,
                               shipType: shipType,
                               shipCounter: shipCounter,
+                              userIsDragging: userIsDragging,
                             ),
                           ),
                         ],

@@ -1,7 +1,7 @@
 part of '../ships_alignment_part.dart';
 
 class BoardCell {
-  final int index;
+  int index;
   bool isOccupied;
   BoardCell? topCell;
   BoardCell? topRightCell;
