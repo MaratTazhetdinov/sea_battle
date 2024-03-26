@@ -15,7 +15,7 @@ class AlignmentBoardWidget extends StatefulWidget {
 }
 
 class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
-  final board = Board(cellsNumber: 100);
+  ValueNotifier<Board> board = ValueNotifier<Board>(Board(cellsNumber: 100));
 
   @override
   Widget build(BuildContext context) {
@@ -30,38 +30,33 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
         ),
       ),
       child: ValueListenableBuilder(
-          valueListenable: widget.userIsDragging,
-          builder: (context, value, _) {
-            return GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 10),
-              itemBuilder: (context, index) {
-                return SizedBox(
-                  child: DragTarget(
-                    builder: (context, candidateData, rejectedData) {
-                      final Color color = candidateData.isNotEmpty
-                          ? Colors.blue
-                          : value
-                              ? Colors.red
-                              : Colors.transparent;
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: color,
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 0.5,
-                          ),
+        valueListenable: widget.userIsDragging,
+        builder: (context, userIsDragging, _) {
+          return DragTarget(
+            builder: (context, candidate, _) {
+              return GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 10),
+                itemBuilder: (context, index) {
+                  return SizedBox(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 0.5,
                         ),
-                      );
-                    },
-                    onMove: (details) {},
-                  ),
-                );
-              },
-              itemCount: 100,
-            );
-          }),
+                      ),
+                    ),
+                  );
+                },
+                itemCount: 100,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

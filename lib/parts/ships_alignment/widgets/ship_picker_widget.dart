@@ -6,9 +6,9 @@ enum ShipType {
   three(3),
   four(4);
 
-  final int cellCount;
+  final int size;
 
-  const ShipType(this.cellCount);
+  const ShipType(this.size);
 }
 
 class ShipPickerWidget extends StatefulWidget {

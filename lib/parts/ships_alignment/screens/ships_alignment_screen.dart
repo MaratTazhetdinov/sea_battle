@@ -20,6 +20,13 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
   ValueNotifier<bool> userIsDragging = ValueNotifier<bool>(false);
 
   @override
+  void dispose() {
+    shipCounter.dispose();
+    userIsDragging.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -49,10 +56,8 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                       final cellHeight = (widgetHeight - 10) /
                           ShipType.values
                               .reduce((current, next) =>
-                                  current.cellCount > next.cellCount
-                                      ? current
-                                      : next)
-                              .cellCount;
+                                  current.size > next.size ? current : next)
+                              .size;
                       return Column(
                         children: [
                           ...ShipType.values.reversed.map(

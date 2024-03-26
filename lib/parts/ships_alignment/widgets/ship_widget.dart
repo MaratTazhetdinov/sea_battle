@@ -18,10 +18,10 @@ class ShipWidget extends StatelessWidget {
     return SizedBox(
       height: switch (axis) {
         Axis.horizontal => cellHeight,
-        Axis.vertical => shipType.cellCount * cellHeight,
+        Axis.vertical => shipType.size * cellHeight,
       },
       width: switch (axis) {
-        Axis.horizontal => shipType.cellCount * cellHeight,
+        Axis.horizontal => shipType.size * cellHeight,
         Axis.vertical => cellHeight,
       },
       child: Container(
@@ -50,7 +50,7 @@ class ShipWidget extends StatelessWidget {
                 ),
               );
             },
-            itemCount: shipType.cellCount,
+            itemCount: shipType.size,
           ),
         ),
       ),

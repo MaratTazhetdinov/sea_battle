@@ -8,3 +8,4 @@ part 'widgets/alignment_board_widget.dart';
 part 'widgets/ship_widget.dart';
 part 'models/board_cell.dart';
 part 'models/board.dart';
+part 'models/ship.dart';
