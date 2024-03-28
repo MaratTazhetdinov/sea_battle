@@ -9,7 +9,7 @@ class ShipsAlignmentScreen extends StatefulWidget {
 }
 
 class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
-  ValueNotifier<Map<ShipType, int>> shipCounter =
+  final ValueNotifier<Map<ShipType, int>> _shipCounter =
       ValueNotifier<Map<ShipType, int>>({
     ShipType.one: 4,
     ShipType.two: 3,
@@ -17,12 +17,16 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
     ShipType.four: 1,
   });
 
-  ValueNotifier<bool> userIsDragging = ValueNotifier<bool>(false);
+  final ValueNotifier<DraggableShip> _draggableShip =
+      ValueNotifier<DraggableShip>(DraggableShip.empty());
+
+  ValueNotifier<List<int>> _potentialIndexes = ValueNotifier<List<int>>([]);
 
   @override
   void dispose() {
-    shipCounter.dispose();
-    userIsDragging.dispose();
+    _shipCounter.dispose();
+    _draggableShip.dispose();
+    _potentialIndexes.dispose();
     super.dispose();
   }
 
@@ -43,7 +47,8 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                 children: [
                   AlignmentBoardWidget(
                     boardSize: Size(constraints.maxWidth, constraints.maxWidth),
-                    userIsDragging: userIsDragging,
+                    draggableShip: _draggableShip,
+                    potentialIndexes: _potentialIndexes,
                   ),
                   const SizedBox(height: 20),
                   Builder(
@@ -66,8 +71,9 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                               defaultCellHeight: cellHeight,
                               draggedCellHeight: draggedCellHeight,
                               shipType: shipType,
-                              shipCounter: shipCounter,
-                              userIsDragging: userIsDragging,
+                              shipCounter: _shipCounter,
+                              draggableShip: _draggableShip,
+                              potentialIndexes: _potentialIndexes,
                             ),
                           ),
                         ],
@@ -77,7 +83,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                   SizedBox(
                     height: 50,
                     child: ValueListenableBuilder<Map<ShipType, int>>(
-                      valueListenable: shipCounter,
+                      valueListenable: _shipCounter,
                       builder: (context, value, _) {
                         return ElevatedButton(
                           onPressed: value.values.every((count) => count == 0)

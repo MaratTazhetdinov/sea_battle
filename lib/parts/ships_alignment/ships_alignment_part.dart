@@ -9,3 +9,4 @@ part 'widgets/ship_widget.dart';
 part 'models/board_cell.dart';
 part 'models/board.dart';
 part 'models/ship.dart';
+part 'models/draggable_ship.dart';

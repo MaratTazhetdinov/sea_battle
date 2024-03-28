@@ -3,8 +3,6 @@ part of '../ships_alignment_part.dart';
 class Board {
   final int cellsNumber;
   BoardCell boardCell;
-  List<int> occupiedIndexes = [];
-  List<int> pottentialCells = [];
 
   Board({required this.cellsNumber}) : boardCell = _createBoard(cellsNumber);
 
@@ -22,8 +20,7 @@ class Board {
       }
       shipSize--;
     }
-    pottentialCells = result;
-    return result;
+    return result.length == ship.shipType.size ? result : [];
   }
 
   void _goToCellWithIndex(int index) {
@@ -95,33 +92,4 @@ class Board {
     }
     return cells.first;
   }
-
-  // List<int> _findOccupiedIndexes() {
-  //   final List<int> res = [];
-
-  //   BoardCell? head = boardCell;
-
-  //   while (head != null) {
-  //     if (head.isOccupied) {
-  //       res.add(head.index);
-  //     }
-
-  //     BoardCell? rightCell = head.rightCell;
-  //     BoardCell? bottomCell = head.bottomCell;
-  //     while (rightCell != null && bottomCell != null) {
-  //       if (rightCell.isOccupied) {
-  //         res.add(rightCell.index);
-  //       }
-  //       if (bottomCell.isOccupied) {
-  //         res.add(bottomCell.index);
-  //       }
-  //       rightCell = rightCell.rightCell;
-  //       bottomCell = bottomCell.bottomCell;
-  //     }
-
-  //     head = head.bottomRightCell;
-  //   }
-
-  //   return res;
-  // }
 }
