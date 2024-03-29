@@ -20,6 +20,7 @@ class ShipPickerWidget extends StatefulWidget {
   final ValueNotifier<Map<ShipType, int>> shipCounter;
   final ValueNotifier<DraggableShip> draggableShip;
   final ValueNotifier<List<int>> potentialIndexes;
+  final Board board;
   const ShipPickerWidget({
     super.key,
     required this.widgetHeight,
@@ -29,6 +30,7 @@ class ShipPickerWidget extends StatefulWidget {
     required this.shipCounter,
     required this.draggableShip,
     required this.potentialIndexes,
+    required this.board,
   });
 
   @override
@@ -38,6 +40,7 @@ class ShipPickerWidget extends StatefulWidget {
 class _ShipPickerWidgetState extends State<ShipPickerWidget> {
   late final _draggableShip = widget.draggableShip;
   late final _potentialIndexes = widget.potentialIndexes;
+  late final _board = widget.board;
   @override
   Widget build(BuildContext context) {
     final shipType = widget.shipType;
@@ -79,6 +82,16 @@ class _ShipPickerWidgetState extends State<ShipPickerWidget> {
                           if (_potentialIndexes.value.isNotEmpty) {
                             /// add ship to board
                             print('added');
+                            final map = widget.shipCounter.value;
+                            int count = map[shipType] ?? 0;
+                            map[shipType] = count - 1;
+                            widget.shipCounter.value = map;
+                            _board.addShip2(
+                                _potentialIndexes.value,
+                                Ship(
+                                  shipType: shipType,
+                                  shipAxis: Axis.vertical,
+                                ));
                             _potentialIndexes.value = [];
                           }
                           _draggableShip.value = DraggableShip.empty();

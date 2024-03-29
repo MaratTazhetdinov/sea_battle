@@ -4,12 +4,14 @@ class AlignmentBoardWidget extends StatefulWidget {
   final Size boardSize;
   final ValueNotifier<DraggableShip> draggableShip;
   final ValueNotifier<List<int>> potentialIndexes;
+  final Board board;
 
   const AlignmentBoardWidget({
     super.key,
     required this.boardSize,
     required this.draggableShip,
     required this.potentialIndexes,
+    required this.board,
   });
 
   @override
@@ -17,10 +19,10 @@ class AlignmentBoardWidget extends StatefulWidget {
 }
 
 class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
-  final _board = Board(cellsNumber: 100);
   late final _boardSize = widget.boardSize;
   late final _draggableShip = widget.draggableShip;
   late final _potentialIndexes = widget.potentialIndexes;
+  late final _board = widget.board;
 
   Offset? _boardOffset;
   int _currentDragTargetIndex = -1;
@@ -104,19 +106,59 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 10),
               itemBuilder: (context, index) {
-                return SizedBox(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: list.contains(index)
-                          ? Colors.amber
-                          : Colors.transparent,
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 0.5,
+                final isOcuppied = _board.isOccupied(index);
+                if (isOcuppied) {
+                  final ship = _board.getShipByIndex(index);
+                  return Draggable(
+                    feedback: ShipWidget(
+                      axis: Axis.vertical,
+                      shipType: ship.shipType,
+                      cellHeight: 40,
+                    ),
+                    child: SizedBox(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 0.5,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                );
+                    onDragStarted: () {
+                      _board.removeShipByIndex(index);
+                    },
+                    onDragUpdate: (details) =>
+                        _draggableShip.value = DraggableShip(
+                      ship: ship,
+                      offset: details.globalPosition,
+                    ),
+                    onDragEnd: (_) {
+                      if (_potentialIndexes.value.isNotEmpty) {
+                        /// add ship to board
+                        print('added');
+                        _board.addShip2(_potentialIndexes.value, ship);
+                        _potentialIndexes.value = [];
+                      }
+                      _draggableShip.value = DraggableShip.empty();
+                    },
+                  );
+                } else {
+                  return SizedBox(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: list.contains(index)
+                            ? Colors.amber
+                            : Colors.transparent,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 0.5,
+                        ),
+                      ),
+                    ),
+                  );
+                }
               },
               itemCount: 100,
             );

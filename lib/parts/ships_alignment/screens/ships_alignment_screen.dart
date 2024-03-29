@@ -20,7 +20,9 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
   final ValueNotifier<DraggableShip> _draggableShip =
       ValueNotifier<DraggableShip>(DraggableShip.empty());
 
-  ValueNotifier<List<int>> _potentialIndexes = ValueNotifier<List<int>>([]);
+  final ValueNotifier<List<int>> _potentialIndexes =
+      ValueNotifier<List<int>>([]);
+  final _board = Board(cellsNumber: 100);
 
   @override
   void dispose() {
@@ -49,6 +51,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                     boardSize: Size(constraints.maxWidth, constraints.maxWidth),
                     draggableShip: _draggableShip,
                     potentialIndexes: _potentialIndexes,
+                    board: _board,
                   ),
                   const SizedBox(height: 20),
                   Builder(
@@ -74,6 +77,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                               shipCounter: _shipCounter,
                               draggableShip: _draggableShip,
                               potentialIndexes: _potentialIndexes,
+                              board: _board,
                             ),
                           ),
                         ],
