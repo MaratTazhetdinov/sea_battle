@@ -2,15 +2,15 @@ part of '../ships_alignment_part.dart';
 
 class Board {
   final int cellsNumber;
-  List<int> occupiedIndexes = [];
   BoardCell boardCell;
-  List<(Ship, List<int>)> ships = [];
 
   Board({
     required this.cellsNumber,
   }) : boardCell = _createBoard(cellsNumber);
 
-  List<int> addShipToBoard({required int index, required Ship ship}) {
+  List<int> get occupiedIndexes => _findOccupiedIndexes();
+
+  List<int> checkShipAlignment({required int index, required Ship ship}) {
     _goToCellWithIndex(index);
     final List<int> result = [];
     BoardCell? cell = boardCell;
@@ -36,65 +36,115 @@ class Board {
       shipSize--;
     }
 
-    print(result);
     return result.length == ship.shipType.size ? result : [];
   }
 
-  void addShip(
-    List<int> indexes,
-  ) {
+  void addShipToBoard(List<int> indexes, Ship ship) {
     for (int i = 0; i < indexes.length; i++) {
       _goToCellWithIndex(indexes[i]);
       boardCell.isOccupied = true;
     }
-    occupiedIndexes.addAll(indexes);
-  }
-
-  void addShip2(List<int> indexes, Ship ship) {
-    for (int i = 0; i < indexes.length; i++) {
-      _goToCellWithIndex(indexes[i]);
-      boardCell.isOccupied = true;
-    }
-    ships.add((ship, indexes));
-  }
-
-  bool isOccupied(int index) {
-    for (final result in ships) {
-      if (result.$2.contains(index)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  Ship getShipByIndex(int index) {
-    (Ship, List<int>)? res;
-    int index = 0;
-    for (int i = 0; i < ships.length; i++) {
-      if (ships[i].$2.contains(index)) {
-        index = i;
-        res = ships[i];
-      }
-    }
-    return res?.$1 ?? Ship(shipType: ShipType.four, shipAxis: Axis.vertical);
   }
 
   void removeShipByIndex(int index) {
-    (Ship, List<int>)? res;
-    int indx = 0;
-    for (int i = 0; i < ships.length; i++) {
-      if (ships[i].$2.contains(index)) {
-        indx = i;
-        res = ships[i];
+    final indexes = detectShipIndexesByIndex(index);
+    for (int i = 0; i < indexes.length; i++) {
+      _goToCellWithIndex(indexes[i]);
+      boardCell.isOccupied = false;
+    }
+  }
+
+  List<int> detectShipIndexesByIndex(int index) {
+    final List<int> indexes = [index];
+
+    _goToCellWithIndex(index);
+
+    BoardCell? leftCell = boardCell.leftCell;
+    BoardCell? rightCell = boardCell.rightCell;
+    while (rightCell != null || leftCell != null) {
+      if (rightCell != null) {
+        indexes.add(rightCell.index);
+        rightCell = rightCell.rightCell;
+      }
+      if (leftCell != null) {
+        indexes.add(leftCell.index);
+        leftCell = leftCell.leftCell;
       }
     }
-    if (res case final res?) {
-      for (int i = 0; i < res.$2.length; i++) {
-        _goToCellWithIndex(res.$2[i]);
-        boardCell.isOccupied = false;
+
+    BoardCell? topCell = boardCell.topCell;
+    BoardCell? bottomCell = boardCell.bottomCell;
+
+    while (topCell != null || bottomCell != null) {
+      if (topCell != null) {
+        indexes.add(topCell.index);
+        topCell = topCell.topCell;
       }
-      ships.removeAt(indx);
+      if (bottomCell != null) {
+        indexes.add(bottomCell.index);
+        bottomCell = bottomCell.bottomCell;
+      }
     }
+
+    return indexes;
+  }
+
+  Ship detectShipByIndex(int index) {
+    int shipSize = 1;
+    _goToCellWithIndex(index);
+    BoardCell? leftCell = boardCell.leftCell;
+    BoardCell? rightCell = boardCell.rightCell;
+    BoardCell? topCell = boardCell.topCell;
+    BoardCell? bottomCell = boardCell.bottomCell;
+
+    while (rightCell != null || leftCell != null) {
+      if (rightCell != null) {
+        if (rightCell.isOccupied) {
+          shipSize++;
+        }
+        rightCell = rightCell.rightCell;
+      }
+      if (leftCell != null) {
+        if (leftCell.isOccupied) {
+          shipSize++;
+        }
+        leftCell = leftCell.leftCell;
+      }
+    }
+
+    if (shipSize > 1) {
+      return Ship(
+        shipAxis: Axis.horizontal,
+        shipType:
+            ShipType.values.firstWhere((shipType) => shipType.size == shipSize),
+      );
+    }
+
+    while (topCell != null || bottomCell != null) {
+      if (topCell != null) {
+        if (topCell.isOccupied) {
+          shipSize++;
+        }
+        topCell = topCell.topCell;
+      }
+      if (bottomCell != null) {
+        if (bottomCell.isOccupied) {
+          shipSize++;
+        }
+        bottomCell = bottomCell.bottomCell;
+      }
+    }
+
+    return Ship(
+      shipAxis: Axis.vertical,
+      shipType:
+          ShipType.values.firstWhere((shipType) => shipType.size == shipSize),
+    );
+  }
+
+  bool isOccupiedIndex(int index) {
+    _goToCellWithIndex(index);
+    return boardCell.isOccupied;
   }
 
   void _goToCellWithIndex(int index) {
@@ -162,5 +212,36 @@ class Board {
           index - 10 >= 0 && index % 10 > 0 ? cells[index - 11] : null;
     }
     return cells.first;
+  }
+
+  List<int> _findOccupiedIndexes() {
+    final List<int> res = [];
+
+    _goToCellWithIndex(0);
+
+    BoardCell? cell = boardCell;
+
+    while (cell != null) {
+      if (cell.isOccupied) {
+        res.add(cell.index);
+      }
+
+      BoardCell? rightCell = cell.rightCell;
+      BoardCell? bottomCell = cell.bottomCell;
+      while (rightCell != null && bottomCell != null) {
+        if (rightCell.isOccupied) {
+          res.add(rightCell.index);
+        }
+        if (bottomCell.isOccupied) {
+          res.add(bottomCell.index);
+        }
+        rightCell = rightCell.rightCell;
+        bottomCell = bottomCell.bottomCell;
+      }
+
+      cell = cell.bottomRightCell;
+    }
+
+    return res;
   }
 }

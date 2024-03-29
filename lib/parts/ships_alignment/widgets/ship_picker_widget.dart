@@ -86,7 +86,7 @@ class _ShipPickerWidgetState extends State<ShipPickerWidget> {
                             int count = map[shipType] ?? 0;
                             map[shipType] = count - 1;
                             widget.shipCounter.value = map;
-                            _board.addShip2(
+                            _board.addShipToBoard(
                                 _potentialIndexes.value,
                                 Ship(
                                   shipType: shipType,

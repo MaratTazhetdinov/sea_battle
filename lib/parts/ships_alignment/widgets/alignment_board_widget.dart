@@ -41,8 +41,10 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
     // });
     _boardOffset = const Offset(40.0, 123.0);
 
-    _draggableShip
-        .addListener(() => _calculateDragTargetIndex(_draggableShip.value));
+    _draggableShip.addListener(() {
+      print(_draggableShip.value.offset);
+      _calculateDragTargetIndex(_draggableShip.value);
+    });
     super.initState();
   }
 
@@ -65,8 +67,8 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
         final index = x + y;
         if (_currentDragTargetIndex != index) {
           _currentDragTargetIndex = index;
-          _potentialIndexes.value =
-              _board.addShipToBoard(index: index, ship: draggableShip.ship!);
+          _potentialIndexes.value = _board.checkShipAlignment(
+              index: index, ship: draggableShip.ship!);
         }
       } else {
         _currentDragTargetIndex = 0;
@@ -89,80 +91,117 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: _boardSize.height,
-      width: _boardSize.width,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-          width: 0.5,
+    /// Make all widget draggable
+    return GestureDetector(
+      onPanStart: (details) {
+        final x = _calculateIndexFromOffset(_boardOffset!.dx,
+            _boardOffset!.dx + _boardSize.width, details.globalPosition.dx);
+        final y = _calculateIndexFromOffset(
+                _boardOffset!.dy,
+                _boardOffset!.dy + _boardSize.width,
+                details.globalPosition.dy) *
+            10;
+        final index = x + y;
+        Ship? ship;
+        if (_board.isOccupiedIndex(index)) {
+          ship = _board.detectShipByIndex(index);
+        }
+        if (ship != null) {
+          _draggableShip.value = DraggableShip(
+              ship: ship,
+              offset:
+                  Offset(details.globalPosition.dx, details.globalPosition.dy));
+          _board.removeShipByIndex(index);
+        }
+      },
+      onPanUpdate: (details) {
+        final x = _calculateIndexFromOffset(_boardOffset!.dx,
+            _boardOffset!.dx + _boardSize.width, details.globalPosition.dx);
+        final y = _calculateIndexFromOffset(
+                _boardOffset!.dy,
+                _boardOffset!.dy + _boardSize.width,
+                details.globalPosition.dy) *
+            10;
+        final index = x + y;
+        final ship = _draggableShip.value.ship;
+        _potentialIndexes.value =
+            _board.checkShipAlignment(index: index, ship: ship!);
+        _draggableShip.value = DraggableShip(
+            ship: ship,
+            offset:
+                Offset(details.globalPosition.dx, details.globalPosition.dy));
+      },
+      onPanEnd: (details) {
+        _board.addShipToBoard(
+            _potentialIndexes.value, _draggableShip.value.ship!);
+        _potentialIndexes.value = [];
+        _draggableShip.value = DraggableShip.empty();
+      },
+      child: Container(
+        height: _boardSize.height,
+        width: _boardSize.width,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+            width: 0.5,
+          ),
         ),
-      ),
-      child: ValueListenableBuilder(
-          valueListenable: _potentialIndexes,
-          builder: (context, list, _) {
-            return GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 10),
-              itemBuilder: (context, index) {
-                final isOcuppied = _board.isOccupied(index);
-                if (isOcuppied) {
-                  final ship = _board.getShipByIndex(index);
-                  return Draggable(
-                    feedback: ShipWidget(
-                      axis: Axis.vertical,
-                      shipType: ship.shipType,
-                      cellHeight: 40,
-                    ),
-                    child: SizedBox(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 0.5,
+        child: Stack(
+          children: [
+            ValueListenableBuilder(
+                valueListenable: _potentialIndexes,
+                builder: (context, list, _) {
+                  final occupiedIndexes = _board.occupiedIndexes;
+                  return GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 10),
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: occupiedIndexes.contains(index)
+                                ? Colors.blue
+                                : list.contains(index)
+                                    ? Colors.amber
+                                    : Colors.transparent,
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 0.5,
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    onDragStarted: () {
-                      _board.removeShipByIndex(index);
+                      );
                     },
-                    onDragUpdate: (details) =>
-                        _draggableShip.value = DraggableShip(
-                      ship: ship,
-                      offset: details.globalPosition,
-                    ),
-                    onDragEnd: (_) {
-                      if (_potentialIndexes.value.isNotEmpty) {
-                        /// add ship to board
-                        print('added');
-                        _board.addShip2(_potentialIndexes.value, ship);
-                        _potentialIndexes.value = [];
-                      }
-                      _draggableShip.value = DraggableShip.empty();
-                    },
+                    itemCount: 100,
                   );
-                } else {
-                  return SizedBox(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: list.contains(index)
-                            ? Colors.amber
-                            : Colors.transparent,
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 0.5,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-              },
-              itemCount: 100,
-            );
-          }),
+                }),
+            ValueListenableBuilder(
+                valueListenable: _draggableShip,
+                builder: (context, value, _) {
+                  if (value.offset != Offset.zero) {
+                    Ship? ship = value.ship;
+                    return Transform.translate(
+                      offset: value.offset,
+                      child: ship != null
+                          ? ShipWidget(
+                              shipType: ship.shipType,
+                              axis: ship.shipAxis,
+                              cellHeight: 50)
+                          : Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.red,
+                            ),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }),
+          ],
+        ),
+      ),
     );
   }
 }
