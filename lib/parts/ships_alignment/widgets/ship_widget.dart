@@ -1,14 +1,12 @@
 part of '../ships_alignment_part.dart';
 
 class ShipWidget extends StatelessWidget {
-  final ShipType shipType;
-  final Axis axis;
+  final Ship ship;
   final double cellHeight;
 
   const ShipWidget({
     super.key,
-    required this.shipType,
-    required this.axis,
+    required this.ship,
     required this.cellHeight,
   });
 
@@ -16,12 +14,12 @@ class ShipWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.theme.colors;
     return SizedBox(
-      height: switch (axis) {
+      height: switch (ship.shipAxis) {
         Axis.horizontal => cellHeight,
-        Axis.vertical => shipType.size * cellHeight,
+        Axis.vertical => ship.shipType.size * cellHeight,
       },
-      width: switch (axis) {
-        Axis.horizontal => shipType.size * cellHeight,
+      width: switch (ship.shipAxis) {
+        Axis.horizontal => ship.shipType.size * cellHeight,
         Axis.vertical => cellHeight,
       },
       child: Container(
@@ -35,7 +33,7 @@ class ShipWidget extends StatelessWidget {
           context: context,
           removeTop: true,
           child: ListView.builder(
-            scrollDirection: axis,
+            scrollDirection: ship.shipAxis,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return Container(
@@ -50,7 +48,7 @@ class ShipWidget extends StatelessWidget {
                 ),
               );
             },
-            itemCount: shipType.size,
+            itemCount: ship.shipType.size,
           ),
         ),
       ),

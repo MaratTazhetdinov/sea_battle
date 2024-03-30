@@ -4,14 +4,18 @@ class AlignmentBoardWidget extends StatefulWidget {
   final Size boardSize;
   final ValueNotifier<DraggableShip> draggableShip;
   final ValueNotifier<List<int>> potentialIndexes;
-  final Board board;
+  final Function(DragStartDetails, Ship) onPanStart;
+  final Function(DragUpdateDetails) onPanUpdate;
+  final Function(DragEndDetails, BuildContext) onPanEnd;
 
   const AlignmentBoardWidget({
     super.key,
     required this.boardSize,
     required this.draggableShip,
     required this.potentialIndexes,
-    required this.board,
+    required this.onPanStart,
+    required this.onPanUpdate,
+    required this.onPanEnd,
   });
 
   @override
@@ -22,10 +26,10 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
   late final _boardSize = widget.boardSize;
   late final _draggableShip = widget.draggableShip;
   late final _potentialIndexes = widget.potentialIndexes;
-  late final _board = widget.board;
 
   Offset? _boardOffset;
   int _currentDragTargetIndex = -1;
+  late Board _board;
 
   @override
   void initState() {
@@ -42,8 +46,7 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
     _boardOffset = const Offset(40.0, 123.0);
 
     _draggableShip.addListener(() {
-      print(_draggableShip.value.offset);
-      _calculateDragTargetIndex(_draggableShip.value);
+      _calculatePotentialIndexes(_draggableShip.value);
     });
     super.initState();
   }
@@ -53,105 +56,105 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
     super.dispose();
   }
 
-  void _calculateDragTargetIndex(DraggableShip draggableShip) {
+  void _calculatePotentialIndexes(DraggableShip draggableShip) {
     if (_boardOffset case final boardOffset?) {
-      if ((draggableShip.offset.dx >= boardOffset.dx &&
-              draggableShip.offset.dx <= boardOffset.dx + _boardSize.width) &&
-          (draggableShip.offset.dy >= boardOffset.dy &&
-              draggableShip.offset.dy <= boardOffset.dy + _boardSize.height)) {
-        final x = _calculateIndexFromOffset(boardOffset.dx,
-            boardOffset.dx + _boardSize.width, draggableShip.offset.dx);
-        final y = _calculateIndexFromOffset(boardOffset.dy,
-                boardOffset.dy + _boardSize.width, draggableShip.offset.dy) *
-            10;
-        final index = x + y;
+      final minX = boardOffset.dx;
+      final maxX = boardOffset.dx + _boardSize.width;
+      final minY = boardOffset.dy;
+      final maxY = boardOffset.dy + _boardSize.height;
+      final positionX = draggableShip.offset.dx;
+      final positionY = draggableShip.offset.dy;
+      if ((positionX >= minX && positionX <= maxX) &&
+          (positionY >= minY && positionY <= maxY)) {
+        final index = _calculateIndexFromOffset(
+          minX: minX,
+          maxX: maxX,
+          positionX: positionX,
+          minY: minY,
+          maxY: maxY,
+          positionY: positionY,
+        );
+
         if (_currentDragTargetIndex != index) {
           _currentDragTargetIndex = index;
-          _potentialIndexes.value = _board.checkShipAlignment(
-              index: index, ship: draggableShip.ship!);
+          _potentialIndexes.value = _board.checkPossibleAlignment(
+              index: index, ship: draggableShip.ship);
         }
       } else {
-        _currentDragTargetIndex = 0;
+        _currentDragTargetIndex = -1;
         _potentialIndexes.value = [];
       }
     }
   }
 
-  int _calculateIndexFromOffset(double min, double max, double position) {
-    final cell = (max - min) / 10;
-    final List<double> fractions =
-        List.generate(10, (index) => (index + 1) * cell + min);
-    for (int i = 0; i < fractions.length; i++) {
-      if (position <= fractions[i]) {
-        return i;
+  int _calculateIndexFromOffset({
+    required double minX,
+    required double maxX,
+    required double positionX,
+    required double minY,
+    required double maxY,
+    required double positionY,
+  }) {
+    final cell = (maxX - minX) / 10;
+    int x = 0;
+    int y = 0;
+    final List<double> fractionsX =
+        List.generate(10, (index) => (index + 1) * cell + minX);
+    final List<double> fractionsY =
+        List.generate(10, (index) => (index + 1) * cell + minY);
+    for (int i = 0; i < fractionsX.length; i++) {
+      if (positionX <= fractionsX[i]) {
+        x = i;
+        break;
       }
     }
-    return -1;
+    for (int i = 0; i < fractionsY.length; i++) {
+      if (positionY <= fractionsY[i]) {
+        y = i * 10;
+        break;
+      }
+    }
+    return x + y;
   }
 
   @override
   Widget build(BuildContext context) {
-    /// Make all widget draggable
-    return GestureDetector(
-      onPanStart: (details) {
-        final x = _calculateIndexFromOffset(_boardOffset!.dx,
-            _boardOffset!.dx + _boardSize.width, details.globalPosition.dx);
-        final y = _calculateIndexFromOffset(
-                _boardOffset!.dy,
-                _boardOffset!.dy + _boardSize.width,
-                details.globalPosition.dy) *
-            10;
-        final index = x + y;
-        Ship? ship;
-        if (_board.isOccupiedIndex(index)) {
-          ship = _board.detectShipByIndex(index);
-        }
-        if (ship != null) {
-          _draggableShip.value = DraggableShip(
-              ship: ship,
-              offset:
-                  Offset(details.globalPosition.dx, details.globalPosition.dy));
-          _board.removeShipByIndex(index);
-        }
-      },
-      onPanUpdate: (details) {
-        final x = _calculateIndexFromOffset(_boardOffset!.dx,
-            _boardOffset!.dx + _boardSize.width, details.globalPosition.dx);
-        final y = _calculateIndexFromOffset(
-                _boardOffset!.dy,
-                _boardOffset!.dy + _boardSize.width,
-                details.globalPosition.dy) *
-            10;
-        final index = x + y;
-        final ship = _draggableShip.value.ship;
-        _potentialIndexes.value =
-            _board.checkShipAlignment(index: index, ship: ship!);
-        _draggableShip.value = DraggableShip(
-            ship: ship,
-            offset:
-                Offset(details.globalPosition.dx, details.globalPosition.dy));
-      },
-      onPanEnd: (details) {
-        _board.addShipToBoard(
-            _potentialIndexes.value, _draggableShip.value.ship!);
-        _potentialIndexes.value = [];
-        _draggableShip.value = DraggableShip.empty();
-      },
-      child: Container(
-        height: _boardSize.height,
-        width: _boardSize.width,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.black,
-            width: 0.5,
-          ),
-        ),
-        child: Stack(
-          children: [
-            ValueListenableBuilder(
+    return BlocBuilder<ShipAlignmentBloc, ShipAlignmentState>(
+      builder: (context, state) {
+        _board = state.board;
+        final occupiedIndexes = _board.findOccupiedIndexes();
+        return GestureDetector(
+          onPanStart: (details) {
+            final index = _calculateIndexFromOffset(
+              minX: _boardOffset!.dx,
+              maxX: _boardOffset!.dx + _boardSize.width,
+              positionX: details.globalPosition.dx,
+              minY: _boardOffset!.dy,
+              maxY: _boardOffset!.dy + _boardSize.width,
+              positionY: details.globalPosition.dy,
+            );
+            final isCellOccupied = occupiedIndexes.contains(index);
+
+            if (isCellOccupied) {
+              final ship = _board.detectShipByIndex(index);
+              widget.onPanStart(details, ship);
+              context.readShipAlignmentBloc.add(ShipRemovedByIndex(index));
+            }
+          },
+          onPanUpdate: (details) => widget.onPanUpdate(details),
+          onPanEnd: (details) => widget.onPanEnd(details, context),
+          child: Container(
+            height: _boardSize.height,
+            width: _boardSize.width,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black,
+                width: 0.5,
+              ),
+            ),
+            child: ValueListenableBuilder(
                 valueListenable: _potentialIndexes,
                 builder: (context, list, _) {
-                  final occupiedIndexes = _board.occupiedIndexes;
                   return GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate:
@@ -177,31 +180,9 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
                     itemCount: 100,
                   );
                 }),
-            ValueListenableBuilder(
-                valueListenable: _draggableShip,
-                builder: (context, value, _) {
-                  if (value.offset != Offset.zero) {
-                    Ship? ship = value.ship;
-                    return Transform.translate(
-                      offset: value.offset,
-                      child: ship != null
-                          ? ShipWidget(
-                              shipType: ship.shipType,
-                              axis: ship.shipAxis,
-                              cellHeight: 50)
-                          : Container(
-                              height: 50,
-                              width: 50,
-                              color: Colors.red,
-                            ),
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                }),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,10 +1,16 @@
 part of '../ships_alignment_part.dart';
 
-class DraggableShip {
-  final Ship? ship;
+@props
+@copyWith
+class DraggableShip extends Equatable {
+  final Ship ship;
   final Offset offset;
 
   const DraggableShip({required this.ship, required this.offset});
 
-  DraggableShip.empty({this.ship, this.offset = Offset.zero});
+  const DraggableShip.empty(
+      {this.ship = const Ship.empty(), this.offset = Offset.zero});
+
+  @override
+  List<Object?> get props => _$DraggableShipProps(this);
 }

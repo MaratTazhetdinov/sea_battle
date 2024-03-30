@@ -13,24 +13,20 @@ enum ShipType {
 
 class ShipPickerWidget extends StatefulWidget {
   final double widgetHeight;
-  final double defaultCellHeight;
-  final double draggedCellHeight;
-
+  final double cellHeight;
   final ShipType shipType;
-  final ValueNotifier<Map<ShipType, int>> shipCounter;
-  final ValueNotifier<DraggableShip> draggableShip;
-  final ValueNotifier<List<int>> potentialIndexes;
-  final Board board;
+  final Function(DragStartDetails, Ship) onPanStart;
+  final Function(DragUpdateDetails) onPanUpdate;
+  final Function(DragEndDetails, BuildContext) onPanEnd;
+
   const ShipPickerWidget({
     super.key,
     required this.widgetHeight,
-    required this.defaultCellHeight,
-    required this.draggedCellHeight,
+    required this.cellHeight,
     required this.shipType,
-    required this.shipCounter,
-    required this.draggableShip,
-    required this.potentialIndexes,
-    required this.board,
+    required this.onPanStart,
+    required this.onPanUpdate,
+    required this.onPanEnd,
   });
 
   @override
@@ -38,20 +34,19 @@ class ShipPickerWidget extends StatefulWidget {
 }
 
 class _ShipPickerWidgetState extends State<ShipPickerWidget> {
-  late final _draggableShip = widget.draggableShip;
-  late final _potentialIndexes = widget.potentialIndexes;
-  late final _board = widget.board;
   @override
   Widget build(BuildContext context) {
     final shipType = widget.shipType;
-    final defaultCellHeight = widget.defaultCellHeight;
-    final draggedCellHeight = widget.draggedCellHeight;
+    final cellHeight = widget.cellHeight;
     return SizedBox(
       height: widget.widgetHeight,
-      child: ValueListenableBuilder(
-        valueListenable: widget.shipCounter,
-        builder: (context, value, _) {
-          final count = value[shipType] ?? 0;
+      child: BlocBuilder<ShipAlignmentBloc, ShipAlignmentState>(
+        builder: (context, state) {
+          final count = state.shipCounter.counterMap[shipType];
+          final verticalShip =
+              Ship(shipType: shipType, shipAxis: Axis.vertical);
+          final horizontalShip =
+              Ship(shipType: shipType, shipAxis: Axis.horizontal);
           return AbsorbPointer(
             absorbing: count == 0,
             child: Row(
@@ -59,59 +54,31 @@ class _ShipPickerWidgetState extends State<ShipPickerWidget> {
               children: [
                 Row(
                   children: [
-                    Draggable(
-                        feedback: ShipWidget(
-                          axis: Axis.vertical,
-                          shipType: shipType,
-                          cellHeight: draggedCellHeight,
-                        ),
-                        child: ShipWidget(
-                          axis: Axis.vertical,
-                          shipType: shipType,
-                          cellHeight: defaultCellHeight,
-                        ),
-                        onDragUpdate: (details) =>
-                            _draggableShip.value = DraggableShip(
-                              ship: Ship(
-                                shipType: shipType,
-                                shipAxis: Axis.vertical,
-                              ),
-                              offset: details.globalPosition,
-                            ),
-                        onDragEnd: (_) {
-                          if (_potentialIndexes.value.isNotEmpty) {
-                            /// add ship to board
-                            print('added');
-                            final map = widget.shipCounter.value;
-                            int count = map[shipType] ?? 0;
-                            map[shipType] = count - 1;
-                            widget.shipCounter.value = map;
-                            _board.addShipToBoard(
-                                _potentialIndexes.value,
-                                Ship(
-                                  shipType: shipType,
-                                  shipAxis: Axis.vertical,
-                                ));
-                            _potentialIndexes.value = [];
-                          }
-                          _draggableShip.value = DraggableShip.empty();
-                        }),
+                    GestureDetector(
+                      onPanStart: (details) =>
+                          widget.onPanStart(details, verticalShip),
+                      onPanUpdate: (details) => widget.onPanUpdate(details),
+                      onPanEnd: (details) => widget.onPanEnd(details, context),
+                      child: ShipWidget(
+                        ship: verticalShip,
+                        cellHeight: cellHeight,
+                      ),
+                    ),
                     if (shipType != ShipType.one)
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text('or'),
                       ),
                     if (shipType != ShipType.one)
-                      Draggable(
-                        feedback: ShipWidget(
-                          axis: Axis.horizontal,
-                          shipType: shipType,
-                          cellHeight: draggedCellHeight,
-                        ),
+                      GestureDetector(
+                        onPanStart: (details) =>
+                            widget.onPanStart(details, horizontalShip),
+                        onPanUpdate: (details) => widget.onPanUpdate(details),
+                        onPanEnd: (details) =>
+                            widget.onPanEnd(details, context),
                         child: ShipWidget(
-                          axis: Axis.horizontal,
-                          shipType: shipType,
-                          cellHeight: defaultCellHeight,
+                          ship: horizontalShip,
+                          cellHeight: cellHeight,
                         ),
                       ),
                   ],

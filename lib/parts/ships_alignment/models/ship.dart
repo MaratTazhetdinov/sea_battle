@@ -5,4 +5,7 @@ class Ship {
   final Axis shipAxis;
 
   const Ship({required this.shipType, required this.shipAxis});
+
+  const Ship.empty(
+      [this.shipType = ShipType.one, this.shipAxis = Axis.horizontal]);
 }
