@@ -3,14 +3,19 @@ part of '../ships_alignment_part.dart';
 class ShipAlignmentBloc extends Bloc<ShipAlignmentEvent, ShipAlignmentState> {
   final Board board;
   final ShipCounter shipCounter;
+  final IGameSessionRepository gameSessionRepository;
 
-  ShipAlignmentBloc({required this.board, required this.shipCounter})
-      : super(ShipAlignmentState(
+  ShipAlignmentBloc({
+    required this.board,
+    required this.shipCounter,
+    required this.gameSessionRepository,
+  }) : super(ShipAlignmentState(
           board: board,
           shipCounter: shipCounter,
         )) {
     on<ShipRemovedByIndex>(_onShipRemovedByIndex);
     on<ShipAddedByIndexes>(_onShipAddedByIndexes);
+    on<ShipAlignmentCompleted>(_onShipAlignmentCompleted);
   }
 
   void _onShipRemovedByIndex(
@@ -37,6 +42,12 @@ class ShipAlignmentBloc extends Bloc<ShipAlignmentEvent, ShipAlignmentState> {
     final updatedShipCounter =
         state.shipCounter.copyWith(counterMap: updatedCounterMap);
     emit(state.copyWith(board: updatedBoard, shipCounter: updatedShipCounter));
+  }
+
+  Future<void> _onShipAlignmentCompleted(
+      ShipAlignmentCompleted event, Emitter<ShipAlignmentState> emit) async {
+    await gameSessionRepository.finishShipsAlignment(
+        userId: event.userId, cells: event.cells);
   }
 }
 

@@ -50,6 +50,12 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
       create: (context) => ShipAlignmentBloc(
         board: Board.factory(),
         shipCounter: ShipCounter.factory(),
+        gameSessionRepository: FbDbGameSessionRepository(
+          fbDbDataProvider: FbDbGameSessionDataProvider(
+            gameSessionId: 'marat',
+            db: FirebaseDatabase.instance,
+          ),
+        ),
       ),
       child: Stack(
         children: [
@@ -117,8 +123,19 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                             return SizedBox(
                               height: 50,
                               child: ElevatedButton(
-                                onPressed:
-                                    state.shipCounter.isEmpty ? () {} : null,
+                                onPressed: state.shipCounter.isEmpty
+                                    ? () {
+                                        final userId =
+                                            context.readAuthBloc.state.user.id;
+                                        context.readShipAlignmentBloc.add(
+                                          ShipAlignmentCompleted(
+                                            userId: userId,
+                                            cells: state.board
+                                                .findOccupiedIndexes(),
+                                          ),
+                                        );
+                                      }
+                                    : null,
                                 child: const Text(
                                   'Start battle',
                                 ),

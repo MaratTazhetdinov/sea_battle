@@ -13,3 +13,10 @@ class ShipAddedByIndexes extends ShipAlignmentEvent {
 
   ShipAddedByIndexes(this.indexes);
 }
+
+class ShipAlignmentCompleted extends ShipAlignmentEvent {
+  final String userId;
+  final List<int> cells;
+
+  ShipAlignmentCompleted({required this.userId, required this.cells});
+}

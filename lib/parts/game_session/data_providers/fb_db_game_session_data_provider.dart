@@ -33,10 +33,12 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
     required String userId,
     required List<int> cells,
   }) async {
-    db.ref(ref).child(gameSessionId).update(
+    final rawCells =
+        List.generate(100, (index) => cells.contains(index) ? 1 : 0);
+    await db.ref(ref).child(gameSessionId).update(
       {
         userId: {
-          'cells': cells,
+          'cells': rawCells,
         },
       },
     );

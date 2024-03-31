@@ -141,7 +141,11 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
               context.readShipAlignmentBloc.add(ShipRemovedByIndex(index));
             }
           },
-          onPanUpdate: (details) => widget.onPanUpdate(details),
+          onPanUpdate: (details) {
+            if (widget.draggableShip.value.offset != Offset.zero) {
+              widget.onPanUpdate(details);
+            }
+          },
           onPanEnd: (details) => widget.onPanEnd(details, context),
           child: Container(
             height: _boardSize.height,
