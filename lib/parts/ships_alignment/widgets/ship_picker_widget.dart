@@ -37,6 +37,7 @@ class ShipPickerWidget extends StatefulWidget {
 class _ShipPickerWidgetState extends State<ShipPickerWidget> {
   @override
   Widget build(BuildContext context) {
+    final locale = context.l10n;
     final shipType = widget.shipType;
     final cellHeight = widget.cellHeight;
     return SizedBox(
@@ -66,9 +67,9 @@ class _ShipPickerWidgetState extends State<ShipPickerWidget> {
                       ),
                     ),
                     if (shipType != ShipType.one)
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text('or'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(locale.or),
                       ),
                     if (shipType != ShipType.one)
                       GestureDetector(

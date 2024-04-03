@@ -26,5 +26,8 @@
     "weakPasswordError": "Entered password is too weak",
     "unexpectedError": "Ooops... Unexpected error has occurred",
     "nicknameAlreadyInUseError": "This nickname already in use",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "lineUpYourShips": "Line up your ships",
+    "or": "or",
+    "startBattle": "Start Battle"
 }

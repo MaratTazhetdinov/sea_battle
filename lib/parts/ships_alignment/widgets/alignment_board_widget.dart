@@ -141,6 +141,7 @@ class _AlignmentGameBoardWidgetState extends State<AlignmentGameBoardWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.theme.colors;
     return BlocBuilder<ShipsAlignmentBloc, ShipsAlignmentState>(
       builder: (context, state) {
         _gameBoard = state.gameBoard;
@@ -176,7 +177,7 @@ class _AlignmentGameBoardWidgetState extends State<AlignmentGameBoardWidget> {
             width: _gameBoardSize.width,
             decoration: BoxDecoration(
               border: Border.all(
-                color: Colors.black,
+                color: colors.firstTextColor,
                 width: 0.5,
               ),
             ),
@@ -193,12 +194,12 @@ class _AlignmentGameBoardWidgetState extends State<AlignmentGameBoardWidget> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: occupiedIndexes.contains(index)
-                                ? Colors.blue
+                                ? colors.alignedShipColor
                                 : list.contains(index)
-                                    ? Colors.amber
-                                    : Colors.transparent,
+                                    ? colors.possibleShipAlignmentColor
+                                    : colors.scaffoldBackgroundColor,
                             border: Border.all(
-                              color: Colors.black,
+                              color: colors.firstTextColor,
                               width: 0.5,
                             ),
                           ),

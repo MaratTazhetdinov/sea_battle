@@ -1,5 +1,6 @@
 part of '../code_kit_part.dart';
 
+/// Extension on [Cell].
 extension CellHelper on Cell {
   /// Detects ship occupuied indexes by [index].
   List<int> detectShipIndexesByIndex(int index) {

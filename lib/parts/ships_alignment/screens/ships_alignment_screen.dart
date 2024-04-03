@@ -52,6 +52,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.l10n;
     const double horizontalPadding = 40;
     final userId = context.readAuthBloc.state.user.id;
     final sessionId =
@@ -71,7 +72,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
         children: [
           Scaffold(
             appBar: AppBar(
-              title: const Text('Ships Alignment'),
+              title: Text(locale.lineUpYourShips),
             ),
             body: SafeArea(
               child: Padding(
@@ -144,9 +145,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                                         );
                                       }
                                     : null,
-                                child: const Text(
-                                  'Start battle',
-                                ),
+                                child: Text(locale.startBattle),
                               ),
                             );
                           },

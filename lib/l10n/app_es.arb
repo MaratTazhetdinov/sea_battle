@@ -26,5 +26,8 @@
     "weakPasswordError": "La contraseña ingresada es demasiado débil",
     "unexpectedError": "¡Ooops... Se ha producido un error inesperado!",
     "nicknameAlreadyInUseError": "Este apodo ya está en uso",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "lineUpYourShips": "Alinea tus barcos",
+    "or": "o",
+    "startBattle": "Iniciar batalla"
 }

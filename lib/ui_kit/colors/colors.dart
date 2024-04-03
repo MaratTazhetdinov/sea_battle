@@ -12,6 +12,8 @@ class AppColors {
   final Color focusedInputBorderColor;
   final Color errorInputBorderColor;
   final Color buttonTextColor;
+  final Color alignedShipColor;
+  final Color possibleShipAlignmentColor;
 
   AppColors.light()
       : firstTextColor = Colors.black,
@@ -24,5 +26,7 @@ class AppColors {
         inputBorderColor = Colors.grey,
         focusedInputBorderColor = Colors.black,
         errorInputBorderColor = Colors.red,
-        buttonTextColor = Colors.white;
+        buttonTextColor = Colors.white,
+        alignedShipColor = Colors.blue,
+        possibleShipAlignmentColor = Colors.amber;
 }
