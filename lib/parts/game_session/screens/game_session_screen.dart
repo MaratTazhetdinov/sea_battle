@@ -38,10 +38,10 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                     child: Text('Loading'),
                   );
                 }
-                final userBoard = state.gameSession.gameBoards
-                    .firstWhere((gameBoard) => gameBoard.userId == userId);
-                final enemyBoard = state.gameSession.gameBoards
-                    .firstWhere((gameBoard) => gameBoard.userId != userId);
+                // final userBoard = state.gameSession.gameBoards
+                //     .firstWhere((gameBoard) => gameBoard.userId == userId);
+                // final enemyBoard = state.gameSession.gameBoards
+                //     .firstWhere((gameBoard) => gameBoard.userId != userId);
                 return Column(
                   children: [
                     SizedBox(
@@ -62,12 +62,12 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                userBoard.cells[index].value.toString(),
+                                '',
                               ),
                             ),
                           );
                         },
-                        itemCount: userBoard.cells.length,
+                        itemCount: 100,
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -92,13 +92,13 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                               ),
                               child: Center(
                                 child: Text(
-                                  enemyBoard.cells[index].value.toString(),
+                                  '',
                                 ),
                               ),
                             ),
                           );
                         },
-                        itemCount: enemyBoard.cells.length,
+                        itemCount: 100,
                       ),
                     ),
                   ],

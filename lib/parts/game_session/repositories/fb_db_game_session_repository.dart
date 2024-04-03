@@ -6,8 +6,15 @@ class FbDbGameSessionRepository extends IGameSessionRepository {
   FbDbGameSessionRepository({required this.fbDbDataProvider});
 
   @override
-  Stream<GameSession> get gameSession => fbDbDataProvider.gameSession
+  Stream<GameSession> getGameSession(String gameSessionId) => fbDbDataProvider
+      .getGameSession(gameSessionId)
       .map((dtoGameSession) => GameSession.fromDto(dtoGameSession));
+
+  @override
+  Stream<List<GameSession>> get gameSessionsList =>
+      fbDbDataProvider.gameSessionsList.map((dtoList) => dtoList
+          .map((dtoGameSession) => GameSession.fromDto(dtoGameSession))
+          .toList());
 
   @override
   Future<void> shoot(
@@ -24,10 +31,12 @@ class FbDbGameSessionRepository extends IGameSessionRepository {
   @override
   Future<void> finishShipsAlignment({
     required String userId,
+    required String userNickname,
     required List<int> cells,
   }) async {
     await fbDbDataProvider.finishShipsAlignment(
       userId: userId,
+      userNickname: userNickname,
       cells: cells,
     );
   }

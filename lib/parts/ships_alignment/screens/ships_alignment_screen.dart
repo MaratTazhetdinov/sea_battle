@@ -54,12 +54,12 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
   Widget build(BuildContext context) {
     final locale = context.l10n;
     const double horizontalPadding = 40;
-    final userId = context.readAuthBloc.state.user.id;
+    final user = context.readAuthBloc.state.user;
     final sessionId =
         DateTime.now().millisecondsSinceEpoch + Random().nextInt(1000);
     return BlocProvider(
       create: (context) => ShipsAlignmentBloc(
-        gameBoard: GameBoard.create(userId),
+        gameBoard: GameBoard.create(user.id, user.nickname),
         shipCounter: ShipCounter.create(),
         gameSessionRepository: game_session.FbDbGameSessionRepository(
           fbDbDataProvider: game_session.FbDbGameSessionDataProvider(

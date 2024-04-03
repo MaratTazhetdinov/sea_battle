@@ -11,9 +11,19 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
   });
 
   @override
-  Stream<DtoGameSession> get gameSession {
+  Stream<DtoGameSession> getGameSession(String gameSessionId) {
     return db.ref(ref).child(gameSessionId).onValue.map(
         (data) => DtoGameSession.fromFirebaseDatabase(data.snapshot.value));
+  }
+
+  @override
+  Stream<List<DtoGameSession>> get gameSessionsList {
+    return db.ref(ref).onValue.map((dataList) {
+      final list = dataList.snapshot.value as List<Object?>;
+      return list
+          .map((data) => DtoGameSession.fromFirebaseDatabase(data))
+          .toList();
+    });
   }
 
   @override
@@ -31,6 +41,7 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
   @override
   Future<void> finishShipsAlignment({
     required String userId,
+    required String userNickname,
     required List<int> cells,
   }) async {
     final rawCells =
@@ -38,6 +49,7 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
     await db.ref(ref).child(gameSessionId).update(
       {
         userId: {
+          'userNickname': userNickname,
           'cells': rawCells,
         },
       },

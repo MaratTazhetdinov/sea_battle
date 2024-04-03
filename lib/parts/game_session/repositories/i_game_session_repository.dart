@@ -1,7 +1,9 @@
 part of '../game_session_part.dart';
 
 abstract class IGameSessionRepository {
-  Stream<GameSession> get gameSession;
+  Stream<GameSession> getGameSession(String gameSessionId);
+
+  Stream<List<GameSession>> get gameSessionsList;
 
   Future<void> shoot({
     required String userId,
@@ -11,6 +13,7 @@ abstract class IGameSessionRepository {
 
   Future<void> finishShipsAlignment({
     required String userId,
+    required String userNickname,
     required List<int> cells,
   });
 }

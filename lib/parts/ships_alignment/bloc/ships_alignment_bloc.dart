@@ -53,9 +53,9 @@ class ShipsAlignmentBloc
   Future<void> _onShipAlignmentCompleted(
       ShipsAlignmentCompleted event, Emitter<ShipsAlignmentState> emit) async {
     final occupiedCells = state.gameBoard.cell.findOccupiedIndexes();
-    final userId = state.gameBoard.userId;
     await gameSessionRepository.finishShipsAlignment(
-      userId: userId,
+      userId: state.gameBoard.userId,
+      userNickname: state.gameBoard.userNickname,
       cells: occupiedCells,
     );
   }

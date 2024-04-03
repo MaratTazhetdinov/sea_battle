@@ -14,6 +14,7 @@ class DtoGameSession {
           .map(
             (key) => DtoGameBoard(
               userId: key,
+              userNickname: json[key]['userNickname'],
               cells: List<int>.from(json[key]['cells']),
             ),
           )

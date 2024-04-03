@@ -10,10 +10,10 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
       : super(const GameSessionState(
           gameSession: GameSession(gameBoards: []),
         )) {
-    _gameSessionSubscription = gameSessionRepository.gameSession
+    _gameSessionSubscription = gameSessionRepository
+        .getGameSession('')
         .listen((gameSession) => add(_GameSessionChanged(gameSession)));
     on<_GameSessionChanged>(_onGameSessionChanged);
-    on<GameSessionShipsAlignmentFinished>(_onShipsAlignmentFinished);
     on<GameSessionUserShot>(_onUserShot);
   }
 
@@ -30,17 +30,6 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
         // );
       }
       emit(state.copyWith(gameSession: event.gameSession));
-    } catch (e) {
-      emit(GameSessionFailed(e, state.gameSession));
-    }
-  }
-
-  Future<void> _onShipsAlignmentFinished(
-      GameSessionShipsAlignmentFinished event,
-      Emitter<GameSessionState> emit) async {
-    try {
-      gameSessionRepository.finishShipsAlignment(
-          userId: '', cells: event.cells);
     } catch (e) {
       emit(GameSessionFailed(e, state.gameSession));
     }

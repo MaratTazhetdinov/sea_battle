@@ -8,21 +8,37 @@ class GameBoard extends Equatable {
   /// User id.
   final String userId;
 
+  /// User nickname.
+  final String userNickname;
+
   /// [GameBoardCell].
   final Cell cell;
 
   /// Creates [GameBoard].
   const GameBoard({
     required this.userId,
+    required this.userNickname,
     required this.cell,
   });
 
-  /// Factory constructor for creating [GameBoard] with given [userId] and [occupuidedIndexes].
-  factory GameBoard.create(String userId,
-      [List<int> occupuidedIndexes = const []]) {
+  /// Factory constructor for creating [GameBoard] with given [userId] and [userNickname].
+  factory GameBoard.create(
+    String userId,
+    String userNickname,
+  ) {
     return GameBoard(
       userId: userId,
-      cell: _createBoard(occupuidedIndexes),
+      userNickname: userNickname,
+      cell: _createBoard(List.generate(100, (index) => 0)),
+    );
+  }
+
+  /// Factory constructor for creating [GameBoard] from [DtoGameBoard].
+  factory GameBoard.fromDto(DtoGameBoard dtoGameBoard) {
+    return GameBoard(
+      userId: dtoGameBoard.userId,
+      userNickname: '',
+      cell: _createBoard(dtoGameBoard.cells),
     );
   }
 
@@ -32,9 +48,12 @@ class GameBoard extends Equatable {
         100,
         (index) => Cell(
               index: index,
-              cellState: occupuidedIndexes.contains(index)
-                  ? CellState.occupied
-                  : CellState.empty,
+              cellState: switch (occupuidedIndexes[index]) {
+                1 => CellState.occupied,
+                2 => CellState.destroyed,
+                3 => CellState.shooted,
+                _ => CellState.empty,
+              },
             ));
 
     for (Cell cell in cells) {
