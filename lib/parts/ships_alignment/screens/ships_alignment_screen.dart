@@ -1,6 +1,8 @@
 part of '../ships_alignment_part.dart';
 
 @RoutePage()
+
+/// [ShipsAlignmentScreen].
 class ShipsAlignmentScreen extends StatefulWidget {
   const ShipsAlignmentScreen({super.key});
 
@@ -9,9 +11,11 @@ class ShipsAlignmentScreen extends StatefulWidget {
 }
 
 class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
+  /// Value notifier of [DraggableShip].
   final ValueNotifier<DraggableShip> _draggableShip =
       ValueNotifier<DraggableShip>(const DraggableShip.empty());
 
+  /// Value notifier of list of potentialIndexes for [DraggableShip] on [GameBoard].
   final ValueNotifier<List<int>> _potentialIndexes =
       ValueNotifier<List<int>>([]);
 
@@ -22,18 +26,21 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
     super.dispose();
   }
 
-  void _onPanStarted(DragStartDetails details, Ship ship) {
+  /// OnPanStart function.
+  void _onPanStart(DragStartDetails details, Ship ship) {
     _draggableShip.value = DraggableShip(
       ship: ship,
       offset: details.globalPosition,
     );
   }
 
+  /// OnPanUpdate function.
   void _onPanUpdate(DragUpdateDetails details) {
     _draggableShip.value =
         _draggableShip.value.copyWith(offset: details.globalPosition);
   }
 
+  /// OnPanEnd function.
   void _onPanEnd(DragEndDetails details, BuildContext context) {
     if (_potentialIndexes.value.isNotEmpty) {
       context.readShipAlignmentBloc
@@ -75,13 +82,13 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        AlignmentBoardWidget(
-                          boardSize:
+                        AlignmentGameBoardWidget(
+                          gameBoardSize:
                               Size(constraints.maxWidth, constraints.maxWidth),
                           draggableShip: _draggableShip,
                           potentialIndexes: _potentialIndexes,
                           onPanStart: (details, ship) =>
-                              _onPanStarted(details, ship),
+                              _onPanStart(details, ship),
                           onPanUpdate: (details) => _onPanUpdate(details),
                           onPanEnd: (details, context) =>
                               _onPanEnd(details, context),
@@ -104,19 +111,23 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                                     .size;
                             return Column(
                               children: [
-                                ...ShipType.values.reversed.map(
-                                  (shipType) => ShipPickerWidget(
-                                    widgetHeight: widgetHeight,
-                                    cellHeight: cellHeight,
-                                    shipType: shipType,
-                                    onPanStart: (details, ship) =>
-                                        _onPanStarted(details, ship),
-                                    onPanUpdate: (details) =>
-                                        _onPanUpdate(details),
-                                    onPanEnd: (details, context) =>
-                                        _onPanEnd(details, context),
-                                  ),
-                                ),
+                                ...ShipType.values
+                                    .skip(0)
+                                    .toList()
+                                    .reversed
+                                    .map(
+                                      (shipType) => ShipPickerWidget(
+                                        widgetHeight: widgetHeight,
+                                        cellHeight: cellHeight,
+                                        shipType: shipType,
+                                        onPanStart: (details, ship) =>
+                                            _onPanStart(details, ship),
+                                        onPanUpdate: (details) =>
+                                            _onPanUpdate(details),
+                                        onPanEnd: (details, context) =>
+                                            _onPanEnd(details, context),
+                                      ),
+                                    ),
                               ],
                             );
                           },

@@ -1,16 +1,28 @@
 part of '../ships_alignment_part.dart';
 
-class AlignmentBoardWidget extends StatefulWidget {
-  final Size boardSize;
+/// Alignment game board widget.
+class AlignmentGameBoardWidget extends StatefulWidget {
+  /// Game board size.
+  final Size gameBoardSize;
+
+  /// Value notifier of [DraggableShip].
   final ValueNotifier<DraggableShip> draggableShip;
+
+  /// Value notifier of list of potentialIndexes for [DraggableShip] on [GameBoard].
   final ValueNotifier<List<int>> potentialIndexes;
+
+  /// OnPanStart function.
   final Function(DragStartDetails, Ship) onPanStart;
+
+  /// OnPanUpdate function.
   final Function(DragUpdateDetails) onPanUpdate;
+
+  /// OnPanEnd function.
   final Function(DragEndDetails, BuildContext) onPanEnd;
 
-  const AlignmentBoardWidget({
+  const AlignmentGameBoardWidget({
     super.key,
-    required this.boardSize,
+    required this.gameBoardSize,
     required this.draggableShip,
     required this.potentialIndexes,
     required this.onPanStart,
@@ -19,15 +31,19 @@ class AlignmentBoardWidget extends StatefulWidget {
   });
 
   @override
-  State<AlignmentBoardWidget> createState() => _AlignmentBoardWidgetState();
+  State<AlignmentGameBoardWidget> createState() =>
+      _AlignmentGameBoardWidgetState();
 }
 
-class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
-  late final _boardSize = widget.boardSize;
+class _AlignmentGameBoardWidgetState extends State<AlignmentGameBoardWidget> {
+  late final _gameBoardSize = widget.gameBoardSize;
   late final _draggableShip = widget.draggableShip;
   late final _potentialIndexes = widget.potentialIndexes;
 
-  Offset? _boardOffset;
+  /// Global offset of [AlignmentGameBoardWidget].
+  Offset? _gameBoardOffset;
+
+  /// Current index of [GameBoard] according to [DraggableShip] offset.
   int _currentDragTargetIndex = -1;
   late GameBoard _board;
 
@@ -43,7 +59,7 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
     //     }
     //   });
     // });
-    _boardOffset = const Offset(40.0, 123.0);
+    _gameBoardOffset = const Offset(40.0, 123.0);
 
     _draggableShip.addListener(() {
       _calculatePotentialIndexes(_draggableShip.value);
@@ -53,15 +69,17 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
 
   @override
   void dispose() {
+    _draggableShip.removeListener(() {});
     super.dispose();
   }
 
+  /// Calculates potential indexes on [GameBoard] for [DraggableShip].
   void _calculatePotentialIndexes(DraggableShip draggableShip) {
-    if (_boardOffset case final boardOffset?) {
+    if (_gameBoardOffset case final boardOffset?) {
       final minX = boardOffset.dx;
-      final maxX = boardOffset.dx + _boardSize.width;
+      final maxX = boardOffset.dx + _gameBoardSize.width;
       final minY = boardOffset.dy;
-      final maxY = boardOffset.dy + _boardSize.height;
+      final maxY = boardOffset.dy + _gameBoardSize.height;
       final positionX = draggableShip.offset.dx;
       final positionY = draggableShip.offset.dy;
       if ((positionX >= minX && positionX <= maxX) &&
@@ -87,6 +105,7 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
     }
   }
 
+  /// Calculates index on [GameBoard] according to [DraggableShip] offset.
   int _calculateIndexFromOffset({
     required double minX,
     required double maxX,
@@ -126,11 +145,11 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
         return GestureDetector(
           onPanStart: (details) {
             final index = _calculateIndexFromOffset(
-              minX: _boardOffset!.dx,
-              maxX: _boardOffset!.dx + _boardSize.width,
+              minX: _gameBoardOffset!.dx,
+              maxX: _gameBoardOffset!.dx + _gameBoardSize.width,
               positionX: details.globalPosition.dx,
-              minY: _boardOffset!.dy,
-              maxY: _boardOffset!.dy + _boardSize.width,
+              minY: _gameBoardOffset!.dy,
+              maxY: _gameBoardOffset!.dy + _gameBoardSize.width,
               positionY: details.globalPosition.dy,
             );
             final isCellOccupied = occupiedIndexes.contains(index);
@@ -148,8 +167,8 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
           },
           onPanEnd: (details) => widget.onPanEnd(details, context),
           child: Container(
-            height: _boardSize.height,
-            width: _boardSize.width,
+            height: _gameBoardSize.height,
+            width: _gameBoardSize.width,
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.black,

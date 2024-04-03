@@ -1,11 +1,23 @@
 part of '../ships_alignment_part.dart';
 
+/// Ship picker widget with specific concrete [ShipType].
 class ShipPickerWidget extends StatefulWidget {
+  /// Overall widget height.
   final double widgetHeight;
+
+  /// Height for one ship's cell.
   final double cellHeight;
+
+  /// [ShipType].
   final ShipType shipType;
+
+  /// OnPanStart function.
   final Function(DragStartDetails, Ship) onPanStart;
+
+  /// OnPanUpdate function.
   final Function(DragUpdateDetails) onPanUpdate;
+
+  /// OnPanEnd function.
   final Function(DragEndDetails, BuildContext) onPanEnd;
 
   const ShipPickerWidget({

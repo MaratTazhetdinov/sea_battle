@@ -1,7 +1,11 @@
 part of '../ships_alignment_part.dart';
 
+/// [ShipWidget].
 class ShipWidget extends StatelessWidget {
+  /// [Ship].
   final Ship ship;
+
+  /// Height for one ship's cell.
   final double cellHeight;
 
   const ShipWidget({
