@@ -1,16 +1,5 @@
 part of '../ships_alignment_part.dart';
 
-enum ShipType {
-  one(1),
-  two(2),
-  three(3),
-  four(4);
-
-  final int size;
-
-  const ShipType(this.size);
-}
-
 class ShipPickerWidget extends StatefulWidget {
   final double widgetHeight;
   final double cellHeight;

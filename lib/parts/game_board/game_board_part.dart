@@ -3,5 +3,6 @@ import 'package:equatable/equatable.dart';
 
 part 'models/game_board.dart';
 part 'models/game_board_cell.dart';
+part 'models/cell_state.dart';
 
 part 'game_board_part.g.dart';

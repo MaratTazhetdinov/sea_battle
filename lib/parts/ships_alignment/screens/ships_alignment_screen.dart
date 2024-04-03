@@ -52,7 +52,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
     return BlocProvider(
       create: (context) => ShipsAlignmentBloc(
         board: GameBoard.create(userId),
-        shipCounter: ShipCounter.factory(),
+        shipCounter: ShipCounter.create(),
         gameSessionRepository: game_session.FbDbGameSessionRepository(
           fbDbDataProvider: game_session.FbDbGameSessionDataProvider(
             gameSessionId: sessionId.toString(),

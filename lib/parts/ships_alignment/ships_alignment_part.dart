@@ -11,13 +11,13 @@ import 'package:sea_battle/parts/auth/auth_part.dart';
 import 'package:sea_battle/parts/game_board/game_board_part.dart';
 import 'package:sea_battle/parts/game_session/game_session_part.dart'
     as game_session;
+import 'package:sea_battle/parts/ship/ship_part.dart';
 import 'package:sea_battle/ui_kit/ui_kit_part.dart';
 
 part 'screens/ships_alignment_screen.dart';
 part 'widgets/ship_picker_widget.dart';
 part 'widgets/alignment_board_widget.dart';
 part 'widgets/ship_widget.dart';
-part 'models/ship.dart';
 part 'models/draggable_ship.dart';
 part 'bloc/ships_alignment_bloc.dart';
 part 'bloc/ships_alignment_event.dart';

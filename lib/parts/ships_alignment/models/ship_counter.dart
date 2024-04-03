@@ -2,21 +2,26 @@ part of '../ships_alignment_part.dart';
 
 @props
 @copyWith
+
+/// [ShipCounter].
 class ShipCounter extends Equatable {
+  /// Map which contains ships count for specific [ShipType].
   final Map<ShipType, int> counterMap;
 
+  /// Creates [ShipCounter].
   const ShipCounter(this.counterMap);
 
-  factory ShipCounter.factory([Map<ShipType, int>? counterMap]) {
-    return ShipCounter(counterMap ??
-        {
-          ShipType.four: 1,
-          ShipType.three: 2,
-          ShipType.two: 3,
-          ShipType.one: 4,
-        });
+  /// Factory constructor for creating [ShipCounter].
+  factory ShipCounter.create() {
+    return const ShipCounter({
+      ShipType.four: 1,
+      ShipType.three: 2,
+      ShipType.two: 3,
+      ShipType.one: 4,
+    });
   }
 
+  /// Getter which checks whether count of all [ShipType] is zero or not.
   bool get isEmpty => counterMap.values.every((count) => count == 0);
 
   @override
