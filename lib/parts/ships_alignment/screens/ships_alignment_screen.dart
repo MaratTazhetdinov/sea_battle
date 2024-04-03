@@ -46,13 +46,16 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
   @override
   Widget build(BuildContext context) {
     const double horizontalPadding = 40;
+    final userId = context.readAuthBloc.state.user.id;
+    final sessionId =
+        DateTime.now().millisecondsSinceEpoch + Random().nextInt(1000);
     return BlocProvider(
-      create: (context) => ShipAlignmentBloc(
-        board: Board.factory(),
+      create: (context) => ShipsAlignmentBloc(
+        board: GameBoard.create(userId),
         shipCounter: ShipCounter.factory(),
-        gameSessionRepository: FbDbGameSessionRepository(
-          fbDbDataProvider: FbDbGameSessionDataProvider(
-            gameSessionId: 'marat',
+        gameSessionRepository: game_session.FbDbGameSessionRepository(
+          fbDbDataProvider: game_session.FbDbGameSessionDataProvider(
+            gameSessionId: sessionId.toString(),
             db: FirebaseDatabase.instance,
           ),
         ),
@@ -118,7 +121,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                             );
                           },
                         ),
-                        BlocBuilder<ShipAlignmentBloc, ShipAlignmentState>(
+                        BlocBuilder<ShipsAlignmentBloc, ShipsAlignmentState>(
                           builder: (context, state) {
                             return SizedBox(
                               height: 50,
@@ -128,7 +131,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                                         final userId =
                                             context.readAuthBloc.state.user.id;
                                         context.readShipAlignmentBloc.add(
-                                          ShipAlignmentCompleted(
+                                          ShipsAlignmentCompleted(
                                             userId: userId,
                                             cells: state.board
                                                 .findOccupiedIndexes(),

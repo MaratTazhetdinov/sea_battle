@@ -40,7 +40,7 @@ class _ShipPickerWidgetState extends State<ShipPickerWidget> {
     final cellHeight = widget.cellHeight;
     return SizedBox(
       height: widget.widgetHeight,
-      child: BlocBuilder<ShipAlignmentBloc, ShipAlignmentState>(
+      child: BlocBuilder<ShipsAlignmentBloc, ShipsAlignmentState>(
         builder: (context, state) {
           final count = state.shipCounter.counterMap[shipType];
           final verticalShip =

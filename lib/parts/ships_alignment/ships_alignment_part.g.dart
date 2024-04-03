@@ -8,46 +8,6 @@ part of 'ships_alignment_part.dart';
 
 // coverage:ignore-start
 /// @nodoc
-extension $BoardCopyWithExtension on Board {
-  $BoardCopyWith<Board> get copyWith =>
-      $BoardCopyWith<Board>(this, (value) => value);
-
-  $BoardCopyWithNull<Board> get copyWithNull =>
-      $BoardCopyWithNull<Board>(this, (value) => value);
-}
-
-/// @nodoc
-class $BoardCopyWith<$Return> {
-  // ignore: unused_field
-  final Board _value;
-
-  // ignore: unused_field
-  final $Return Function(Board) _callback;
-
-  $BoardCopyWith(this._value, this._callback);
-
-  $Return call({
-    BoardCell? boardCell,
-  }) =>
-      _callback(Board(
-        boardCell ?? _value.boardCell,
-      ));
-}
-
-/// @nodoc
-class $BoardCopyWithNull<$Return> {
-  // ignore: unused_field
-  final Board _value;
-  // ignore: unused_field
-  final $Return Function(Board) _callback;
-
-  $BoardCopyWithNull(this._value, this._callback);
-}
-
-// coverage:ignore-end
-
-// coverage:ignore-start
-/// @nodoc
 extension $DraggableShipCopyWithExtension on DraggableShip {
   $DraggableShipCopyWith<DraggableShip> get copyWith =>
       $DraggableShipCopyWith<DraggableShip>(this, (value) => value);
@@ -90,26 +50,26 @@ class $DraggableShipCopyWithNull<$Return> {
 
 // coverage:ignore-start
 /// @nodoc
-extension $ShipAlignmentStateCopyWithExtension on ShipAlignmentState {
-  $ShipAlignmentStateCopyWith<ShipAlignmentState> get copyWith =>
-      $ShipAlignmentStateCopyWith<ShipAlignmentState>(this, (value) => value);
+extension $ShipsAlignmentStateCopyWithExtension on ShipsAlignmentState {
+  $ShipsAlignmentStateCopyWith<ShipsAlignmentState> get copyWith =>
+      $ShipsAlignmentStateCopyWith<ShipsAlignmentState>(this, (value) => value);
 
-  $ShipAlignmentStateCopyWithNull<ShipAlignmentState> get copyWithNull =>
-      $ShipAlignmentStateCopyWithNull<ShipAlignmentState>(
+  $ShipsAlignmentStateCopyWithNull<ShipsAlignmentState> get copyWithNull =>
+      $ShipsAlignmentStateCopyWithNull<ShipsAlignmentState>(
           this, (value) => value);
 }
 
 /// @nodoc
-class $ShipAlignmentStateCopyWith<$Return> {
+class $ShipsAlignmentStateCopyWith<$Return> {
   // ignore: unused_field
-  final ShipAlignmentState _value;
+  final ShipsAlignmentState _value;
 
   // ignore: unused_field
-  final $Return Function(ShipAlignmentState) _callback;
+  final $Return Function(ShipsAlignmentState) _callback;
 
-  $ShipAlignmentStateCopyWith(this._value, this._callback);
+  $ShipsAlignmentStateCopyWith(this._value, this._callback);
 
-  $BoardCopyWith<$Return> get board => $BoardCopyWith<$Return>(
+  $GameBoardCopyWith<$Return> get board => $GameBoardCopyWith<$Return>(
       _value.board, (value) => _callback(_value.copyWith(board: value)));
 
   $ShipCounterCopyWith<$Return> get shipCounter =>
@@ -117,25 +77,25 @@ class $ShipAlignmentStateCopyWith<$Return> {
           (value) => _callback(_value.copyWith(shipCounter: value)));
 
   $Return call({
-    Board? board,
+    GameBoard? board,
     ShipCounter? shipCounter,
   }) =>
-      _callback(ShipAlignmentState(
+      _callback(ShipsAlignmentState(
         board: board ?? _value.board,
         shipCounter: shipCounter ?? _value.shipCounter,
       ));
 }
 
 /// @nodoc
-class $ShipAlignmentStateCopyWithNull<$Return> {
+class $ShipsAlignmentStateCopyWithNull<$Return> {
   // ignore: unused_field
-  final ShipAlignmentState _value;
+  final ShipsAlignmentState _value;
   // ignore: unused_field
-  final $Return Function(ShipAlignmentState) _callback;
+  final $Return Function(ShipsAlignmentState) _callback;
 
-  $ShipAlignmentStateCopyWithNull(this._value, this._callback);
+  $ShipsAlignmentStateCopyWithNull(this._value, this._callback);
 
-  $BoardCopyWithNull<$Return> get board => $BoardCopyWithNull<$Return>(
+  $GameBoardCopyWithNull<$Return> get board => $GameBoardCopyWithNull<$Return>(
       _value.board, (value) => _callback(_value.copyWith(board: value)));
 
   $ShipCounterCopyWithNull<$Return> get shipCounter =>
@@ -191,12 +151,6 @@ class $ShipCounterCopyWithNull<$Return> {
 
 // coverage:ignore-start
 /// @nodoc
-List<Object?> _$BoardProps(Board instance, {List<Object?>? superProps}) =>
-    [instance.boardCell, ...?superProps];
-// coverage:ignore-end
-
-// coverage:ignore-start
-/// @nodoc
 List<Object?> _$DraggableShipProps(DraggableShip instance,
         {List<Object?>? superProps}) =>
     [instance.ship, instance.offset, ...?superProps];
@@ -204,7 +158,7 @@ List<Object?> _$DraggableShipProps(DraggableShip instance,
 
 // coverage:ignore-start
 /// @nodoc
-List<Object?> _$ShipAlignmentStateProps(ShipAlignmentState instance,
+List<Object?> _$ShipsAlignmentStateProps(ShipsAlignmentState instance,
         {List<Object?>? superProps}) =>
     [instance.board, instance.shipCounter, ...?superProps];
 // coverage:ignore-end

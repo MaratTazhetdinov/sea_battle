@@ -29,7 +29,7 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
 
   Offset? _boardOffset;
   int _currentDragTargetIndex = -1;
-  late Board _board;
+  late GameBoard _board;
 
   @override
   void initState() {
@@ -119,7 +119,7 @@ class _AlignmentBoardWidgetState extends State<AlignmentBoardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ShipAlignmentBloc, ShipAlignmentState>(
+    return BlocBuilder<ShipsAlignmentBloc, ShipsAlignmentState>(
       builder: (context, state) {
         _board = state.board;
         final occupiedIndexes = _board.findOccupiedIndexes();
