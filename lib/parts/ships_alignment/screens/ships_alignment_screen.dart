@@ -15,14 +15,14 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
   final ValueNotifier<DraggableShip> _draggableShip =
       ValueNotifier<DraggableShip>(const DraggableShip.empty());
 
-  /// Value notifier of list of potentialIndexes for [DraggableShip] on [GameBoard].
-  final ValueNotifier<List<int>> _potentialIndexes =
+  /// Value notifier of list of possible indexes for [DraggableShip] on [GameBoard].
+  final ValueNotifier<List<int>> _possibleIndexes =
       ValueNotifier<List<int>>([]);
 
   @override
   void dispose() {
     _draggableShip.dispose();
-    _potentialIndexes.dispose();
+    _possibleIndexes.dispose();
     super.dispose();
   }
 
@@ -42,23 +42,24 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
 
   /// OnPanEnd function.
   void _onPanEnd(DragEndDetails details, BuildContext context) {
-    if (_potentialIndexes.value.isNotEmpty) {
+    if (_possibleIndexes.value.isNotEmpty) {
       context.readShipAlignmentBloc
-          .add(ShipAddedByIndexes(_potentialIndexes.value));
-      _potentialIndexes.value = [];
+          .add(ShipAddedByIndexes(_possibleIndexes.value));
+      _possibleIndexes.value = [];
     }
     _draggableShip.value = const DraggableShip.empty();
   }
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.l10n;
     const double horizontalPadding = 40;
     final userId = context.readAuthBloc.state.user.id;
     final sessionId =
         DateTime.now().millisecondsSinceEpoch + Random().nextInt(1000);
     return BlocProvider(
       create: (context) => ShipsAlignmentBloc(
-        board: GameBoard.create(userId),
+        gameBoard: GameBoard.create(userId),
         shipCounter: ShipCounter.create(),
         gameSessionRepository: game_session.FbDbGameSessionRepository(
           fbDbDataProvider: game_session.FbDbGameSessionDataProvider(
@@ -71,7 +72,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
         children: [
           Scaffold(
             appBar: AppBar(
-              title: const Text('Ships Alignment'),
+              title: Text(locale.lineUpYourShips),
             ),
             body: SafeArea(
               child: Padding(
@@ -86,7 +87,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                           gameBoardSize:
                               Size(constraints.maxWidth, constraints.maxWidth),
                           draggableShip: _draggableShip,
-                          potentialIndexes: _potentialIndexes,
+                          possibleIndexes: _possibleIndexes,
                           onPanStart: (details, ship) =>
                               _onPanStart(details, ship),
                           onPanUpdate: (details) => _onPanUpdate(details),
@@ -139,20 +140,12 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                               child: ElevatedButton(
                                 onPressed: state.shipCounter.isEmpty
                                     ? () {
-                                        final userId =
-                                            context.readAuthBloc.state.user.id;
                                         context.readShipAlignmentBloc.add(
-                                          ShipsAlignmentCompleted(
-                                            userId: userId,
-                                            cells: state.board
-                                                .findOccupiedIndexes(),
-                                          ),
+                                          ShipsAlignmentCompleted(),
                                         );
                                       }
                                     : null,
-                                child: const Text(
-                                  'Start battle',
-                                ),
+                                child: Text(locale.startBattle),
                               ),
                             );
                           },
@@ -164,26 +157,28 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
               ),
             ),
           ),
-          LayoutBuilder(builder: (context, constraint) {
-            final draggedCellHeight =
-                ((constraint.maxWidth - (horizontalPadding * 2)) / 10) * 1.25;
-            return ValueListenableBuilder(
-              valueListenable: _draggableShip,
-              builder: (context, draggableShip, _) {
-                if (draggableShip == const DraggableShip.empty()) {
-                  return const SizedBox.shrink();
-                } else {
-                  return Transform.translate(
-                    offset: draggableShip.offset,
-                    child: ShipWidget(
-                      ship: draggableShip.ship,
-                      cellHeight: draggedCellHeight,
-                    ),
-                  );
-                }
-              },
-            );
-          }),
+          LayoutBuilder(
+            builder: (context, constraint) {
+              final draggedCellHeight =
+                  ((constraint.maxWidth - (horizontalPadding * 2)) / 10) * 1.25;
+              return ValueListenableBuilder(
+                valueListenable: _draggableShip,
+                builder: (context, draggableShip, _) {
+                  if (draggableShip == const DraggableShip.empty()) {
+                    return const SizedBox.shrink();
+                  } else {
+                    return Transform.translate(
+                      offset: draggableShip.offset,
+                      child: ShipWidget(
+                        ship: draggableShip.ship,
+                        cellHeight: draggedCellHeight,
+                      ),
+                    );
+                  }
+                },
+              );
+            },
+          ),
         ],
       ),
     );

@@ -9,12 +9,12 @@ class GameBoard extends Equatable {
   final String userId;
 
   /// [GameBoardCell].
-  final GameBoardCell gameBoardCell;
+  final Cell cell;
 
   /// Creates [GameBoard].
   const GameBoard({
     required this.userId,
-    required this.gameBoardCell,
+    required this.cell,
   });
 
   /// Factory constructor for creating [GameBoard] with given [userId] and [occupuidedIndexes].
@@ -22,22 +22,22 @@ class GameBoard extends Equatable {
       [List<int> occupuidedIndexes = const []]) {
     return GameBoard(
       userId: userId,
-      gameBoardCell: _createBoard(occupuidedIndexes),
+      cell: _createBoard(occupuidedIndexes),
     );
   }
 
   /// Creates [GameBoardCell] with given [occupuidedIndexes].
-  static GameBoardCell _createBoard(List<int> occupuidedIndexes) {
-    final List<GameBoardCell> cells = List.generate(
+  static Cell _createBoard(List<int> occupuidedIndexes) {
+    final List<Cell> cells = List.generate(
         100,
-        (index) => GameBoardCell(
+        (index) => Cell(
               index: index,
               cellState: occupuidedIndexes.contains(index)
                   ? CellState.occupied
                   : CellState.empty,
             ));
 
-    for (GameBoardCell cell in cells) {
+    for (Cell cell in cells) {
       final index = cell.index;
       final copy = cells[index];
       copy.topCell = index - 10 >= 0 ? cells[index - 10] : null;

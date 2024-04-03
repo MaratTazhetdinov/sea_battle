@@ -2,11 +2,11 @@ part of '../ships_alignment_part.dart';
 
 abstract class ShipsAlignmentEvent {}
 
-/// Removes ship by [index] from [Board].
-class ShipRemovedByIndex extends ShipsAlignmentEvent {
-  final int index;
+/// Removes ship by list of [indexes] from [Board].
+class ShipRemovedByIndexes extends ShipsAlignmentEvent {
+  final List<int> indexes;
 
-  ShipRemovedByIndex(this.index);
+  ShipRemovedByIndexes(this.indexes);
 }
 
 /// Adds ship by list of indexes to [Board].
@@ -17,9 +17,4 @@ class ShipAddedByIndexes extends ShipsAlignmentEvent {
 }
 
 /// Sends result of completed ships data to backend.
-class ShipsAlignmentCompleted extends ShipsAlignmentEvent {
-  final String userId;
-  final List<int> cells;
-
-  ShipsAlignmentCompleted({required this.userId, required this.cells});
-}
+class ShipsAlignmentCompleted extends ShipsAlignmentEvent {}

@@ -1,36 +1,36 @@
 part of '../game_board_part.dart';
 
-/// [GameBoard].
-class GameBoardCell {
-  /// Index on [GameBoard].
+/// [Cell].
+class Cell {
+  /// Index on [Cell].
   final int index;
 
   /// [CellState].
   CellState cellState;
 
-  /// Top [GameBoardCell].
-  GameBoardCell? topCell;
+  /// Top [Cell].
+  Cell? topCell;
 
-  /// Top right [GameBoardCell].
-  GameBoardCell? topRightCell;
+  /// Top right [Cell].
+  Cell? topRightCell;
 
-  /// Right [GameBoardCell].
-  GameBoardCell? rightCell;
+  /// Right [Cell].
+  Cell? rightCell;
 
-  /// Bottom right [GameBoardCell].
-  GameBoardCell? bottomRightCell;
+  /// Bottom right [Cell].
+  Cell? bottomRightCell;
 
-  /// Bottom [GameBoardCell].
-  GameBoardCell? bottomCell;
+  /// Bottom [Cell].
+  Cell? bottomCell;
 
-  /// Bottom left [GameBoardCell].
-  GameBoardCell? bottomLeftCell;
+  /// Bottom left [Cell].
+  Cell? bottomLeftCell;
 
-  /// Left [GameBoardCell].
-  GameBoardCell? leftCell;
+  /// Left [Cell].
+  Cell? leftCell;
 
   /// Top left [GameBoardCell].
-  GameBoardCell? topLeftCell;
+  Cell? topLeftCell;
 
   /// Getter for checking whether [GameBoardCell] is occupied by ship or not.
   bool get isOccupied => cellState == CellState.occupied;
@@ -38,8 +38,8 @@ class GameBoardCell {
   /// Setter for changing [CellState].
   set setCellState(CellState state) => cellState = state;
 
-  /// Creates [GameBoardCell].
-  GameBoardCell({
+  /// Creates [Cell].
+  Cell({
     required this.index,
     required this.cellState,
     this.topCell,
