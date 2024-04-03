@@ -18,6 +18,15 @@ class HomeScreen extends StatelessWidget {
               },
               child: const Text('Start Game'),
             ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: ElevatedButton(
+                onPressed: () {
+                  context.router.push(const ShipsAlignmentRoute());
+                },
+                child: const Text('Ships Alignment'),
+              ),
+            ),
             ElevatedButton(
               onPressed: () {
                 context.readAuthBloc.add(AuthLoggedOut());

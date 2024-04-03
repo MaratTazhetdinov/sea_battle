@@ -22,12 +22,12 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
     try {
       final gameBoards = event.gameSession.gameBoards;
       if (gameBoards.length == 2) {
-        gameLogic = GameLogic(
-          userBoard:
-              gameBoards.firstWhere((gameBoard) => gameBoard.userId == userId),
-          enemyBoard:
-              gameBoards.firstWhere((gameBoard) => gameBoard.userId != userId),
-        );
+        // gameLogic = GameLogic(
+        //   userBoard:
+        //       gameBoards.firstWhere((gameBoard) => gameBoard.userId == userId),
+        //   enemyBoard:
+        //       gameBoards.firstWhere((gameBoard) => gameBoard.userId != userId),
+        // );
       }
       emit(state.copyWith(gameSession: event.gameSession));
     } catch (e) {
@@ -39,7 +39,6 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
       GameSessionShipsAlignmentFinished event,
       Emitter<GameSessionState> emit) async {
     try {
-      ///TODO add game logic
       gameSessionRepository.finishShipsAlignment(
           userId: '', cells: event.cells);
     } catch (e) {
