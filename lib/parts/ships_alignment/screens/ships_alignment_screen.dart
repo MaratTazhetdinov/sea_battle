@@ -112,7 +112,7 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                             return Column(
                               children: [
                                 ...ShipType.values
-                                    .skip(0)
+                                    .skip(1)
                                     .toList()
                                     .reversed
                                     .map(

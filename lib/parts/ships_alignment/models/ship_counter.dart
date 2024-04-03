@@ -13,12 +13,13 @@ class ShipCounter extends Equatable {
 
   /// Factory constructor for creating [ShipCounter].
   factory ShipCounter.create() {
-    return const ShipCounter({
+    final map = {
       ShipType.four: 1,
       ShipType.three: 2,
       ShipType.two: 3,
       ShipType.one: 4,
-    });
+    };
+    return ShipCounter(map);
   }
 
   /// Getter which checks whether count of all [ShipType] is zero or not.
