@@ -4,7 +4,7 @@ part of '../ships_alignment_part.dart';
 class ShipsAlignmentBloc
     extends Bloc<ShipsAlignmentEvent, ShipsAlignmentState> {
   /// [GameBoard].
-  final GameBoard board;
+  final GameBoard gameBoard;
 
   /// [ShipCounter].
   final ShipCounter shipCounter;
@@ -13,47 +13,77 @@ class ShipsAlignmentBloc
   final game_session.IGameSessionRepository gameSessionRepository;
 
   ShipsAlignmentBloc({
-    required this.board,
+    required this.gameBoard,
     required this.shipCounter,
     required this.gameSessionRepository,
   }) : super(ShipsAlignmentState(
-          board: board,
+          gameBoard: gameBoard,
           shipCounter: shipCounter,
         )) {
-    on<ShipRemovedByIndex>(_onShipRemovedByIndex);
+    on<ShipRemovedByIndexes>(_onShipRemovedByIndexes);
     on<ShipAddedByIndexes>(_onShipAddedByIndexes);
     on<ShipsAlignmentCompleted>(_onShipAlignmentCompleted);
   }
 
   /// Removes ship by [index] from [Board].
-  void _onShipRemovedByIndex(
-      ShipRemovedByIndex event, Emitter<ShipsAlignmentState> emit) {
-    final ship = state.board.detectShipByIndex(event.index);
-    final updatedBoardCell = state.board.removeShipByIndex(event.index);
-    final updatedBoard = state.board.copyWith(gameBoardCell: updatedBoardCell);
-    final updatedCounterMap = state.shipCounter.addShip(ship.shipType);
-    final updatedShipCounter =
-        state.shipCounter.copyWith(counterMap: updatedCounterMap);
-    emit(state.copyWith(board: updatedBoard, shipCounter: updatedShipCounter));
+  void _onShipRemovedByIndexes(
+      ShipRemovedByIndexes event, Emitter<ShipsAlignmentState> emit) {
+    final newGameBoard = _removeShipByIndexes(
+        indexes: event.indexes, gameBoard: state.gameBoard);
+    final ship = Ship.fromIndexes(event.indexes);
+    final newShipCounter = state.shipCounter.addShip(ship.shipType);
+    final newState = ShipsAlignmentState(
+        gameBoard: newGameBoard, shipCounter: newShipCounter);
+    emit(newState);
   }
 
   /// Adds ship by list of indexes to [Board].
   void _onShipAddedByIndexes(
       ShipAddedByIndexes event, Emitter<ShipsAlignmentState> emit) {
-    final updatedBoardCell = state.board.addShipToBoard(event.indexes);
-    final updatedBoard = state.board.copyWith(gameBoardCell: updatedBoardCell);
-    final updatedCounterMap = state.shipCounter.removeShip(ShipType.values
-        .firstWhere((shipType) => shipType.size == event.indexes.length));
-    final updatedShipCounter =
-        state.shipCounter.copyWith(counterMap: updatedCounterMap);
-    emit(state.copyWith(board: updatedBoard, shipCounter: updatedShipCounter));
+    final newGameBoard =
+        _addShipToGameBoard(indexes: event.indexes, gameBoard: state.gameBoard);
+    final ship = Ship.fromIndexes(event.indexes);
+    final newShipCounter = state.shipCounter.removeShip(ship.shipType);
+    final newState = ShipsAlignmentState(
+        gameBoard: newGameBoard, shipCounter: newShipCounter);
+    emit(newState);
   }
 
   /// Sends result of completed ships data to backend.
   Future<void> _onShipAlignmentCompleted(
       ShipsAlignmentCompleted event, Emitter<ShipsAlignmentState> emit) async {
+    final occupiedCells = state.gameBoard.cell.findOccupiedIndexes();
+    final userId = state.gameBoard.userId;
     await gameSessionRepository.finishShipsAlignment(
-        userId: event.userId, cells: event.cells);
+      userId: userId,
+      cells: occupiedCells,
+    );
+  }
+
+  /// Removes ship from [GameBoard] with given [index].
+  GameBoard _removeShipByIndexes({
+    required List<int> indexes,
+    required GameBoard gameBoard,
+  }) {
+    Cell newCell = gameBoard.cell;
+    for (int i = 0; i < indexes.length; i++) {
+      newCell = newCell.goToCellWithIndex(indexes[i]);
+      newCell.setCellState = CellState.empty;
+    }
+    return gameBoard.copyWith(cell: newCell);
+  }
+
+  /// Adds ship to [GameBoard] with given [indexes].
+  GameBoard _addShipToGameBoard({
+    required List<int> indexes,
+    required GameBoard gameBoard,
+  }) {
+    Cell newCell = gameBoard.cell;
+    for (int i = 0; i < indexes.length; i++) {
+      newCell = newCell.goToCellWithIndex(indexes[i]);
+      newCell.setCellState = CellState.occupied;
+    }
+    return gameBoard.copyWith(cell: newCell);
   }
 }
 

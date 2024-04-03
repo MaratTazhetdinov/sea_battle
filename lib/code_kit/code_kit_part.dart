@@ -11,5 +11,5 @@ part 'validators/app_text_validators.dart';
 part 'validators/form_validation_state.dart';
 part 'constants/constants.dart';
 part 'exceptions/error_type.dart';
-part 'extensions/board_helper.dart';
+part 'extensions/cell_helper.dart';
 part 'extensions/ship_counter_helper.dart';

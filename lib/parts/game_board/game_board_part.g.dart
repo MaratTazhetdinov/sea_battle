@@ -28,11 +28,11 @@ class $GameBoardCopyWith<$Return> {
 
   $Return call({
     String? userId,
-    GameBoardCell? gameBoardCell,
+    Cell? cell,
   }) =>
       _callback(GameBoard(
         userId: userId ?? _value.userId,
-        gameBoardCell: gameBoardCell ?? _value.gameBoardCell,
+        cell: cell ?? _value.cell,
       ));
 }
 
@@ -56,5 +56,5 @@ class $GameBoardCopyWithNull<$Return> {
 /// @nodoc
 List<Object?> _$GameBoardProps(GameBoard instance,
         {List<Object?>? superProps}) =>
-    [instance.userId, instance.gameBoardCell, ...?superProps];
+    [instance.userId, instance.cell, ...?superProps];
 // coverage:ignore-end

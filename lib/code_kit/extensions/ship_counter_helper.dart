@@ -1,15 +1,15 @@
 part of '../code_kit_part.dart';
 
 extension ShipCounterHelper on ShipCounter {
-  Map<ShipType, int> removeShip(ShipType shipType) {
+  ShipCounter removeShip(ShipType shipType) {
     final map = counterMap;
     map.update(shipType, (count) => count - 1);
-    return map;
+    return copyWith(counterMap: map);
   }
 
-  Map<ShipType, int> addShip(ShipType shipType) {
+  ShipCounter addShip(ShipType shipType) {
     final map = counterMap;
     map.update(shipType, (count) => count + 1);
-    return map;
+    return copyWith(counterMap: map);
   }
 }

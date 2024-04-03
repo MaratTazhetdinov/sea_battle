@@ -9,7 +9,7 @@ class AlignmentGameBoardWidget extends StatefulWidget {
   final ValueNotifier<DraggableShip> draggableShip;
 
   /// Value notifier of list of potentialIndexes for [DraggableShip] on [GameBoard].
-  final ValueNotifier<List<int>> potentialIndexes;
+  final ValueNotifier<List<int>> possibleIndexes;
 
   /// OnPanStart function.
   final Function(DragStartDetails, Ship) onPanStart;
@@ -24,7 +24,7 @@ class AlignmentGameBoardWidget extends StatefulWidget {
     super.key,
     required this.gameBoardSize,
     required this.draggableShip,
-    required this.potentialIndexes,
+    required this.possibleIndexes,
     required this.onPanStart,
     required this.onPanUpdate,
     required this.onPanEnd,
@@ -38,14 +38,14 @@ class AlignmentGameBoardWidget extends StatefulWidget {
 class _AlignmentGameBoardWidgetState extends State<AlignmentGameBoardWidget> {
   late final _gameBoardSize = widget.gameBoardSize;
   late final _draggableShip = widget.draggableShip;
-  late final _potentialIndexes = widget.potentialIndexes;
+  late final _potentialIndexes = widget.possibleIndexes;
 
   /// Global offset of [AlignmentGameBoardWidget].
   Offset? _gameBoardOffset;
 
   /// Current index of [GameBoard] according to [DraggableShip] offset.
   int _currentDragTargetIndex = -1;
-  late GameBoard _board;
+  late GameBoard _gameBoard;
 
   @override
   void initState() {
@@ -95,8 +95,11 @@ class _AlignmentGameBoardWidgetState extends State<AlignmentGameBoardWidget> {
 
         if (_currentDragTargetIndex != index) {
           _currentDragTargetIndex = index;
-          _potentialIndexes.value = _board.checkPossibleAlignment(
-              index: index, ship: draggableShip.ship);
+          _potentialIndexes.value = ShipsAlignmentLogic.checkPossibleAlignment(
+            index: index,
+            ship: draggableShip.ship,
+            cell: _gameBoard.cell,
+          );
         }
       } else {
         _currentDragTargetIndex = -1;
@@ -140,8 +143,8 @@ class _AlignmentGameBoardWidgetState extends State<AlignmentGameBoardWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<ShipsAlignmentBloc, ShipsAlignmentState>(
       builder: (context, state) {
-        _board = state.board;
-        final occupiedIndexes = _board.findOccupiedIndexes();
+        _gameBoard = state.gameBoard;
+        final occupiedIndexes = _gameBoard.cell.findOccupiedIndexes();
         return GestureDetector(
           onPanStart: (details) {
             final index = _calculateIndexFromOffset(
@@ -155,9 +158,11 @@ class _AlignmentGameBoardWidgetState extends State<AlignmentGameBoardWidget> {
             final isCellOccupied = occupiedIndexes.contains(index);
 
             if (isCellOccupied) {
-              final ship = _board.detectShipByIndex(index);
-              widget.onPanStart(details, ship);
-              context.readShipAlignmentBloc.add(ShipRemovedByIndex(index));
+              final shipIndexes =
+                  _gameBoard.cell.detectShipIndexesByIndex(index);
+              context.readShipAlignmentBloc
+                  .add(ShipRemovedByIndexes(shipIndexes));
+              widget.onPanStart(details, Ship.fromIndexes(shipIndexes));
             }
           },
           onPanUpdate: (details) {

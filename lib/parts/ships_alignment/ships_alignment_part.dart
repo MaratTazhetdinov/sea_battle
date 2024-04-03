@@ -23,4 +23,5 @@ part 'bloc/ships_alignment_bloc.dart';
 part 'bloc/ships_alignment_event.dart';
 part 'bloc/ships_alignment_state.dart';
 part 'models/ship_counter.dart';
+part 'logic/ships_alignment_logic.dart';
 part 'ships_alignment_part.g.dart';
