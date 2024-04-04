@@ -1,7 +1,7 @@
 part of '../game_session_list_part.dart';
 
 @props
-abstract class GameSessionListState extends Equatable {
+sealed class GameSessionListState extends Equatable {
   final List<GameSession> gameSessionList;
 
   const GameSessionListState(this.gameSessionList);

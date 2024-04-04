@@ -6,8 +6,7 @@ class FbDbGameSessionRepository extends IGameSessionRepository {
   FbDbGameSessionRepository({required this.fbDbDataProvider});
 
   @override
-  Stream<GameSession> getGameSession(String gameSessionId) => fbDbDataProvider
-      .getGameSession(gameSessionId)
+  Stream<GameSession> get gameSession => fbDbDataProvider.gameSession
       .map((dtoGameSession) => GameSession.fromDto(dtoGameSession));
 
   @override

@@ -37,7 +37,7 @@ class GameBoard extends Equatable {
   factory GameBoard.fromDto(DtoGameBoard dtoGameBoard) {
     return GameBoard(
       userId: dtoGameBoard.userId,
-      userNickname: '',
+      userNickname: dtoGameBoard.userNickname,
       cell: _createBoard(dtoGameBoard.cells),
     );
   }

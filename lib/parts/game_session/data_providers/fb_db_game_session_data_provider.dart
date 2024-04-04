@@ -11,7 +11,7 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
   });
 
   @override
-  Stream<DtoGameSession> getGameSession(String gameSessionId) {
+  Stream<DtoGameSession> get gameSession {
     return db.ref(ref).child(gameSessionId).onValue.map(
         (data) => DtoGameSession.fromFirebaseDatabase(data.snapshot.value));
   }
@@ -19,8 +19,8 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
   @override
   Stream<List<DtoGameSession>> get gameSessionsList {
     return db.ref(ref).onValue.map((dataList) {
-      final list = dataList.snapshot.value as List<Object?>;
-      return list
+      final list = dataList.snapshot.value as Map<Object?, Object?>;
+      return list.values
           .map((data) => DtoGameSession.fromFirebaseDatabase(data))
           .toList();
     });

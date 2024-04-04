@@ -1,7 +1,7 @@
 part of '../game_session_part.dart';
 
 abstract class IGameSessionRepository {
-  Stream<GameSession> getGameSession(String gameSessionId);
+  Stream<GameSession> get gameSession;
 
   Stream<List<GameSession>> get gameSessionsList;
 

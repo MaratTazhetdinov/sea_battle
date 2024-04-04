@@ -10,8 +10,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
       : super(const GameSessionState(
           gameSession: GameSession(gameBoards: []),
         )) {
-    _gameSessionSubscription = gameSessionRepository
-        .getGameSession('')
+    _gameSessionSubscription = gameSessionRepository.gameSession
         .listen((gameSession) => add(_GameSessionChanged(gameSession)));
     on<_GameSessionChanged>(_onGameSessionChanged);
     on<GameSessionUserShot>(_onUserShot);

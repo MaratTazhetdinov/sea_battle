@@ -41,3 +41,10 @@ class GameSessionListBloc
     return super.close();
   }
 }
+
+/// Context extension for quick access to [GameSessionListBloc].
+extension GameSessionListBlocBuildContextX on BuildContext {
+  /// Instance of [GameSessionListBloc].
+  GameSessionListBloc get readGameSessionListBloc =>
+      read<GameSessionListBloc>();
+}
