@@ -8,27 +8,22 @@ class GameBoard extends Equatable {
   /// User id.
   final String userId;
 
-  /// User nickname.
-  final String userNickname;
-
-  /// [GameBoardCell].
+  /// [Cell].
   final Cell cell;
 
   /// Creates [GameBoard].
   const GameBoard({
     required this.userId,
-    required this.userNickname,
     required this.cell,
   });
 
-  /// Factory constructor for creating [GameBoard] with given [userId] and [userNickname].
+  /// Factory constructor for creating [GameBoard] with given [userId].
   factory GameBoard.create(
     String userId,
     String userNickname,
   ) {
     return GameBoard(
       userId: userId,
-      userNickname: userNickname,
       cell: _createBoard(List.generate(100, (index) => 0)),
     );
   }
@@ -37,7 +32,6 @@ class GameBoard extends Equatable {
   factory GameBoard.fromDto(DtoGameBoard dtoGameBoard) {
     return GameBoard(
       userId: dtoGameBoard.userId,
-      userNickname: dtoGameBoard.userNickname,
       cell: _createBoard(dtoGameBoard.cells),
     );
   }

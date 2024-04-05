@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sea_battle/firebase_options.dart';
 import 'package:sea_battle/l10n/l10n.dart';
 import 'package:sea_battle/parts/auth/auth_part.dart';
+import 'package:sea_battle/parts/game_session/game_session_part.dart';
 import 'package:sea_battle/parts/profile/profile_part.dart';
 import 'package:sea_battle/parts/router/router_part.dart';
 import 'package:sea_battle/ui_kit/ui_kit_part.dart';
@@ -25,10 +27,13 @@ void _runApp() {
       FirebaseAuthDataProvider(firebaseAuth: FirebaseAuth.instance);
   final profileDataProvider =
       FirestoreProfileDataProvider(db: FirebaseFirestore.instance);
+  final gameSessionDataProvider =
+      FbDbGameSessionDataProvider(db: FirebaseDatabase.instance);
   final appRouter = AppRouter();
   runApp(MyApp(
     iAuthDataProvider: authDataProvider,
     iProfileDataProvider: profileDataProvider,
+    iGameSessionDataProvider: gameSessionDataProvider,
     appRouter: appRouter,
   ));
 }
@@ -36,12 +41,14 @@ void _runApp() {
 class MyApp extends StatelessWidget {
   final IAuthDataProvider iAuthDataProvider;
   final IProfileDataProvider iProfileDataProvider;
+  final IGameSessionDataProvider iGameSessionDataProvider;
   final AppRouter appRouter;
 
   const MyApp({
     super.key,
     required this.iAuthDataProvider,
     required this.iProfileDataProvider,
+    required this.iGameSessionDataProvider,
     required this.appRouter,
   });
 
@@ -56,6 +63,10 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<IProfileRepository>(
           create: (context) =>
               ProfileRepository(iProfileDataProvider: iProfileDataProvider),
+        ),
+        RepositoryProvider<IGameSessionRepository>(
+          create: (context) => GameSessionRepository(
+              gameSessionDataProvider: iGameSessionDataProvider),
         ),
       ],
       child: MultiBlocProvider(

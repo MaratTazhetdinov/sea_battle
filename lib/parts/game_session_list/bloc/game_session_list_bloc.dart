@@ -3,11 +3,14 @@ part of '../game_session_list_part.dart';
 class GameSessionListBloc
     extends Bloc<GameSessionListEvent, GameSessionListState> {
   final IGameSessionRepository gameSessionRepository;
+  final IProfileRepository profileRepository;
 
   StreamSubscription<List<GameSession>>? _gameSessionListSubscription;
 
-  GameSessionListBloc({required this.gameSessionRepository})
-      : super(const GameSessionListInit()) {
+  GameSessionListBloc({
+    required this.gameSessionRepository,
+    required this.profileRepository,
+  }) : super(const GameSessionListInit()) {
     _startListen();
     on<_GameSessionListChanged>(_onGameSessionListChanged);
     on<GameSessionListReloaded>(_onGameSessionListReloaded);

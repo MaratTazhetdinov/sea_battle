@@ -64,6 +64,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           id: id,
           email: event.email,
           nickname: event.nickname,
+          win: 0,
+          loss: 0,
         ));
       } else {
         throw ErrorType.unexpectedError;

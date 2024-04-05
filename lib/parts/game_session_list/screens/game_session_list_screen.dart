@@ -8,12 +8,9 @@ class GameSessionListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => GameSessionListBloc(
-        gameSessionRepository: FbDbGameSessionRepository(
-          fbDbDataProvider: FbDbGameSessionDataProvider(
-            gameSessionId: '',
-            db: FirebaseDatabase.instance,
-          ),
-        ),
+        gameSessionRepository:
+            RepositoryProvider.of<IGameSessionRepository>(context),
+        profileRepository: RepositoryProvider.of<IProfileRepository>(context),
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -22,10 +19,6 @@ class GameSessionListScreen extends StatelessWidget {
         body: BlocBuilder<GameSessionListBloc, GameSessionListState>(
           builder: (context, state) {
             return switch (state) {
-              GameSessionListInit init when init.gameSessionList.isEmpty =>
-                const Center(
-                  child: Text('List is empty'),
-                ),
               GameSessionListInit _ => const Center(
                   child: CircularProgressIndicator(),
                 ),
@@ -40,15 +33,14 @@ class GameSessionListScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              // GameSessionListSuccess successState => ListView.builder(
-              //     itemBuilder: (context, index) => Text(
-              //         successState.list[index].gameBoards.first.userNickname),
-              //     itemCount: successState.list.length,
-              //   ),
+              GameSessionListSuccess successState
+                  when successState.list.isEmpty =>
+                const Center(
+                  child: Text('List is empty'),
+                ),
               GameSessionListSuccess successState => Column(
                   children: [
-                    ...successState.gameSessionList
-                        .map((e) => Text(e.gameBoards.first.userNickname))
+                    ...successState.gameSessionList.map((e) => const Text('Hi'))
                   ],
                 ),
             };

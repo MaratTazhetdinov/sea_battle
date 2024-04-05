@@ -55,18 +55,13 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
     final locale = context.l10n;
     const double horizontalPadding = 40;
     final user = context.readAuthBloc.state.user;
-    final sessionId =
-        DateTime.now().millisecondsSinceEpoch + Random().nextInt(1000);
+
     return BlocProvider(
       create: (context) => ShipsAlignmentBloc(
         gameBoard: GameBoard.create(user.id, user.nickname),
         shipCounter: ShipCounter.create(),
-        gameSessionRepository: game_session.FbDbGameSessionRepository(
-          fbDbDataProvider: game_session.FbDbGameSessionDataProvider(
-            gameSessionId: sessionId.toString(),
-            db: FirebaseDatabase.instance,
-          ),
-        ),
+        gameSessionRepository:
+            RepositoryProvider.of<IGameSessionRepository>(context),
       ),
       child: Stack(
         children: [

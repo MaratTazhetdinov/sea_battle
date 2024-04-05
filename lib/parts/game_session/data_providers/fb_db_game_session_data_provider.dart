@@ -1,17 +1,15 @@
 part of '../game_session_part.dart';
 
 class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
-  final String gameSessionId;
   final FirebaseDatabase db;
   static const ref = 'games';
 
   FbDbGameSessionDataProvider({
-    required this.gameSessionId,
     required this.db,
   });
 
   @override
-  Stream<DtoGameSession> get gameSession {
+  Stream<DtoGameSession> getGameSession(String gameSessionId) {
     return db.ref(ref).child(gameSessionId).onValue.map(
         (data) => DtoGameSession.fromFirebaseDatabase(data.snapshot.value));
   }
@@ -29,6 +27,7 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
   @override
   Future<void> shoot({
     required String userId,
+    required String gameSessionId,
     required int cellIndex,
     required int cellState,
   }) async {
@@ -41,7 +40,7 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
   @override
   Future<void> finishShipsAlignment({
     required String userId,
-    required String userNickname,
+    required String gameSessionId,
     required List<int> cells,
   }) async {
     final rawCells =
@@ -49,7 +48,6 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
     await db.ref(ref).child(gameSessionId).update(
       {
         userId: {
-          'userNickname': userNickname,
           'cells': rawCells,
         },
       },

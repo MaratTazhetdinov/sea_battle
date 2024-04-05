@@ -11,9 +11,7 @@ sealed class GameSessionListState extends Equatable {
 }
 
 class GameSessionListInit extends GameSessionListState {
-  final List<GameSession>? list;
-
-  const GameSessionListInit([this.list]) : super(const []);
+  const GameSessionListInit() : super(const []);
 }
 
 class GameSessionListSuccess extends GameSessionListState {
