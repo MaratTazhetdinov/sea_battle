@@ -24,9 +24,13 @@ class GameSessionListBloc
   Future<void> _onGameSessionListChanged(
       _GameSessionListChanged event, Emitter<GameSessionListState> emit) async {
     try {
-      emit(GameSessionListSuccess(event.gameSessionList
-          .where((session) => session.isWaitingForPlayer)
-          .toList()));
+      final profiles = await profileRepository.getAllProfiles();
+      emit(GameSessionListSuccess(
+        event.gameSessionList
+            .where((session) => session.isWaitingForPlayer)
+            .toList(),
+        profiles,
+      ));
     } catch (e) {
       emit(GameSessionListFailure(e));
     }

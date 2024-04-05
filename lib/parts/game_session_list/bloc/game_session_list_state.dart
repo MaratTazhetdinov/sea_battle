@@ -16,8 +16,9 @@ class GameSessionListInit extends GameSessionListState {
 
 class GameSessionListSuccess extends GameSessionListState {
   final List<GameSession> list;
+  final List<Profile> profiles;
 
-  const GameSessionListSuccess(this.list) : super(list);
+  const GameSessionListSuccess(this.list, this.profiles) : super(list);
 }
 
 class GameSessionListFailure extends GameSessionListState {

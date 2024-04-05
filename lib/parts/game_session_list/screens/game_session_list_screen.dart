@@ -38,10 +38,21 @@ class GameSessionListScreen extends StatelessWidget {
                 const Center(
                   child: Text('List is empty'),
                 ),
-              GameSessionListSuccess successState => Column(
-                  children: [
-                    ...successState.gameSessionList.map((e) => const Text('Hi'))
-                  ],
+              GameSessionListSuccess successState => Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      ...successState.gameSessionList.map((e) {
+                        final profile = successState.profiles.firstWhere(
+                            (profile) =>
+                                profile.id == e.gameBoards.first.userId);
+                        return GameSessionListItemWidget(
+                          profile: profile,
+                          sessionId: e.gameSessionId,
+                        );
+                      }),
+                    ],
+                  ),
                 ),
             };
           },

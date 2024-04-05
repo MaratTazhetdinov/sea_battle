@@ -10,8 +10,11 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
       {required this.gameSessionRepository,
       required this.userId,
       required this.gameSessionId})
-      : super(const GameSessionState(
-          gameSession: GameSession(gameBoards: []),
+      : super(GameSessionState(
+          gameSession: GameSession(
+            gameSessionId: gameSessionId,
+            gameBoards: [],
+          ),
         )) {
     _gameSessionSubscription = gameSessionRepository
         .getGameSession(gameSessionId)
