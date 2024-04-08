@@ -1,10 +1,15 @@
 part of '../game_session_list_part.dart';
 
+/// Bloc for loading game session list.
 class GameSessionListBloc
     extends Bloc<GameSessionListEvent, GameSessionListState> {
+  /// Game session repository to interact with backend.
   final IGameSessionRepository gameSessionRepository;
+
+  /// Profile repository to interact with backend.
   final IProfileRepository profileRepository;
 
+  /// Stream subscription for listening to game session list from backend.
   StreamSubscription<List<GameSession>>? _gameSessionListSubscription;
 
   GameSessionListBloc({
@@ -16,11 +21,13 @@ class GameSessionListBloc
     on<GameSessionListReloaded>(_onGameSessionListReloaded);
   }
 
+  /// Starts listen to game session stream.
   void _startListen() {
     _gameSessionListSubscription = gameSessionRepository.gameSessionsList
         .listen((list) => add(_GameSessionListChanged(list)));
   }
 
+  /// Changes state when new data comes from stream.
   Future<void> _onGameSessionListChanged(
       _GameSessionListChanged event, Emitter<GameSessionListState> emit) async {
     try {
@@ -36,6 +43,7 @@ class GameSessionListBloc
     }
   }
 
+  /// Reloads and starts listen to a new stream.
   Future<void> _onGameSessionListReloaded(
       GameSessionListReloaded event, Emitter<GameSessionListState> emit) async {
     emit(const GameSessionListInit());

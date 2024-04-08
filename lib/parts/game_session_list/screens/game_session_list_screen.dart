@@ -39,20 +39,39 @@ class GameSessionListScreen extends StatelessWidget {
                   child: Text('List is empty'),
                 ),
               GameSessionListSuccess successState => Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      ...successState.gameSessionList.map((e) {
-                        final profile = successState.profiles.firstWhere(
-                            (profile) =>
-                                profile.id == e.gameBoards.first.userId);
-                        return GameSessionListItemWidget(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      final profile = successState.profiles.firstWhere(
+                          (profile) =>
+                              profile.id ==
+                              successState.list[index].gameBoards.first.userId);
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: 20,
+                          top: index == 0 ? 20 : 0,
+                        ),
+                        child: GameSessionListItemWidget(
                           profile: profile,
-                          sessionId: e.gameSessionId,
-                        );
-                      }),
-                    ],
+                          sessionId: successState.list[index].gameSessionId,
+                        ),
+                      );
+                    },
+                    itemCount: successState.gameSessionList.length,
                   ),
+                  // child: Column(
+                  //   children: [
+                  //     ...successState.gameSessionList.map((e) {
+                  //       final profile = successState.profiles.firstWhere(
+                  //           (profile) =>
+                  //               profile.id == e.gameBoards.first.userId);
+                  //       return GameSessionListItemWidget(
+                  //         profile: profile,
+                  //         sessionId: e.gameSessionId,
+                  //       );
+                  //     }),
+                  //   ],
+                  // ),
                 ),
             };
           },
