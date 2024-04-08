@@ -37,7 +37,7 @@ class GameSessionListScreen extends StatelessWidget {
               GameSessionListSuccess successState
                   when successState.list.isEmpty =>
                 Center(
-                  child: Text(locale.noActiveSession),
+                  child: Text(locale.noActiveSessions),
                 ),
               GameSessionListSuccess successState => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
