@@ -13,6 +13,7 @@ class GameSessionListItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.theme.colors;
+    final locale = context.l10n;
     return GestureDetector(
       onTap: () {
         /// to ships alignment screen
@@ -26,8 +27,8 @@ class GameSessionListItemWidget extends StatelessWidget {
         ),
         child: ListTile(
           title: Text(profile.nickname),
-          subtitle:
-              Text('Statistics - wins: ${profile.win} / loss: ${profile.loss}'),
+          subtitle: Text(
+              '${locale.wins}: ${profile.win} / ${locale.losses}: ${profile.loss}'),
         ),
       ),
     );

@@ -29,5 +29,10 @@
     "loading": "Загрузка...",
     "lineUpYourShips": "Расположите корабли",
     "or": "или",
-    "startBattle": "Вступить в бой"
+    "startBattle": "Вступить в бой",
+    "chooseYourOpponent": "Выберите своего противника",
+    "reload": "Перезагрузить",
+    "noActiveSessions": "Нет активных сессий в настоящий момент",
+    "wins": "Побед",
+    "losses": "Поражений"
 }

@@ -29,5 +29,10 @@
     "loading": "Loading...",
     "lineUpYourShips": "Line up your ships",
     "or": "or",
-    "startBattle": "Start Battle"
+    "startBattle": "Start Battle",
+    "chooseYourOpponent": "Choose your opponent",
+    "reload": "Reload",
+    "noActiveSessions": "No active sessions at the moment",
+    "wins": "Wins",
+    "losses": "Losses"
 }

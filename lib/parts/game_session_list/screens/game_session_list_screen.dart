@@ -6,6 +6,7 @@ class GameSessionListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.l10n;
     return BlocProvider(
       create: (context) => GameSessionListBloc(
         gameSessionRepository:
@@ -14,7 +15,7 @@ class GameSessionListScreen extends StatelessWidget {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Choose your opponent'),
+          title: Text(locale.chooseYourOpponent),
         ),
         body: BlocBuilder<GameSessionListBloc, GameSessionListState>(
           builder: (context, state) {
@@ -28,15 +29,15 @@ class GameSessionListScreen extends StatelessWidget {
                       Text(errorState.error.toString()),
                       ElevatedButton(
                         onPressed: () {},
-                        child: const Text('Reload'),
+                        child: Text(locale.reload),
                       ),
                     ],
                   ),
                 ),
               GameSessionListSuccess successState
                   when successState.list.isEmpty =>
-                const Center(
-                  child: Text('List is empty'),
+                Center(
+                  child: Text(locale.noActiveSession),
                 ),
               GameSessionListSuccess successState => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
