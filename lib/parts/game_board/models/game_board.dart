@@ -45,7 +45,7 @@ class GameBoard extends Equatable {
               cellState: switch (occupuidedIndexes[index]) {
                 1 => CellState.occupied,
                 2 => CellState.destroyed,
-                3 => CellState.shooted,
+                3 => CellState.shot,
                 _ => CellState.empty,
               },
             ));

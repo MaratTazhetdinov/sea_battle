@@ -11,7 +11,7 @@ class GameLogic extends IGameLogic {
 
   int? shoot(int cellIndex) =>
       switch (enemyBoard.cell.goToCellWithIndex(cellIndex).cellState) {
-        CellState.empty => CellState.shooted.value,
+        CellState.empty => CellState.shot.value,
         CellState.occupied => CellState.destroyed.value,
         _ => null,
       };

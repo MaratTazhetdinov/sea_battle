@@ -157,9 +157,15 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                                 child: ElevatedButton(
                                   onPressed: state.shipCounter.isEmpty
                                       ? () {
+                                          final userId =
+                                              widget.gameSessionId == null
+                                                  ? user.id
+                                                  : null;
                                           context.readShipAlignmentBloc.add(
                                             ShipsAlignmentCompleted(
-                                                gameSessionId: _gameSessionId),
+                                              gameSessionId: _gameSessionId,
+                                              currentTurnUserId: userId,
+                                            ),
                                           );
                                         }
                                       : null,

@@ -12,11 +12,13 @@ abstract class IGameSessionRepository {
     required String gameSessionId,
     required int cellIndex,
     required int cellState,
+    required String nextTurnUserId,
   });
 
   Future<void> finishShipsAlignment({
     required String userId,
     required String gameSessionId,
     required List<int> cells,
+    String? currentTurnUserId,
   });
 }

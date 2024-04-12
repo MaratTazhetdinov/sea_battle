@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sea_battle/code_kit/code_kit_part.dart';
 import 'package:sea_battle/parts/auth/auth_part.dart';
 import 'package:sea_battle/parts/game_board/game_board_part.dart';
+import 'package:sea_battle/parts/game_logic/game_logic_part.dart';
 import 'package:sea_battle/ui_kit/ui_kit_part.dart';
 
 part 'data_providers/i_game_session_data_provider.dart';

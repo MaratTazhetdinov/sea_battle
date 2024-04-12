@@ -37,11 +37,16 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
     required String gameSessionId,
     required int cellIndex,
     required int cellState,
+    required String nextTurnUserId,
   }) async {
     await db
         .ref(ref)
         .child(gameSessionId)
         .update({'$userId/cells/$cellIndex': cellState});
+    await db
+        .ref(ref)
+        .child(gameSessionId)
+        .update({'currentTurnUserId': nextTurnUserId});
   }
 
   @override
@@ -49,11 +54,13 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
     required String userId,
     required String gameSessionId,
     required List<int> cells,
+    String? currentTurnUserId,
   }) async {
     final rawCells =
         List.generate(100, (index) => cells.contains(index) ? 1 : 0);
     await db.ref(ref).child(gameSessionId).update(
       {
+        if (currentTurnUserId case final userId?) 'currentTurnUserId': userId,
         userId: {
           'cells': rawCells,
         },

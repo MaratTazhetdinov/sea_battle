@@ -14,6 +14,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
           gameSession: GameSession(
             gameSessionId: gameSessionId,
             gameBoards: [],
+            currentTurnUserId: '',
           ),
         )) {
     _gameSessionSubscription = gameSessionRepository
@@ -26,15 +27,6 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
   Future<void> _onGameSessionChanged(
       _GameSessionChanged event, Emitter<GameSessionState> emit) async {
     try {
-      final gameBoards = event.gameSession.gameBoards;
-      if (gameBoards.length == 2) {
-        // gameLogic = GameLogic(
-        //   userBoard:
-        //       gameBoards.firstWhere((gameBoard) => gameBoard.userId == userId),
-        //   enemyBoard:
-        //       gameBoards.firstWhere((gameBoard) => gameBoard.userId != userId),
-        // );
-      }
       emit(state.copyWith(gameSession: event.gameSession));
     } catch (e) {
       emit(GameSessionFailed(e, state.gameSession));
@@ -44,14 +36,22 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
   Future<void> _onUserShot(
       GameSessionUserShot event, Emitter<GameSessionState> emit) async {
     try {
-      // final cellState = gameLogic.shoot(event.cellIndex);
-      // if (cellState case final state?) {
-      //   gameSessionRepository.shoot(
-      //     userId: gameLogic.enemyBoard.userId,
-      //     cellIndex: event.cellIndex,
-      //     cellState: state,
-      //   );
-      // }
+      final gameLogic = GameLogic(
+        userBoard: state.gameSession.gameBoards
+            .firstWhere((gameBoard) => gameBoard.userId == userId),
+        enemyBoard: state.gameSession.gameBoards
+            .firstWhere((gameBoard) => gameBoard.userId != userId),
+      );
+      final cellState = gameLogic.shoot(event.cellIndex);
+      if (cellState case final cellState?) {
+        gameSessionRepository.shoot(
+          gameSessionId: state.gameSession.gameSessionId,
+          userId: gameLogic.enemyBoard.userId,
+          cellIndex: event.cellIndex,
+          cellState: cellState,
+          nextTurnUserId: gameLogic.enemyBoard.userId,
+        );
+      }
     } catch (e) {
       emit(GameSessionFailed(e, state.gameSession));
     }

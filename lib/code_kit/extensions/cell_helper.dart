@@ -126,7 +126,7 @@ extension CellHelper on Cell {
     final List<CellState> res = [];
 
     for (int i = 0; i < 100; i++) {
-      final cell = goToCellWithIndex(0);
+      final cell = goToCellWithIndex(i);
       res.add(cell.cellState);
     }
     return res;

@@ -58,6 +58,7 @@ class ShipsAlignmentBloc
         userId: state.gameBoard.userId,
         gameSessionId: event.gameSessionId,
         cells: occupiedCells,
+        currentTurnUserId: event.currentTurnUserId,
       );
       emit(state.copyWith(isAlignmentComplited: true));
     } catch (e) {
