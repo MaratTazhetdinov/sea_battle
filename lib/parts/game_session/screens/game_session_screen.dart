@@ -40,15 +40,29 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                     .firstWhere((gameBoard) => gameBoard.userId == userId);
                 final enemyGameBoard = state.gameSession.gameBoards
                     .firstWhere((gameBoard) => gameBoard.userId != userId);
+                final isUserTurn =
+                    state.gameSession.currentTurnUserId == userId;
                 return Column(
                   children: [
-                    GameBoardWidget(
-                        height: 300, width: 300, gameBoard: playerGameBoard),
-                    const SizedBox(height: 40),
-                    GameBoardWidget(
-                      height: 300,
-                      width: 300,
-                      gameBoard: enemyGameBoard,
+                    AbsorbPointer(
+                      absorbing: true,
+                      child: GameBoardWidget(
+                          height: 300, width: 300, gameBoard: playerGameBoard),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Text(
+                        isUserTurn ? 'Your turn' : 'Enemy turn',
+                      ),
+                    ),
+                    AbsorbPointer(
+                      absorbing: !isUserTurn,
+                      child: GameBoardWidget(
+                        height: 300,
+                        width: 300,
+                        gameBoard: enemyGameBoard,
+                        isEnemyBoard: true,
+                      ),
                     ),
                   ],
                 );

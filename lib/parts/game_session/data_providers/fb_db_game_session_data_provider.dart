@@ -43,10 +43,12 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
         .ref(ref)
         .child(gameSessionId)
         .update({'$userId/cells/$cellIndex': cellState});
-    await db
-        .ref(ref)
-        .child(gameSessionId)
-        .update({'currentTurnUserId': nextTurnUserId});
+    if (cellState != 2) {
+      await db
+          .ref(ref)
+          .child(gameSessionId)
+          .update({'currentTurnUserId': nextTurnUserId});
+    }
   }
 
   @override
