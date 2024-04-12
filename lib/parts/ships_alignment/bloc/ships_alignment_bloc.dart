@@ -55,11 +55,16 @@ class ShipsAlignmentBloc
     final occupiedCells = state.gameBoard.cell.findOccupiedIndexes();
     final gameSessionId =
         DateTime.now().millisecondsSinceEpoch + Random().nextInt(1000);
-    await gameSessionRepository.finishShipsAlignment(
-      userId: state.gameBoard.userId,
-      gameSessionId: gameSessionId.toString(),
-      cells: occupiedCells,
-    );
+    try {
+      await gameSessionRepository.finishShipsAlignment(
+        userId: state.gameBoard.userId,
+        gameSessionId: gameSessionId.toString(),
+        cells: occupiedCells,
+      );
+      emit(state.copyWith(isAlignmentComplited: true));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   /// Removes ship from [GameBoard] with given [index].
