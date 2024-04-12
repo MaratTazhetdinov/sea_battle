@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  context.router.push(const ShipsAlignmentRoute());
+                  context.router.push(ShipsAlignmentRoute());
                 },
                 child: Text(locale.createGame),
               ),

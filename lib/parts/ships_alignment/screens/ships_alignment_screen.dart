@@ -4,7 +4,13 @@ part of '../ships_alignment_part.dart';
 
 /// [ShipsAlignmentScreen].
 class ShipsAlignmentScreen extends StatefulWidget {
-  const ShipsAlignmentScreen({super.key});
+  /// Game session id.
+  final String? gameSessionId;
+
+  const ShipsAlignmentScreen({
+    super.key,
+    this.gameSessionId,
+  });
 
   @override
   State<ShipsAlignmentScreen> createState() => _ShipsAlignmentScreenState();
@@ -18,6 +24,10 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
   /// Value notifier of list of possible indexes for [DraggableShip] on [GameBoard].
   final ValueNotifier<List<int>> _possibleIndexes =
       ValueNotifier<List<int>>([]);
+
+  late final String _gameSessionId = widget.gameSessionId ??
+      (DateTime.now().millisecondsSinceEpoch + Random().nextInt(1000))
+          .toString();
 
   @override
   void dispose() {
@@ -66,7 +76,13 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
       child: BlocListener<ShipsAlignmentBloc, ShipsAlignmentState>(
         listener: (context, state) {
           if (state.isAlignmentComplited) {
-            context.router.replace(const GameSessionRoute());
+            if (widget.gameSessionId case final gameSessionId?) {
+              context.router
+                  .replace(GameSessionRoute(gameSessionId: gameSessionId));
+            } else {
+              context.router
+                  .replace(GameSessionRoute(gameSessionId: _gameSessionId));
+            }
           }
         },
         child: Stack(
@@ -142,7 +158,8 @@ class _ShipsAlignmentScreenState extends State<ShipsAlignmentScreen> {
                                   onPressed: state.shipCounter.isEmpty
                                       ? () {
                                           context.readShipAlignmentBloc.add(
-                                            ShipsAlignmentCompleted(),
+                                            ShipsAlignmentCompleted(
+                                                gameSessionId: _gameSessionId),
                                           );
                                         }
                                       : null,

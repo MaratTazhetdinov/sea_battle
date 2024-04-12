@@ -2,7 +2,12 @@ part of '../game_session_part.dart';
 
 @RoutePage()
 class GameSessionScreen extends StatefulWidget {
-  const GameSessionScreen({super.key});
+  final String gameSessionId;
+
+  const GameSessionScreen({
+    super.key,
+    required this.gameSessionId,
+  });
 
   @override
   State<GameSessionScreen> createState() => _GameSessionScreenState();

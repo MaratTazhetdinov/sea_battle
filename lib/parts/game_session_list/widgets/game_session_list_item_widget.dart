@@ -2,12 +2,12 @@ part of '../game_session_list_part.dart';
 
 class GameSessionListItemWidget extends StatelessWidget {
   final Profile profile;
-  final String sessionId;
+  final String gameSessionId;
 
   const GameSessionListItemWidget({
     super.key,
     required this.profile,
-    required this.sessionId,
+    required this.gameSessionId,
   });
 
   @override
@@ -16,7 +16,7 @@ class GameSessionListItemWidget extends StatelessWidget {
     final locale = context.l10n;
     return GestureDetector(
       onTap: () {
-        /// to ships alignment screen
+        context.router.push(ShipsAlignmentRoute(gameSessionId: gameSessionId));
       },
       child: Container(
         decoration: BoxDecoration(

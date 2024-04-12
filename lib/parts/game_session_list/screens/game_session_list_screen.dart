@@ -54,25 +54,12 @@ class GameSessionListScreen extends StatelessWidget {
                         ),
                         child: GameSessionListItemWidget(
                           profile: profile,
-                          sessionId: successState.list[index].gameSessionId,
+                          gameSessionId: successState.list[index].gameSessionId,
                         ),
                       );
                     },
                     itemCount: successState.gameSessionList.length,
                   ),
-                  // child: Column(
-                  //   children: [
-                  //     ...successState.gameSessionList.map((e) {
-                  //       final profile = successState.profiles.firstWhere(
-                  //           (profile) =>
-                  //               profile.id == e.gameBoards.first.userId);
-                  //       return GameSessionListItemWidget(
-                  //         profile: profile,
-                  //         sessionId: e.gameSessionId,
-                  //       );
-                  //     }),
-                  //   ],
-                  // ),
                 ),
             };
           },

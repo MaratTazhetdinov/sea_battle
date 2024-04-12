@@ -17,4 +17,8 @@ class ShipAddedByIndexes extends ShipsAlignmentEvent {
 }
 
 /// Sends result of completed ships data to backend.
-class ShipsAlignmentCompleted extends ShipsAlignmentEvent {}
+class ShipsAlignmentCompleted extends ShipsAlignmentEvent {
+  final String gameSessionId;
+
+  ShipsAlignmentCompleted({required this.gameSessionId});
+}
