@@ -16,14 +16,13 @@ class GameSessionScreen extends StatefulWidget {
 class _GameSessionScreenState extends State<GameSessionScreen> {
   @override
   Widget build(BuildContext context) {
-    // final userId = context.readAuthBloc.state.user.id;
-    const userId = 'newUser';
+    final userId = context.readAuthBloc.state.user.id;
     return BlocProvider(
       create: (context) => GameSessionBloc(
         gameSessionRepository:
             RepositoryProvider.of<IGameSessionRepository>(context),
         userId: userId,
-        gameSessionId: '',
+        gameSessionId: widget.gameSessionId,
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -32,76 +31,28 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
         body: Center(
           child: BlocBuilder<GameSessionBloc, GameSessionState>(
             builder: (context, state) {
-              if (state.gameSession.gameBoards.isEmpty) {
+              if (state.gameSession.gameBoards.length != 2) {
                 return const Center(
-                  child: Text('Loading'),
+                  child: Text('Waiting For Player'),
+                );
+              } else {
+                final playerGameBoard = state.gameSession.gameBoards
+                    .firstWhere((gameBoard) => gameBoard.userId == userId);
+                final enemyGameBoard = state.gameSession.gameBoards
+                    .firstWhere((gameBoard) => gameBoard.userId != userId);
+                return Column(
+                  children: [
+                    GameBoardWidget(
+                        height: 300, width: 300, gameBoard: playerGameBoard),
+                    const SizedBox(height: 40),
+                    GameBoardWidget(
+                      height: 300,
+                      width: 300,
+                      gameBoard: enemyGameBoard,
+                    ),
+                  ],
                 );
               }
-              // final userBoard = state.gameSession.gameBoards
-              //     .firstWhere((gameBoard) => gameBoard.userId == userId);
-              // final enemyBoard = state.gameSession.gameBoards
-              //     .firstWhere((gameBoard) => gameBoard.userId != userId);
-              return Column(
-                children: [
-                  SizedBox(
-                    height: 300,
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                      ),
-                      itemBuilder: (context, index) {
-                        return Container(
-                          height: 10,
-                          width: 10,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.black,
-                            ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              '',
-                            ),
-                          ),
-                        );
-                      },
-                      itemCount: 100,
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  SizedBox(
-                    height: 300,
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                      ),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () => context.readGameSessionBloc
-                              .add(GameSessionUserShot(index)),
-                          child: Container(
-                            height: 10,
-                            width: 10,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
-                              ),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                '',
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      itemCount: 100,
-                    ),
-                  ),
-                ],
-              );
             },
           ),
         ),

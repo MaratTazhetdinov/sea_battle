@@ -53,12 +53,10 @@ class ShipsAlignmentBloc
   Future<void> _onShipAlignmentCompleted(
       ShipsAlignmentCompleted event, Emitter<ShipsAlignmentState> emit) async {
     final occupiedCells = state.gameBoard.cell.findOccupiedIndexes();
-    final gameSessionId =
-        DateTime.now().millisecondsSinceEpoch + Random().nextInt(1000);
     try {
       await gameSessionRepository.finishShipsAlignment(
         userId: state.gameBoard.userId,
-        gameSessionId: gameSessionId.toString(),
+        gameSessionId: event.gameSessionId,
         cells: occupiedCells,
       );
       emit(state.copyWith(isAlignmentComplited: true));

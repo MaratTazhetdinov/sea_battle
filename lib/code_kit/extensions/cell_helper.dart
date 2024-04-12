@@ -120,4 +120,15 @@ extension CellHelper on Cell {
 
     return res;
   }
+
+  /// Retruns list of [CellState] of all cells.
+  List<CellState> getCellsState() {
+    final List<CellState> res = [];
+
+    for (int i = 0; i < 100; i++) {
+      final cell = goToCellWithIndex(0);
+      res.add(cell.cellState);
+    }
+    return res;
+  }
 }
