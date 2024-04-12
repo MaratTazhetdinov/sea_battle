@@ -31,6 +31,8 @@ class FirestoreProfileDataProvider extends IProfileDataProvider {
       'id': dtoProfile.id,
       'email': dtoProfile.email,
       'nickname': dtoProfile.nickname,
+      'win': dtoProfile.win,
+      'loss': dtoProfile.loss,
     });
   }
 

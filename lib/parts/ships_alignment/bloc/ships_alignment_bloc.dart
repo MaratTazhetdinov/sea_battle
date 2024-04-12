@@ -10,7 +10,7 @@ class ShipsAlignmentBloc
   final ShipCounter shipCounter;
 
   /// Game session repository to interact with backend.
-  final game_session.IGameSessionRepository gameSessionRepository;
+  final IGameSessionRepository gameSessionRepository;
 
   ShipsAlignmentBloc({
     required this.gameBoard,
@@ -53,9 +53,11 @@ class ShipsAlignmentBloc
   Future<void> _onShipAlignmentCompleted(
       ShipsAlignmentCompleted event, Emitter<ShipsAlignmentState> emit) async {
     final occupiedCells = state.gameBoard.cell.findOccupiedIndexes();
-    final userId = state.gameBoard.userId;
+    final gameSessionId =
+        DateTime.now().millisecondsSinceEpoch + Random().nextInt(1000);
     await gameSessionRepository.finishShipsAlignment(
-      userId: userId,
+      userId: state.gameBoard.userId,
+      gameSessionId: gameSessionId.toString(),
       cells: occupiedCells,
     );
   }

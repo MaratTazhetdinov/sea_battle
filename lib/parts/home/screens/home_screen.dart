@@ -27,6 +27,15 @@ class HomeScreen extends StatelessWidget {
                 child: const Text('Ships Alignment'),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: ElevatedButton(
+                onPressed: () {
+                  context.router.push(const GameSessionListRoute());
+                },
+                child: const Text('Game Session List'),
+              ),
+            ),
             ElevatedButton(
               onPressed: () {
                 context.readAuthBloc.add(AuthLoggedOut());

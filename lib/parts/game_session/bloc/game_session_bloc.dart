@@ -3,17 +3,23 @@ part of '../game_session_part.dart';
 class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
   final IGameSessionRepository gameSessionRepository;
   final String userId;
-  late GameLogic gameLogic;
+  final String gameSessionId;
   StreamSubscription<GameSession>? _gameSessionSubscription;
 
-  GameSessionBloc({required this.gameSessionRepository, required this.userId})
-      : super(const GameSessionState(
-          gameSession: GameSession(gameBoards: []),
+  GameSessionBloc(
+      {required this.gameSessionRepository,
+      required this.userId,
+      required this.gameSessionId})
+      : super(GameSessionState(
+          gameSession: GameSession(
+            gameSessionId: gameSessionId,
+            gameBoards: [],
+          ),
         )) {
-    _gameSessionSubscription = gameSessionRepository.gameSession
+    _gameSessionSubscription = gameSessionRepository
+        .getGameSession(gameSessionId)
         .listen((gameSession) => add(_GameSessionChanged(gameSession)));
     on<_GameSessionChanged>(_onGameSessionChanged);
-    on<GameSessionShipsAlignmentFinished>(_onShipsAlignmentFinished);
     on<GameSessionUserShot>(_onUserShot);
   }
 
@@ -35,28 +41,17 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
     }
   }
 
-  Future<void> _onShipsAlignmentFinished(
-      GameSessionShipsAlignmentFinished event,
-      Emitter<GameSessionState> emit) async {
-    try {
-      gameSessionRepository.finishShipsAlignment(
-          userId: '', cells: event.cells);
-    } catch (e) {
-      emit(GameSessionFailed(e, state.gameSession));
-    }
-  }
-
   Future<void> _onUserShot(
       GameSessionUserShot event, Emitter<GameSessionState> emit) async {
     try {
-      final cellState = gameLogic.shoot(event.cellIndex);
-      if (cellState case final state?) {
-        gameSessionRepository.shoot(
-          userId: gameLogic.enemyBoard.userId,
-          cellIndex: event.cellIndex,
-          cellState: state,
-        );
-      }
+      // final cellState = gameLogic.shoot(event.cellIndex);
+      // if (cellState case final state?) {
+      //   gameSessionRepository.shoot(
+      //     userId: gameLogic.enemyBoard.userId,
+      //     cellIndex: event.cellIndex,
+      //     cellState: state,
+      //   );
+      // }
     } catch (e) {
       emit(GameSessionFailed(e, state.gameSession));
     }

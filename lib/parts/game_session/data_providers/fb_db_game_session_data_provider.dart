@@ -1,24 +1,40 @@
 part of '../game_session_part.dart';
 
 class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
-  final String gameSessionId;
   final FirebaseDatabase db;
   static const ref = 'games';
 
   FbDbGameSessionDataProvider({
-    required this.gameSessionId,
     required this.db,
   });
 
   @override
-  Stream<DtoGameSession> get gameSession {
-    return db.ref(ref).child(gameSessionId).onValue.map(
-        (data) => DtoGameSession.fromFirebaseDatabase(data.snapshot.value));
+  Stream<DtoGameSession> getGameSession(String gameSessionId) {
+    return db.ref(ref).child(gameSessionId).onValue.map((data) =>
+        DtoGameSession.fromFirebaseDatabase(
+            gameSessionId, data.snapshot.value));
+  }
+
+  @override
+  Stream<List<DtoGameSession>> get gameSessionsList {
+    return db.ref(ref).onValue.map((dataList) {
+      if (dataList.snapshot.value case final data?) {
+        final list = data as Map<Object?, Object?>;
+        return list.entries.map((entry) {
+          final gameSessionId = entry.key.toString();
+          final data = entry.value;
+          return DtoGameSession.fromFirebaseDatabase(gameSessionId, data);
+        }).toList();
+      } else {
+        return [];
+      }
+    });
   }
 
   @override
   Future<void> shoot({
     required String userId,
+    required String gameSessionId,
     required int cellIndex,
     required int cellState,
   }) async {
@@ -31,6 +47,7 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
   @override
   Future<void> finishShipsAlignment({
     required String userId,
+    required String gameSessionId,
     required List<int> cells,
   }) async {
     final rawCells =

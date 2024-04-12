@@ -29,5 +29,10 @@
     "loading": "Cargando...",
     "lineUpYourShips": "Alinea tus barcos",
     "or": "o",
-    "startBattle": "Iniciar batalla"
+    "startBattle": "Iniciar batalla",
+    "chooseYourOpponent": "Elige tu oponente",
+    "reload": "Recargar",
+    "noActiveSessions": "No hay sesiones activas en este momento",
+    "wins": "Victorias",
+    "losses": "Derrotas"
 }

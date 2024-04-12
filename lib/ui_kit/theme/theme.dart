@@ -34,6 +34,7 @@ class AppTheme {
     return ThemeData(
       fontFamily: FontFamily.roboto,
       scaffoldBackgroundColor: colorScheme.scaffoldBackgroundColor,
+      useMaterial3: false,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           splashFactory: NoSplash.splashFactory,
