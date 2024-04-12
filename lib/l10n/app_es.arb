@@ -34,5 +34,7 @@
     "reload": "Recargar",
     "noActiveSessions": "No hay sesiones activas en este momento",
     "wins": "Victorias",
-    "losses": "Derrotas"
+    "losses": "Derrotas",
+    "createGame": "Crear juego",
+    "joinGame": "Unirse al juego"
 }

@@ -34,5 +34,7 @@
     "reload": "Reload",
     "noActiveSessions": "No active sessions at the moment",
     "wins": "Wins",
-    "losses": "Losses"
+    "losses": "Losses",
+    "createGame": "Create Game",
+    "joinGame": "Join Game"
 }
