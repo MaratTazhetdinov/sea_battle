@@ -36,5 +36,8 @@
     "wins": "Victorias",
     "losses": "Derrotas",
     "createGame": "Crear juego",
-    "joinGame": "Unirse al juego"
+    "joinGame": "Unirse al juego",
+    "waitingForPlayer": "Esperando al jugador",
+    "yourTurn": "Tu turno",
+    "enemyTurn": "Turno del enemigo"
 }

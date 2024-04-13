@@ -12,6 +12,13 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/black_fire.png
+  AssetGenImage get blackFire =>
+      const AssetGenImage('assets/images/black_fire.png');
+
+  /// File path: assets/images/fire.png
+  AssetGenImage get fire => const AssetGenImage('assets/images/fire.png');
+
   /// File path: assets/images/loader_ship_one.png
   AssetGenImage get loaderShipOne =>
       const AssetGenImage('assets/images/loader_ship_one.png');
@@ -20,8 +27,12 @@ class $AssetsImagesGen {
   AssetGenImage get loaderShipTwo =>
       const AssetGenImage('assets/images/loader_ship_two.png');
 
+  /// File path: assets/images/splash.png
+  AssetGenImage get splash => const AssetGenImage('assets/images/splash.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [loaderShipOne, loaderShipTwo];
+  List<AssetGenImage> get values =>
+      [blackFire, fire, loaderShipOne, loaderShipTwo, splash];
 }
 
 class Assets {

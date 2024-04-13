@@ -17,6 +17,7 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
   @override
   Widget build(BuildContext context) {
     final userId = context.readAuthBloc.state.user.id;
+    final locale = context.l10n;
     return BlocProvider(
       create: (context) => GameSessionBloc(
         gameSessionRepository:
@@ -25,49 +26,78 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
         gameSessionId: widget.gameSessionId,
       ),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Game Session'),
-        ),
-        body: Center(
-          child: BlocBuilder<GameSessionBloc, GameSessionState>(
-            builder: (context, state) {
-              if (state.gameSession.gameBoards.length != 2) {
-                return const Center(
-                  child: Text('Waiting For Player'),
-                );
-              } else {
-                final playerGameBoard = state.gameSession.gameBoards
-                    .firstWhere((gameBoard) => gameBoard.userId == userId);
-                final enemyGameBoard = state.gameSession.gameBoards
-                    .firstWhere((gameBoard) => gameBoard.userId != userId);
-                final isUserTurn =
-                    state.gameSession.currentTurnUserId == userId;
-                return Column(
-                  children: [
-                    AbsorbPointer(
-                      absorbing: true,
-                      child: GameBoardWidget(
-                          height: 300, width: 300, gameBoard: playerGameBoard),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Text(
-                        isUserTurn ? 'Your turn' : 'Enemy turn',
-                      ),
-                    ),
-                    AbsorbPointer(
-                      absorbing: !isUserTurn,
-                      child: GameBoardWidget(
-                        height: 300,
-                        width: 300,
-                        gameBoard: enemyGameBoard,
-                        isEnemyBoard: true,
-                      ),
-                    ),
-                  ],
-                );
-              }
-            },
+        body: SafeArea(
+          child: Stack(
+            children: [
+              BlocBuilder<GameSessionBloc, GameSessionState>(
+                builder: (context, state) {
+                  if (state.gameSession.gameBoards.length != 2) {
+                    return Center(
+                      child: Text(locale.waitingForPlayer),
+                    );
+                  } else {
+                    final playerGameBoard = state.gameSession.gameBoards
+                        .firstWhere((gameBoard) => gameBoard.userId == userId);
+                    final enemyGameBoard = state.gameSession.gameBoards
+                        .firstWhere((gameBoard) => gameBoard.userId != userId);
+                    final isUserTurn =
+                        state.gameSession.currentTurnUserId == userId;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 50),
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        final boardHeight = (constraints.maxHeight * 0.85) / 2;
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              AbsorbPointer(
+                                absorbing: true,
+                                child: GameBoardWidget(
+                                    height: boardHeight,
+                                    width: boardHeight,
+                                    gameBoard: playerGameBoard),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  isUserTurn
+                                      ? locale.yourTurn
+                                      : locale.enemyTurn,
+                                ),
+                              ),
+                              AbsorbPointer(
+                                absorbing: !isUserTurn,
+                                child: GameBoardWidget(
+                                  height: boardHeight,
+                                  width: boardHeight,
+                                  gameBoard: enemyGameBoard,
+                                  isEnemyBoard: true,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    );
+                  }
+                },
+              ),
+              Positioned(
+                top: 10,
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    context.router.pop();
+                  },
+                  child: const SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: Icon(Icons.close),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

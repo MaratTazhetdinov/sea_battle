@@ -9,6 +9,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sea_battle/code_kit/code_kit_part.dart';
+import 'package:sea_battle/gen/assets.gen.dart';
+import 'package:sea_battle/l10n/l10n.dart';
 import 'package:sea_battle/parts/auth/auth_part.dart';
 import 'package:sea_battle/parts/game_board/game_board_part.dart';
 import 'package:sea_battle/parts/game_logic/game_logic_part.dart';

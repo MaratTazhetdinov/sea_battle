@@ -9,7 +9,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i7;
-import 'package:flutter/material.dart' as _i8;
+import 'package:flutter/cupertino.dart' as _i8;
+import 'package:flutter/material.dart' as _i9;
 import 'package:sea_battle/parts/auth/auth_part.dart' as _i1;
 import 'package:sea_battle/parts/game_session/game_session_part.dart' as _i5;
 import 'package:sea_battle/parts/game_session_list/game_session_list_part.dart'
@@ -210,7 +211,7 @@ class HomeRouteRoot extends _i7.PageRouteInfo<void> {
 /// [_i6.ShipsAlignmentScreen]
 class ShipsAlignmentRoute extends _i7.PageRouteInfo<ShipsAlignmentRouteArgs> {
   ShipsAlignmentRoute({
-    _i8.Key? key,
+    _i9.Key? key,
     String? gameSessionId,
     List<_i7.PageRouteInfo>? children,
   }) : super(
@@ -234,7 +235,7 @@ class ShipsAlignmentRouteArgs {
     this.gameSessionId,
   });
 
-  final _i8.Key? key;
+  final _i9.Key? key;
 
   final String? gameSessionId;
 
