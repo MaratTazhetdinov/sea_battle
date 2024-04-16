@@ -37,40 +37,25 @@ class GameBoardWidget extends StatelessWidget {
               context.readGameSessionBloc.add(GameSessionUserShot(index));
             },
             child: SizedBox(
-              child: isEnemyBoard
-                  ? Builder(
-                      builder: (context) {
-                        return switch (cellStates[index]) {
-                          CellState.shot =>
-                            Image.asset(Assets.images.splash.path),
-                          CellState.destroyed =>
-                            Image.asset(Assets.images.fire.path),
-                          _ => Container(
-                              color: Colors.transparent,
-                            ),
-                        };
-                      },
-                    )
-                  : Container(
-                      decoration: BoxDecoration(
-                        color: isEnemyBoard
-                            ? switch (cellStates[index]) {
-                                CellState.shot => Colors.amber,
-                                CellState.destroyed => Colors.red,
-                                _ => Colors.transparent,
-                              }
-                            : switch (cellStates[index]) {
-                                CellState.empty => Colors.transparent,
-                                CellState.occupied => Colors.blue,
-                                CellState.shot => Colors.amber,
-                                CellState.destroyed => Colors.red,
-                              },
-                        border: Border.all(
-                          color: colors.firstTextColor,
-                          width: 0.5,
-                        ),
-                      ),
-                    ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isEnemyBoard
+                      ? Colors.transparent
+                      : switch (cellStates[index]) {
+                          CellState.occupied => Colors.blue,
+                          _ => Colors.transparent,
+                        },
+                  border: Border.all(
+                    color: colors.firstTextColor,
+                    width: 0.5,
+                  ),
+                ),
+                child: switch (cellStates[index]) {
+                  CellState.destroyed => Image.asset(Assets.images.fire.path),
+                  CellState.shot => Image.asset(Assets.images.splash.path),
+                  _ => null,
+                },
+              ),
             ),
           );
         },
