@@ -18,6 +18,10 @@ class GameBoardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.theme.colors;
     final cellStates = gameBoard.cell.getCellsState();
+    if (cellStates.where((state) => state == CellState.destroyed).length ==
+        20) {
+      context.readGameSessionBloc.add(GameSessionCompleted(isEnemyBoard));
+    }
     return Container(
       height: height,
       width: width,

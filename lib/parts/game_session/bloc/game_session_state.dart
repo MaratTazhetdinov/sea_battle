@@ -11,9 +11,16 @@ class GameSessionState extends Equatable {
   List<Object?> get props => _$GameSessionStateProps(this);
 }
 
-class GameSessionFailed extends GameSessionState {
+class GameSessionFailure extends GameSessionState {
   final Object? error;
 
-  const GameSessionFailed(this.error, GameSession gameSession)
+  const GameSessionFailure(this.error, GameSession gameSession)
+      : super(gameSession: gameSession);
+}
+
+class GameSessionComplete extends GameSessionState {
+  final bool isUserWon;
+
+  const GameSessionComplete(this.isUserWon, GameSession gameSession)
       : super(gameSession: gameSession);
 }

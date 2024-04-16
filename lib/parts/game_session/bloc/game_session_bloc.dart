@@ -5,6 +5,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
   final String userId;
   final String gameSessionId;
   StreamSubscription<GameSession>? _gameSessionSubscription;
+  late GameLogic gameLogic;
 
   GameSessionBloc(
       {required this.gameSessionRepository,
@@ -22,26 +23,22 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
         .listen((gameSession) => add(_GameSessionChanged(gameSession)));
     on<_GameSessionChanged>(_onGameSessionChanged);
     on<GameSessionUserShot>(_onUserShot);
+    on<GameSessionCompleted>(_onGameSessionCompleted);
   }
 
   Future<void> _onGameSessionChanged(
       _GameSessionChanged event, Emitter<GameSessionState> emit) async {
     try {
+      gameLogic = GameLogic.fromGameSession(event.gameSession, userId);
       emit(state.copyWith(gameSession: event.gameSession));
     } catch (e) {
-      emit(GameSessionFailed(e, state.gameSession));
+      emit(GameSessionFailure(e, state.gameSession));
     }
   }
 
   Future<void> _onUserShot(
       GameSessionUserShot event, Emitter<GameSessionState> emit) async {
     try {
-      final gameLogic = GameLogic(
-        userBoard: state.gameSession.gameBoards
-            .firstWhere((gameBoard) => gameBoard.userId == userId),
-        enemyBoard: state.gameSession.gameBoards
-            .firstWhere((gameBoard) => gameBoard.userId != userId),
-      );
       final cellState = gameLogic.shoot(event.cellIndex);
       if (cellState case final cellState?) {
         gameSessionRepository.shoot(
@@ -53,8 +50,16 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
         );
       }
     } catch (e) {
-      emit(GameSessionFailed(e, state.gameSession));
+      emit(GameSessionFailure(e, state.gameSession));
     }
+  }
+
+  Future<void> _onGameSessionCompleted(
+      GameSessionCompleted event, Emitter<GameSessionState> emit) async {
+    emit(GameSessionComplete(
+      event.isUserWon,
+      state.gameSession,
+    ));
   }
 
   @override

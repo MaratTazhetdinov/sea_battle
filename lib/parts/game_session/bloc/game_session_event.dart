@@ -19,3 +19,9 @@ class GameSessionUserShot extends GameSessionEvent {
 
   GameSessionUserShot(this.cellIndex);
 }
+
+class GameSessionCompleted extends GameSessionEvent {
+  final bool isUserWon;
+
+  GameSessionCompleted(this.isUserWon);
+}
