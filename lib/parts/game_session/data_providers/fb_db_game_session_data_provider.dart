@@ -52,6 +52,15 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
   }
 
   @override
+  Future<void> surrender({
+    required String userId,
+    required String gameSessionId,
+    required List<int> cells,
+  }) async {
+    await db.ref(ref).child(gameSessionId).update({'$userId/cells': cells});
+  }
+
+  @override
   Future<void> finishShipsAlignment({
     required String userId,
     required String gameSessionId,

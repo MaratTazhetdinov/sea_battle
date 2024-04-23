@@ -37,6 +37,13 @@ class GameSessionRepository extends IGameSessionRepository {
   }
 
   @override
+  Future<void> surrender({
+    required String userId,
+    required String gameSessionId,
+    required List<int> cells,
+  }) async {}
+
+  @override
   Future<void> finishShipsAlignment({
     required String userId,
     required String gameSessionId,

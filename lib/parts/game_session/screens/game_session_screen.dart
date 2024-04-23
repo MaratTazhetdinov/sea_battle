@@ -136,6 +136,8 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                   left: 20,
                   child: GestureDetector(
                     onTap: () {
+                      context.readGameSessionBloc
+                          .add(GameSessionUserSurrendered());
                       context.router.pop();
                     },
                     child: const SizedBox(

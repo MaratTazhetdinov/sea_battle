@@ -20,6 +20,8 @@ class GameSessionUserShot extends GameSessionEvent {
   GameSessionUserShot(this.cellIndex);
 }
 
+class GameSessionUserSurrendered extends GameSessionEvent {}
+
 class GameSessionCompleted extends GameSessionEvent {
   final bool isUserWon;
 

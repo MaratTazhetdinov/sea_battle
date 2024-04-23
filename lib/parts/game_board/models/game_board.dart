@@ -36,6 +36,14 @@ class GameBoard extends Equatable {
     );
   }
 
+  /// Creates [DtoGameBoard] from [GameBoard].
+  DtoGameBoard toDtoGameBoard() {
+    return DtoGameBoard(
+      userId: userId,
+      cells: [],
+    );
+  }
+
   /// Creates [GameBoardCell] with given [occupuidedIndexes].
   static Cell _createBoard(List<int> occupuidedIndexes) {
     final List<Cell> cells = List.generate(

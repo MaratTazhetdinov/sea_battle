@@ -121,7 +121,7 @@ extension CellHelper on Cell {
     return res;
   }
 
-  /// Retruns list of [CellState] of all cells.
+  /// Returns list of [CellState] of all cells.
   List<CellState> getCellsState() {
     final List<CellState> res = [];
 

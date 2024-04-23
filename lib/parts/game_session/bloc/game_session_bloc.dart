@@ -24,6 +24,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
     on<_GameSessionChanged>(_onGameSessionChanged);
     on<GameSessionUserShot>(_onUserShot);
     on<GameSessionCompleted>(_onGameSessionCompleted);
+    on<GameSessionUserSurrendered>(_onGameSessionUserSurrendered);
   }
 
   Future<void> _onGameSessionChanged(
@@ -60,6 +61,25 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
       event.isUserWon,
       state.gameSession,
     ));
+  }
+
+  Future<void> _onGameSessionUserSurrendered(
+      GameSessionUserSurrendered event, Emitter<GameSessionState> emit) async {
+    final previousCells = state.gameSession.gameBoards
+        .firstWhere((gameBoard) => gameBoard.userId == userId)
+        .cell
+        .getCellsState();
+    final List<int> cells = previousCells.map((cellState) {
+      if (cellState == CellState.occupied) {
+        return CellState.destroyed.value;
+      }
+      return cellState.value;
+    }).toList();
+    await gameSessionRepository.surrender(
+      userId: userId,
+      gameSessionId: gameSessionId,
+      cells: cells,
+    );
   }
 
   @override

@@ -15,6 +15,12 @@ abstract class IGameSessionDataProvider {
     required String nextTurnUserId,
   });
 
+  Future<void> surrender({
+    required String userId,
+    required String gameSessionId,
+    required List<int> cells,
+  });
+
   Future<void> finishShipsAlignment({
     required String userId,
     required String gameSessionId,
