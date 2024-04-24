@@ -14,11 +14,44 @@ class GameSessionScreen extends StatefulWidget {
 }
 
 class _GameSessionScreenState extends State<GameSessionScreen> {
+  late final AppLifecycleListener _appLifecycleListener;
+  final ValueNotifier<int> _timerCount = ValueNotifier<int>(605);
+  late final Timer _timer;
+
+  @override
+  void initState() {
+    _startTimer();
+    _appLifecycleListener = AppLifecycleListener(
+      onPause: () =>
+          context.readGameSessionBloc.add(GameSessionUserSurrendered()),
+    );
+    super.initState();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _timerCount.value = _timerCount.value - 1;
+    });
+  }
+
+  void _restartTimerCount() {
+    // _timerCount.value = 60;
+  }
+
+  void _cancelTimer() {
+    _timer.cancel();
+  }
+
+  @override
+  void dispose() {
+    _appLifecycleListener.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final userId = context.readAuthBloc.state.user.id;
     final locale = context.l10n;
-    final colors = context.theme.colors;
     return BlocProvider(
       create: (context) => GameSessionBloc(
         gameSessionRepository:
@@ -30,44 +63,45 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
         body: BlocListener<GameSessionBloc, GameSessionState>(
           listener: (context, state) {
             if (state is GameSessionComplete) {
-              showDialog(
-                  context: context,
-                  builder: (ctx) {
-                    return Dialog(
-                      clipBehavior: Clip.hardEdge,
-                      backgroundColor: colors.transparent,
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Container(
-                            width: double.infinity,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: colors.scaffoldBackgroundColor,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  state.isUserWon ? 'You won' : 'You lost',
-                                ),
-                                const SizedBox(height: 10),
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    ctx.router.pop();
-                                    context.router.popUntilRouteWithName(
-                                        const HomeRoute().routeName);
-                                  },
-                                  child: const Text('Leave session'),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  });
+              // _cancelTimer();
+              // showDialog(
+              //     context: context,
+              //     builder: (ctx) {
+              //       return Dialog(
+              //         clipBehavior: Clip.hardEdge,
+              //         backgroundColor: colors.transparent,
+              //         child: Center(
+              //           child: Padding(
+              //             padding: const EdgeInsets.symmetric(horizontal: 20),
+              //             child: Container(
+              //               width: double.infinity,
+              //               height: 200,
+              //               decoration: BoxDecoration(
+              //                 color: colors.scaffoldBackgroundColor,
+              //                 borderRadius: BorderRadius.circular(25),
+              //               ),
+              //               child: Column(
+              //                 mainAxisAlignment: MainAxisAlignment.center,
+              //                 children: [
+              //                   Text(
+              //                     state.isUserWon ? 'You won' : 'You lost',
+              //                   ),
+              //                   const SizedBox(height: 10),
+              //                   ElevatedButton(
+              //                     onPressed: () async {
+              //                       ctx.router.pop();
+              //                       context.router.popUntilRouteWithName(
+              //                           const HomeRoute().routeName);
+              //                     },
+              //                     child: const Text('Leave session'),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       );
+              //     });
             }
           },
           child: SafeArea(
@@ -80,6 +114,7 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                         child: Text(locale.waitingForPlayer),
                       );
                     } else {
+                      _restartTimerCount();
                       final userGameBoard = state.gameSession.gameBoards
                           .firstWhere(
                               (gameBoard) => gameBoard.userId == userId);
@@ -108,10 +143,19 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 20),
-                                  child: Text(
-                                    isUserTurn
-                                        ? locale.yourTurn
-                                        : locale.enemyTurn,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        isUserTurn
+                                            ? locale.yourTurn
+                                            : locale.enemyTurn,
+                                      ),
+                                      const SizedBox(height: 10),
+                                      TimerWidget(
+                                        timerCount: _timerCount,
+                                        isUserTurn: isUserTurn,
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 AbsorbPointer(

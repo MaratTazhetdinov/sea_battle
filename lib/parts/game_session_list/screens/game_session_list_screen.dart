@@ -8,9 +8,7 @@ class GameSessionListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = context.l10n;
     return PopScope(
-      onPopInvoked: (didPop) {
-        print(didPop);
-      },
+      onPopInvoked: (didPop) {},
       child: BlocProvider(
         create: (context) => GameSessionListBloc(
           gameSessionRepository:
