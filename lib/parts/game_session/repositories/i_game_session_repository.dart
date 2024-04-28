@@ -1,12 +1,16 @@
 part of '../game_session_part.dart';
 
+/// [IGameSessionRepository].
 abstract class IGameSessionRepository {
+  /// Stream for listening [GameSession].
   Stream<GameSession> getGameSession(
     String gameSessionId,
   );
 
+  /// Stream for listening list of [GameSession].
   Stream<List<GameSession>> get gameSessionsList;
 
+  /// Registers user shot.
   Future<void> shoot({
     required String userId,
     required String gameSessionId,
@@ -15,12 +19,14 @@ abstract class IGameSessionRepository {
     required String nextTurnUserId,
   });
 
+  /// Registers user surrender.
   Future<void> surrender({
     required String userId,
     required String gameSessionId,
     required List<int> cells,
   });
 
+  /// Register completion of ships alignment.
   Future<void> finishShipsAlignment({
     required String userId,
     required String gameSessionId,

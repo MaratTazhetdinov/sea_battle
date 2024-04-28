@@ -1,7 +1,10 @@
 part of '../game_session_part.dart';
 
 @RoutePage()
+
+/// [GameSessionScreen].
 class GameSessionScreen extends StatefulWidget {
+  /// Game session id.
   final String gameSessionId;
 
   const GameSessionScreen({
@@ -14,13 +17,18 @@ class GameSessionScreen extends StatefulWidget {
 }
 
 class _GameSessionScreenState extends State<GameSessionScreen> {
+  /// AppLifecycleListener for listeting app state.
   late final AppLifecycleListener _appLifecycleListener;
-  final ValueNotifier<int> _timerCount = ValueNotifier<int>(605);
+
+  /// ValueNotifier for timer.
+  final ValueNotifier<int> _timerCount = ValueNotifier<int>(60);
+
+  /// Timer.
   late final Timer _timer;
 
   @override
   void initState() {
-    _startTimer();
+    /// End the game if player close or pause the app.
     _appLifecycleListener = AppLifecycleListener(
       onPause: () =>
           context.readGameSessionBloc.add(GameSessionUserSurrendered()),
@@ -28,16 +36,19 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
     super.initState();
   }
 
+  /// Starts timer.
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _timerCount.value = _timerCount.value - 1;
     });
   }
 
+  /// Updates _timesCount value.
   void _restartTimerCount() {
     // _timerCount.value = 60;
   }
 
+  /// Stops timer.
   void _cancelTimer() {
     _timer.cancel();
   }
@@ -63,45 +74,7 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
         body: BlocListener<GameSessionBloc, GameSessionState>(
           listener: (context, state) {
             if (state is GameSessionComplete) {
-              // _cancelTimer();
-              // showDialog(
-              //     context: context,
-              //     builder: (ctx) {
-              //       return Dialog(
-              //         clipBehavior: Clip.hardEdge,
-              //         backgroundColor: colors.transparent,
-              //         child: Center(
-              //           child: Padding(
-              //             padding: const EdgeInsets.symmetric(horizontal: 20),
-              //             child: Container(
-              //               width: double.infinity,
-              //               height: 200,
-              //               decoration: BoxDecoration(
-              //                 color: colors.scaffoldBackgroundColor,
-              //                 borderRadius: BorderRadius.circular(25),
-              //               ),
-              //               child: Column(
-              //                 mainAxisAlignment: MainAxisAlignment.center,
-              //                 children: [
-              //                   Text(
-              //                     state.isUserWon ? 'You won' : 'You lost',
-              //                   ),
-              //                   const SizedBox(height: 10),
-              //                   ElevatedButton(
-              //                     onPressed: () async {
-              //                       ctx.router.pop();
-              //                       context.router.popUntilRouteWithName(
-              //                           const HomeRoute().routeName);
-              //                     },
-              //                     child: const Text('Leave session'),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       );
-              //     });
+              _cancelTimer();
             }
           },
           child: SafeArea(
@@ -114,7 +87,11 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                         child: Text(locale.waitingForPlayer),
                       );
                     } else {
-                      _restartTimerCount();
+                      if (_timer.isActive) {
+                        _restartTimerCount();
+                      } else {
+                        _startTimer();
+                      }
                       final userGameBoard = state.gameSession.gameBoards
                           .firstWhere(
                               (gameBoard) => gameBoard.userId == userId);

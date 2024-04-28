@@ -1,7 +1,11 @@
 part of '../game_session_part.dart';
 
+/// [FbDbGameSessionDataProvider].
 class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
+  /// [FirebaseDatabase].
   final FirebaseDatabase db;
+
+  /// Collection path.
   static const ref = 'games';
 
   FbDbGameSessionDataProvider({

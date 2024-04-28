@@ -1,7 +1,11 @@
 part of '../game_session_part.dart';
 
+/// Timer Widget.
 class TimerWidget extends StatelessWidget {
+  /// ValueNotifier for timerCount.
   final ValueNotifier<int> timerCount;
+
+  /// Determines whose turn it is now.
   final bool isUserTurn;
 
   const TimerWidget({

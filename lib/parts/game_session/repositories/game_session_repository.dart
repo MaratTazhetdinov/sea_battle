@@ -1,6 +1,8 @@
 part of '../game_session_part.dart';
 
+/// [GameSessionRepository].
 class GameSessionRepository extends IGameSessionRepository {
+  /// [IGameSessionDataProvider].
   final IGameSessionDataProvider gameSessionDataProvider;
 
   GameSessionRepository({required this.gameSessionDataProvider});

@@ -1,8 +1,14 @@
 part of '../../game_session_part.dart';
 
+/// [DtoGameSession].
 class DtoGameSession {
+  /// Game session id.
   final String gameSessionId;
+
+  /// List of [DtoGameBoard].
   final List<DtoGameBoard> dtoGameBoards;
+
+  /// Shows which user id should shoot now.
   final String currentTurnUserId;
 
   DtoGameSession({
@@ -11,6 +17,7 @@ class DtoGameSession {
     required this.currentTurnUserId,
   });
 
+  /// Factory constructor from FirebaseDatabase object.
   factory DtoGameSession.fromFirebaseDatabase(
       String gameSessionId, Object? data) {
     final json = Map<String, dynamic>.from(data! as Map<Object?, Object?>);

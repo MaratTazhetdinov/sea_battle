@@ -1,10 +1,20 @@
 part of '../game_session_part.dart';
 
+/// Bloc for ship alignment.
 class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
+  /// Game session repository to interact with backend.
   final IGameSessionRepository gameSessionRepository;
+
+  /// User Id.
   final String userId;
+
+  /// Game Session Id.
   final String gameSessionId;
+
+  /// Stream subscription for listening [GameSession].
   StreamSubscription<GameSession>? _gameSessionSubscription;
+
+  /// Game logic class.
   late GameLogic gameLogic;
 
   GameSessionBloc(
@@ -27,6 +37,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
     on<GameSessionUserSurrendered>(_onGameSessionUserSurrendered);
   }
 
+  /// Updates states when new [GameSession] received from backend.
   Future<void> _onGameSessionChanged(
       _GameSessionChanged event, Emitter<GameSessionState> emit) async {
     try {
@@ -37,6 +48,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
     }
   }
 
+  /// Registers user shot.
   Future<void> _onUserShot(
       GameSessionUserShot event, Emitter<GameSessionState> emit) async {
     try {
@@ -55,6 +67,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
     }
   }
 
+  /// Registers the end of the game.
   Future<void> _onGameSessionCompleted(
       GameSessionCompleted event, Emitter<GameSessionState> emit) async {
     emit(GameSessionComplete(
@@ -63,6 +76,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
     ));
   }
 
+  /// Registered user surrender.
   Future<void> _onGameSessionUserSurrendered(
       GameSessionUserSurrendered event, Emitter<GameSessionState> emit) async {
     final previousCells = state.gameSession.gameBoards

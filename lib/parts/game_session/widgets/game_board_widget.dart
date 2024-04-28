@@ -1,9 +1,17 @@
 part of '../game_session_part.dart';
 
+/// Game Board widget.
 class GameBoardWidget extends StatelessWidget {
+  /// Game Board height.
   final double height;
+
+  /// Game Board width.
   final double width;
+
+  /// [GameBoard].
   final GameBoard gameBoard;
+
+  /// Is enemy board.
   final bool isEnemyBoard;
 
   const GameBoardWidget({
