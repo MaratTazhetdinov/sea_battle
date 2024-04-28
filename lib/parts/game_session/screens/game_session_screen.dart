@@ -28,6 +28,8 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
 
   @override
   void initState() {
+    _startTimer();
+
     /// End the game if player close or pause the app.
     _appLifecycleListener = AppLifecycleListener(
       onPause: () =>
@@ -45,7 +47,7 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
 
   /// Updates _timesCount value.
   void _restartTimerCount() {
-    // _timerCount.value = 60;
+    _timerCount.value = 60;
   }
 
   /// Stops timer.
@@ -87,11 +89,7 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                         child: Text(locale.waitingForPlayer),
                       );
                     } else {
-                      if (_timer.isActive) {
-                        _restartTimerCount();
-                      } else {
-                        _startTimer();
-                      }
+                      _restartTimerCount();
                       final userGameBoard = state.gameSession.gameBoards
                           .firstWhere(
                               (gameBoard) => gameBoard.userId == userId);
@@ -101,53 +99,99 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
 
                       final isUserTurn =
                           state.gameSession.currentTurnUserId == userId;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 50),
-                        child: LayoutBuilder(builder: (context, constraints) {
-                          final boardHeight =
-                              (constraints.maxHeight * 0.85) / 2;
-                          return Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                AbsorbPointer(
-                                  absorbing: true,
-                                  child: GameBoardWidget(
-                                      height: boardHeight,
-                                      width: boardHeight,
-                                      gameBoard: userGameBoard),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 20),
+                      return Stack(
+                        children: [
+                          AbsorbPointer(
+                            absorbing: state is GameSessionComplete,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 50),
+                              child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                final boardHeight =
+                                    (constraints.maxHeight * 0.85) / 2;
+                                return Center(
                                   child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        isUserTurn
-                                            ? locale.yourTurn
-                                            : locale.enemyTurn,
+                                      AbsorbPointer(
+                                        absorbing: true,
+                                        child: GameBoardWidget(
+                                            height: boardHeight,
+                                            width: boardHeight,
+                                            gameBoard: userGameBoard),
                                       ),
-                                      const SizedBox(height: 10),
-                                      TimerWidget(
-                                        timerCount: _timerCount,
-                                        isUserTurn: isUserTurn,
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 20),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              isUserTurn
+                                                  ? locale.yourTurn
+                                                  : locale.enemyTurn,
+                                            ),
+                                            const SizedBox(height: 10),
+                                            TimerWidget(
+                                              timerCount: _timerCount,
+                                              isUserTurn: isUserTurn,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      AbsorbPointer(
+                                        absorbing: !isUserTurn,
+                                        child: GameBoardWidget(
+                                          height: boardHeight,
+                                          width: boardHeight,
+                                          gameBoard: enemyGameBoard,
+                                          isEnemyBoard: true,
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                AbsorbPointer(
-                                  absorbing: !isUserTurn,
-                                  child: GameBoardWidget(
-                                    height: boardHeight,
-                                    width: boardHeight,
-                                    gameBoard: enemyGameBoard,
-                                    isEnemyBoard: true,
+                                );
+                              }),
+                            ),
+                          ),
+                          if (state is GameSessionComplete)
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                    ),
+                                    borderRadius: BorderRadius.circular(25),
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 40,
+                                      vertical: 40,
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(state.isUserWon
+                                            ? 'You won'
+                                            : 'You lost'),
+                                        const SizedBox(height: 40),
+                                        ElevatedButton(
+                                          onPressed: () => context.router.pop(),
+                                          child:
+                                              const Text('Leave the session'),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          );
-                        }),
+                        ],
                       );
                     }
                   },
