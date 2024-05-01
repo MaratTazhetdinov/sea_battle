@@ -46,20 +46,19 @@ class _AlignmentGameBoardWidgetState extends State<AlignmentGameBoardWidget> {
   /// Current index of [GameBoard] according to [DraggableShip] offset.
   int _currentDragTargetIndex = -1;
   late GameBoard _gameBoard;
+  final _key = GlobalKey();
 
   @override
   void initState() {
-    // WidgetsBinding.instance.addPostFrameCallback((duration) {
-    //   Future.delayed(duration).then((_) {
-    //     RenderBox? renderBox =
-    //         key.currentContext?.findRenderObject() as RenderBox?;
-    //     if (renderBox case final box?) {
-    //       _boardOffset = box.localToGlobal(Offset.zero);
-    //       print(_boardOffset);
-    //     }
-    //   });
-    // });
-    _gameBoardOffset = const Offset(40.0, 123.0);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 300)).then((_) {
+        RenderBox? renderBox =
+            _key.currentContext?.findRenderObject() as RenderBox?;
+        if (renderBox case final box?) {
+          _gameBoardOffset = box.localToGlobal(Offset.zero);
+        }
+      });
+    });
 
     _draggableShip.addListener(() {
       _calculatePotentialIndexes(_draggableShip.value);
@@ -173,6 +172,7 @@ class _AlignmentGameBoardWidgetState extends State<AlignmentGameBoardWidget> {
           },
           onPanEnd: (details) => widget.onPanEnd(details, context),
           child: Container(
+            key: _key,
             height: _gameBoardSize.height,
             width: _gameBoardSize.width,
             decoration: BoxDecoration(
