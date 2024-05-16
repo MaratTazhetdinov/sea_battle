@@ -103,55 +103,76 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                         children: [
                           AbsorbPointer(
                             absorbing: state is GameSessionComplete,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 50),
-                              child: LayoutBuilder(
-                                  builder: (context, constraints) {
-                                final boardHeight =
-                                    (constraints.maxHeight * 0.85) / 2;
-                                return Center(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      AbsorbPointer(
-                                        absorbing: true,
-                                        child: GameBoardWidget(
-                                            height: boardHeight,
-                                            width: boardHeight,
-                                            gameBoard: userGameBoard),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 20),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              isUserTurn
-                                                  ? locale.yourTurn
-                                                  : locale.enemyTurn,
+                            child: Stack(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 50),
+                                  child: LayoutBuilder(
+                                      builder: (context, constraints) {
+                                    final boardHeight =
+                                        (constraints.maxHeight * 0.85) / 2;
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AbsorbPointer(
+                                            absorbing: true,
+                                            child: GameBoardWidget(
+                                                height: boardHeight,
+                                                width: boardHeight,
+                                                gameBoard: userGameBoard),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 20),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  isUserTurn
+                                                      ? locale.yourTurn
+                                                      : locale.enemyTurn,
+                                                ),
+                                                const SizedBox(height: 10),
+                                                TimerWidget(
+                                                  timerCount: _timerCount,
+                                                  isUserTurn: isUserTurn,
+                                                ),
+                                              ],
                                             ),
-                                            const SizedBox(height: 10),
-                                            TimerWidget(
-                                              timerCount: _timerCount,
-                                              isUserTurn: isUserTurn,
+                                          ),
+                                          AbsorbPointer(
+                                            absorbing: !isUserTurn,
+                                            child: GameBoardWidget(
+                                              height: boardHeight,
+                                              width: boardHeight,
+                                              gameBoard: enemyGameBoard,
+                                              isEnemyBoard: true,
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                      AbsorbPointer(
-                                        absorbing: !isUserTurn,
-                                        child: GameBoardWidget(
-                                          height: boardHeight,
-                                          width: boardHeight,
-                                          gameBoard: enemyGameBoard,
-                                          isEnemyBoard: true,
-                                        ),
-                                      ),
-                                    ],
+                                    );
+                                  }),
+                                ),
+                                Positioned(
+                                  top: 10,
+                                  left: 20,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      context.readGameSessionBloc
+                                          .add(GameSessionUserSurrendered());
+                                      context.router.pop();
+                                    },
+                                    child: const SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: Icon(Icons.close),
+                                    ),
                                   ),
-                                );
-                              }),
+                                ),
+                              ],
                             ),
                           ),
                           if (state is GameSessionComplete)
@@ -195,22 +216,6 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                       );
                     }
                   },
-                ),
-                Positioned(
-                  top: 10,
-                  left: 20,
-                  child: GestureDetector(
-                    onTap: () {
-                      context.readGameSessionBloc
-                          .add(GameSessionUserSurrendered());
-                      context.router.pop();
-                    },
-                    child: const SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: Icon(Icons.close),
-                    ),
-                  ),
                 ),
               ],
             ),
