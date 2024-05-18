@@ -61,6 +61,10 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
     super.dispose();
   }
 
+  void _goToHome() {
+    context.router.popUntilRouteWithName(HomeRoute.name);
+  }
+
   @override
   Widget build(BuildContext context) {
     final userId = context.readAuthBloc.state.user.id;
@@ -69,6 +73,7 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
       create: (context) => GameSessionBloc(
         gameSessionRepository:
             RepositoryProvider.of<IGameSessionRepository>(context),
+        profileRepository: RepositoryProvider.of<IProfileRepository>(context),
         userId: userId,
         gameSessionId: widget.gameSessionId,
       ),
@@ -163,7 +168,7 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                                     onTap: () {
                                       context.readGameSessionBloc
                                           .add(GameSessionUserSurrendered());
-                                      context.router.pop();
+                                      _goToHome();
                                     },
                                     child: const SizedBox(
                                       width: 30,
@@ -176,42 +181,48 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                             ),
                           ),
                           if (state is GameSessionComplete)
-                            Center(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black,
+                            Builder(builder: (context) {
+                              if (state.isUserWon) {
+                                context.readGameSessionBloc
+                                    .add(UserProfileStatisticUpdated());
+                              }
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ),
+                                      borderRadius: BorderRadius.circular(25),
+                                      color: Colors.white,
                                     ),
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: Colors.white,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 40,
-                                      vertical: 40,
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(state.isUserWon
-                                            ? 'You won'
-                                            : 'You lost'),
-                                        const SizedBox(height: 40),
-                                        ElevatedButton(
-                                          onPressed: () => context.router.pop(),
-                                          child:
-                                              const Text('Leave the session'),
-                                        ),
-                                      ],
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 40,
+                                        vertical: 40,
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(state.isUserWon
+                                              ? 'You won'
+                                              : 'You lost'),
+                                          const SizedBox(height: 40),
+                                          ElevatedButton(
+                                            onPressed: () => _goToHome(),
+                                            child:
+                                                const Text('Leave the session'),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              );
+                            }),
                         ],
                       );
                     }

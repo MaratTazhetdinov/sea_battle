@@ -8,4 +8,7 @@ abstract class IProfileDataProvider {
   Future<void> createProfile({required DtoProfile dtoProfile});
 
   Future<bool> isNicknameInUse({required String nickname});
+
+  Future<void> updateProfileStatistic(
+      {required bool isWinner, required String id});
 }

@@ -43,7 +43,10 @@ class GameSessionRepository extends IGameSessionRepository {
     required String userId,
     required String gameSessionId,
     required List<int> cells,
-  }) async {}
+  }) async {
+    await gameSessionDataProvider.surrender(
+        userId: userId, gameSessionId: gameSessionId, cells: cells);
+  }
 
   @override
   Future<void> finishShipsAlignment({

@@ -5,6 +5,9 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
   /// Game session repository to interact with backend.
   final IGameSessionRepository gameSessionRepository;
 
+  /// Profile repository to interact with backend.
+  final IProfileRepository profileRepository;
+
   /// User Id.
   final String userId;
 
@@ -19,6 +22,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
 
   GameSessionBloc(
       {required this.gameSessionRepository,
+      required this.profileRepository,
       required this.userId,
       required this.gameSessionId})
       : super(GameSessionState(
@@ -35,6 +39,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
     on<GameSessionUserShot>(_onUserShot);
     on<GameSessionCompleted>(_onGameSessionCompleted);
     on<GameSessionUserSurrendered>(_onGameSessionUserSurrendered);
+    on<UserProfileStatisticUpdated>(_onUserProfileStatisticUpdated);
   }
 
   /// Updates states when new [GameSession] received from backend.
@@ -94,6 +99,14 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
       gameSessionId: gameSessionId,
       cells: cells,
     );
+  }
+
+  /// Updates users wins and loss statictic.
+  Future<void> _onUserProfileStatisticUpdated(UserProfileStatisticUpdated event,
+      Emitter<GameSessionState> state) async {
+    await profileRepository.updateProfileStatistic(isWinner: true, id: userId);
+    await profileRepository.updateProfileStatistic(
+        isWinner: false, id: gameLogic.enemyBoard.userId);
   }
 
   @override

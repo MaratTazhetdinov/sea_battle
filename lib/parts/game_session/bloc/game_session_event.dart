@@ -32,3 +32,6 @@ class GameSessionCompleted extends GameSessionEvent {
 
   GameSessionCompleted(this.isUserWon);
 }
+
+/// Updates user profiles statistic.
+class UserProfileStatisticUpdated extends GameSessionEvent {}

@@ -32,13 +32,6 @@ class HomeScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  context.router
-                      .push(GameSessionRoute(gameSessionId: '1713231840791'));
-                },
-                child: const Text('Game Session'),
-              ),
-              ElevatedButton(
-                onPressed: () {
                   context.readAuthBloc.add(AuthLoggedOut());
                 },
                 child: const Text('LogOut'),

@@ -34,4 +34,11 @@ class ProfileRepository extends IProfileRepository {
   Future<bool> isNicknameInUse({required String nickname}) async {
     return iProfileDataProvider.isNicknameInUse(nickname: nickname);
   }
+
+  @override
+  Future<void> updateProfileStatistic(
+      {required bool isWinner, required String id}) async {
+    await iProfileDataProvider.updateProfileStatistic(
+        isWinner: isWinner, id: id);
+  }
 }
