@@ -26,14 +26,23 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
   /// Timer.
   late final Timer _timer;
 
+  VoidCallback? _surrendUser;
+  late VoidCallback _removeSession;
+
   @override
   void initState() {
     _startTimer();
 
-    /// End the game if player close or pause the app.
+    /// End the game if player close or pause
+    /// the app during active session with another player.
     _appLifecycleListener = AppLifecycleListener(
-      onPause: () =>
-          context.readGameSessionBloc.add(GameSessionUserSurrendered()),
+      onInactive: () {
+        if (_surrendUser case final func?) {
+          func();
+        } else {
+          _removeSession();
+        }
+      },
     );
     super.initState();
   }
@@ -89,12 +98,22 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
               children: [
                 BlocBuilder<GameSessionBloc, GameSessionState>(
                   builder: (context, state) {
+                    _removeSession = () =>
+                        context.readGameSessionBloc.add(GameSessionRemove());
+                    if (state is GameSessionFailure) {
+                      return Center(
+                        child: Text(parseErrorType(state.error!)
+                            .toLocalizedMessage(locale)),
+                      );
+                    }
                     if (state.gameSession.gameBoards.length != 2) {
                       return Center(
                         child: Text(locale.waitingForPlayer),
                       );
                     } else {
                       _restartTimerCount();
+                      _surrendUser ??= () => context.readGameSessionBloc
+                          .add(GameSessionUserSurrendered());
                       final userGameBoard = state.gameSession.gameBoards
                           .firstWhere(
                               (gameBoard) => gameBoard.userId == userId);

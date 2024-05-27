@@ -11,6 +11,7 @@ enum ErrorType {
   weakPassword,
   unexpectedError,
   nicknameAlreadyInUse,
+  gameSessionHasBeenDeleted,
 }
 
 ErrorType parseErrorType(Object error) {
@@ -64,6 +65,7 @@ extension ErrorTypeLocalization on ErrorType {
       ErrorType.weakPassword => locale.weakPasswordError,
       ErrorType.unexpectedError => locale.unexpectedError,
       ErrorType.nicknameAlreadyInUse => locale.nicknameAlreadyInUseError,
+      ErrorType.gameSessionHasBeenDeleted => 'Game session has been deleted',
     };
   }
 }

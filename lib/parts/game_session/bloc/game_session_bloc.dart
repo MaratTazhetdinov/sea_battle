@@ -15,7 +15,7 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
   final String gameSessionId;
 
   /// Stream subscription for listening [GameSession].
-  StreamSubscription<GameSession>? _gameSessionSubscription;
+  StreamSubscription<GameSession?>? _gameSessionSubscription;
 
   /// Game logic class.
   late GameLogic gameLogic;
@@ -40,14 +40,22 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
     on<GameSessionCompleted>(_onGameSessionCompleted);
     on<GameSessionUserSurrendered>(_onGameSessionUserSurrendered);
     on<UserProfileStatisticUpdated>(_onUserProfileStatisticUpdated);
+    on<GameSessionRemove>(_onGameSessionRemove);
   }
 
   /// Updates states when new [GameSession] received from backend.
   Future<void> _onGameSessionChanged(
       _GameSessionChanged event, Emitter<GameSessionState> emit) async {
     try {
-      gameLogic = GameLogic.fromGameSession(event.gameSession, userId);
-      emit(state.copyWith(gameSession: event.gameSession));
+      if (event.gameSession case final gameSession?) {
+        if (gameSession.gameBoards.length == 2) {
+          gameLogic = GameLogic.fromGameSession(gameSession, userId);
+        }
+        emit(state.copyWith(gameSession: event.gameSession));
+      } else {
+        emit(GameSessionFailure(
+            ErrorType.gameSessionHasBeenDeleted, state.gameSession));
+      }
     } catch (e) {
       emit(GameSessionFailure(e, state.gameSession));
     }
@@ -107,6 +115,12 @@ class GameSessionBloc extends Bloc<GameSessionEvent, GameSessionState> {
     await profileRepository.updateProfileStatistic(isWinner: true, id: userId);
     await profileRepository.updateProfileStatistic(
         isWinner: false, id: gameLogic.enemyBoard.userId);
+  }
+
+  /// Remove game session from Database.
+  Future<void> _onGameSessionRemove(
+      GameSessionRemove event, Emitter<GameSessionState> state) async {
+    await gameSessionRepository.removeGameSession(gameSessionId: gameSessionId);
   }
 
   @override

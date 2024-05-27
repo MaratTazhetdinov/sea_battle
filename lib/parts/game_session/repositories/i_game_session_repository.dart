@@ -3,7 +3,7 @@ part of '../game_session_part.dart';
 /// [IGameSessionRepository].
 abstract class IGameSessionRepository {
   /// Stream for listening [GameSession].
-  Stream<GameSession> getGameSession(
+  Stream<GameSession?> getGameSession(
     String gameSessionId,
   );
 
@@ -33,4 +33,7 @@ abstract class IGameSessionRepository {
     required List<int> cells,
     String? currentTurnUserId,
   });
+
+  /// Removes game session from Database.
+  Future<void> removeGameSession({required String gameSessionId});
 }

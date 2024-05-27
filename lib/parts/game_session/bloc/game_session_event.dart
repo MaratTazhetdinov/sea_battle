@@ -4,7 +4,7 @@ abstract class GameSessionEvent {}
 
 /// Updates state when new [GameSession] received.
 class _GameSessionChanged extends GameSessionEvent {
-  final GameSession gameSession;
+  final GameSession? gameSession;
 
   _GameSessionChanged(this.gameSession);
 }
@@ -35,3 +35,6 @@ class GameSessionCompleted extends GameSessionEvent {
 
 /// Updates user profiles statistic.
 class UserProfileStatisticUpdated extends GameSessionEvent {}
+
+/// Removes game session from Database.
+class GameSessionRemove extends GameSessionEvent {}

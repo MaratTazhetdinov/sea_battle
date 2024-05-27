@@ -19,8 +19,8 @@ class DtoGameSession {
 
   /// Factory constructor from FirebaseDatabase object.
   factory DtoGameSession.fromFirebaseDatabase(
-      String gameSessionId, Object? data) {
-    final json = Map<String, dynamic>.from(data! as Map<Object?, Object?>);
+      String gameSessionId, Object data) {
+    final json = Map<String, dynamic>.from(data as Map<Object?, Object?>);
     return DtoGameSession(
       gameSessionId: gameSessionId,
       dtoGameBoards: json.keys

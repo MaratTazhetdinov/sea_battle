@@ -8,12 +8,17 @@ class GameSessionRepository extends IGameSessionRepository {
   GameSessionRepository({required this.gameSessionDataProvider});
 
   @override
-  Stream<GameSession> getGameSession(
+  Stream<GameSession?> getGameSession(
     String gameSessionId,
   ) =>
       gameSessionDataProvider
           .getGameSession(gameSessionId)
-          .map((dtoGameSession) => GameSession.fromDto(dtoGameSession));
+          .map((dtoGameSession) {
+        if (dtoGameSession case final dto?) {
+          return GameSession.fromDto(dto);
+        }
+        return null;
+      });
 
   @override
   Stream<List<GameSession>> get gameSessionsList =>
@@ -61,5 +66,11 @@ class GameSessionRepository extends IGameSessionRepository {
       cells: cells,
       currentTurnUserId: currentTurnUserId,
     );
+  }
+
+  @override
+  Future<void> removeGameSession({required String gameSessionId}) async {
+    await gameSessionDataProvider.removeGameSession(
+        gameSessionId: gameSessionId);
   }
 }

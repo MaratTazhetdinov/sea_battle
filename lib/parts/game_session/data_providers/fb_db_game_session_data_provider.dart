@@ -13,10 +13,13 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
   });
 
   @override
-  Stream<DtoGameSession> getGameSession(String gameSessionId) {
-    return db.ref(ref).child(gameSessionId).onValue.map((data) =>
-        DtoGameSession.fromFirebaseDatabase(
-            gameSessionId, data.snapshot.value));
+  Stream<DtoGameSession?> getGameSession(String gameSessionId) {
+    return db.ref(ref).child(gameSessionId).onValue.map((data) {
+      if (data.snapshot.value case final value?) {
+        return DtoGameSession.fromFirebaseDatabase(gameSessionId, value);
+      }
+      return null;
+    });
   }
 
   @override
@@ -27,7 +30,7 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
         return list.entries.map((entry) {
           final gameSessionId = entry.key.toString();
           final data = entry.value;
-          return DtoGameSession.fromFirebaseDatabase(gameSessionId, data);
+          return DtoGameSession.fromFirebaseDatabase(gameSessionId, data!);
         }).toList();
       } else {
         return [];
@@ -81,5 +84,10 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
         },
       },
     );
+  }
+
+  @override
+  Future<void> removeGameSession({required String gameSessionId}) async {
+    await db.ref(ref).child(gameSessionId).remove();
   }
 }
