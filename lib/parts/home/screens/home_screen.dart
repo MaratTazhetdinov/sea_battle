@@ -6,43 +6,38 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.l10n;
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Home'),
-            ElevatedButton(
-              onPressed: () {
-                context.router.push(const GameSessionRoute());
-              },
-              child: const Text('Start Game'),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: ElevatedButton(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ElevatedButton(
                 onPressed: () {
-                  context.router.push(const ShipsAlignmentRoute());
+                  context.router.push(ShipsAlignmentRoute());
                 },
-                child: const Text('Ships Alignment'),
+                child: Text(locale.createGame),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: ElevatedButton(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.router.push(const GameSessionListRoute());
+                  },
+                  child: Text(locale.joinGame),
+                ),
+              ),
+              ElevatedButton(
                 onPressed: () {
-                  context.router.push(const GameSessionListRoute());
+                  context.readAuthBloc.add(AuthLoggedOut());
                 },
-                child: const Text('Game Session List'),
+                child: Text(locale.logout),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.readAuthBloc.add(AuthLoggedOut());
-              },
-              child: const Text('LogOut'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

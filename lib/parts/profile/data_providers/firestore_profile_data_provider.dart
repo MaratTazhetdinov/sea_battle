@@ -6,11 +6,16 @@ class FirestoreProfileDataProvider extends IProfileDataProvider {
 
   FirestoreProfileDataProvider({required this.db});
 
+  Future<QueryDocumentSnapshot<Map<String, dynamic>>?> _getDocByUserId(
+      {required String id}) {
+    return db.collection(collectionPath).get().then((value) =>
+        value.docs.firstWhereOrNull((element) => element['id'] == id));
+  }
+
   @override
   Future<DtoProfile?> getProfileById({required String id}) async {
     DtoProfile? dtoProfile;
-    final doc = await db.collection(collectionPath).get().then((value) =>
-        value.docs.firstWhereOrNull((element) => element['id'] == id));
+    final doc = await _getDocByUserId(id: id);
     if (doc?.data() case final json?) {
       dtoProfile = DtoProfile.fromJson(json);
     }
@@ -42,5 +47,30 @@ class FirestoreProfileDataProvider extends IProfileDataProvider {
         .docs
         .firstWhereOrNull((element) => element['nickname'] == nickname));
     return doc != null;
+  }
+
+  @override
+  Future<void> updateProfileStatistic(
+      {required bool isWinner, required String id}) async {
+    final doc = await _getDocByUserId(id: id);
+    if (doc case final doc?) {
+      final profileId = doc.id;
+      final profile = await getProfileById(id: id);
+      if (profile case final profile?) {
+        if (isWinner) {
+          final winsCount = profile.win + 1;
+          await db
+              .collection(collectionPath)
+              .doc(profileId)
+              .update({'win': winsCount});
+        } else {
+          final lossCount = profile.loss + 1;
+          await db
+              .collection(collectionPath)
+              .doc(profileId)
+              .update({'loss': lossCount});
+        }
+      }
+    }
   }
 }

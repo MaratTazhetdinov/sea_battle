@@ -5,7 +5,7 @@ enum CellState {
   empty(0),
   occupied(1),
   destroyed(2),
-  shooted(3);
+  shot(3);
 
   final int value;
 

@@ -9,9 +9,20 @@ class GameLogic extends IGameLogic {
     required this.enemyBoard,
   });
 
+  factory GameLogic.fromGameSession(GameSession gameSession, String userId) {
+    final userBoard = gameSession.gameBoards
+        .firstWhere((gameBoard) => gameBoard.userId == userId);
+    final enemyBoard = gameSession.gameBoards
+        .firstWhere((gameBoard) => gameBoard.userId != userId);
+    return GameLogic(
+      userBoard: userBoard,
+      enemyBoard: enemyBoard,
+    );
+  }
+
   int? shoot(int cellIndex) =>
       switch (enemyBoard.cell.goToCellWithIndex(cellIndex).cellState) {
-        CellState.empty => CellState.shooted.value,
+        CellState.empty => CellState.shot.value,
         CellState.occupied => CellState.destroyed.value,
         _ => null,
       };

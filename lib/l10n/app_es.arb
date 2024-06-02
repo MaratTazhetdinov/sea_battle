@@ -34,5 +34,15 @@
     "reload": "Recargar",
     "noActiveSessions": "No hay sesiones activas en este momento",
     "wins": "Victorias",
-    "losses": "Derrotas"
+    "losses": "Derrotas",
+    "createGame": "Crear juego",
+    "joinGame": "Unirse al juego",
+    "waitingForPlayer": "Esperando al jugador",
+    "yourTurn": "Tu turno",
+    "enemyTurn": "Turno del enemigo",
+    "gameSessionHasBeenDeleted": "La sesión de juego ha sido eliminada",
+    "youWon": "Ganaste",
+    "youLost": "Perdiste",
+    "leaveTheSession": "Abandonar la sesión",
+    "logout": "Cerrar sesión"
 }

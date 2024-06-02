@@ -34,5 +34,15 @@
     "reload": "Reload",
     "noActiveSessions": "No active sessions at the moment",
     "wins": "Wins",
-    "losses": "Losses"
+    "losses": "Losses",
+    "createGame": "Create Game",
+    "joinGame": "Join Game",
+    "waitingForPlayer": "Waiting For Player",
+    "yourTurn": "Your turn",
+    "enemyTurn": "Enemy turn",
+    "gameSessionHasBeenDeleted": "Game Session has been deleted",
+    "youWon": "You Won",
+    "youLost": "You Lost",
+    "leaveTheSession": "Leave the Session",
+    "logout": "Log out"
 }

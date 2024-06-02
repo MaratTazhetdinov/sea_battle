@@ -10,6 +10,7 @@ import 'package:sea_battle/l10n/l10n.dart';
 import 'package:sea_battle/parts/auth/auth_part.dart';
 import 'package:sea_battle/parts/game_board/game_board_part.dart';
 import 'package:sea_battle/parts/game_session/game_session_part.dart';
+import 'package:sea_battle/parts/router/router_part.gr.dart';
 import 'package:sea_battle/parts/ship/ship_part.dart';
 import 'package:sea_battle/ui_kit/ui_kit_part.dart';
 

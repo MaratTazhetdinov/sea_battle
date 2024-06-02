@@ -36,6 +36,14 @@ class GameBoard extends Equatable {
     );
   }
 
+  /// Creates [DtoGameBoard] from [GameBoard].
+  DtoGameBoard toDtoGameBoard() {
+    return DtoGameBoard(
+      userId: userId,
+      cells: [],
+    );
+  }
+
   /// Creates [GameBoardCell] with given [occupuidedIndexes].
   static Cell _createBoard(List<int> occupuidedIndexes) {
     final List<Cell> cells = List.generate(
@@ -45,7 +53,7 @@ class GameBoard extends Equatable {
               cellState: switch (occupuidedIndexes[index]) {
                 1 => CellState.occupied,
                 2 => CellState.destroyed,
-                3 => CellState.shooted,
+                3 => CellState.shot,
                 _ => CellState.empty,
               },
             ));

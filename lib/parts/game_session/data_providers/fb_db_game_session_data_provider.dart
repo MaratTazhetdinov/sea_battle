@@ -1,7 +1,11 @@
 part of '../game_session_part.dart';
 
+/// [FbDbGameSessionDataProvider].
 class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
+  /// [FirebaseDatabase].
   final FirebaseDatabase db;
+
+  /// Collection path.
   static const ref = 'games';
 
   FbDbGameSessionDataProvider({
@@ -9,10 +13,13 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
   });
 
   @override
-  Stream<DtoGameSession> getGameSession(String gameSessionId) {
-    return db.ref(ref).child(gameSessionId).onValue.map((data) =>
-        DtoGameSession.fromFirebaseDatabase(
-            gameSessionId, data.snapshot.value));
+  Stream<DtoGameSession?> getGameSession(String gameSessionId) {
+    return db.ref(ref).child(gameSessionId).onValue.map((data) {
+      if (data.snapshot.value case final value?) {
+        return DtoGameSession.fromFirebaseDatabase(gameSessionId, value);
+      }
+      return null;
+    });
   }
 
   @override
@@ -23,7 +30,7 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
         return list.entries.map((entry) {
           final gameSessionId = entry.key.toString();
           final data = entry.value;
-          return DtoGameSession.fromFirebaseDatabase(gameSessionId, data);
+          return DtoGameSession.fromFirebaseDatabase(gameSessionId, data!);
         }).toList();
       } else {
         return [];
@@ -37,11 +44,27 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
     required String gameSessionId,
     required int cellIndex,
     required int cellState,
+    required String nextTurnUserId,
   }) async {
     await db
         .ref(ref)
         .child(gameSessionId)
         .update({'$userId/cells/$cellIndex': cellState});
+    if (cellState != 2) {
+      await db
+          .ref(ref)
+          .child(gameSessionId)
+          .update({'currentTurnUserId': nextTurnUserId});
+    }
+  }
+
+  @override
+  Future<void> surrender({
+    required String userId,
+    required String gameSessionId,
+    required List<int> cells,
+  }) async {
+    await db.ref(ref).child(gameSessionId).update({'$userId/cells': cells});
   }
 
   @override
@@ -49,15 +72,22 @@ class FbDbGameSessionDataProvider extends IGameSessionDataProvider {
     required String userId,
     required String gameSessionId,
     required List<int> cells,
+    String? currentTurnUserId,
   }) async {
     final rawCells =
         List.generate(100, (index) => cells.contains(index) ? 1 : 0);
     await db.ref(ref).child(gameSessionId).update(
       {
+        if (currentTurnUserId case final userId?) 'currentTurnUserId': userId,
         userId: {
           'cells': rawCells,
         },
       },
     );
+  }
+
+  @override
+  Future<void> removeGameSession({required String gameSessionId}) async {
+    await db.ref(ref).child(gameSessionId).remove();
   }
 }

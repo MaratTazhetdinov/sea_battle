@@ -50,6 +50,68 @@ class $DraggableShipCopyWithNull<$Return> {
 
 // coverage:ignore-start
 /// @nodoc
+extension $ShipsAlignmentStateCopyWithExtension on ShipsAlignmentState {
+  $ShipsAlignmentStateCopyWith<ShipsAlignmentState> get copyWith =>
+      $ShipsAlignmentStateCopyWith<ShipsAlignmentState>(this, (value) => value);
+
+  $ShipsAlignmentStateCopyWithNull<ShipsAlignmentState> get copyWithNull =>
+      $ShipsAlignmentStateCopyWithNull<ShipsAlignmentState>(
+          this, (value) => value);
+}
+
+/// @nodoc
+class $ShipsAlignmentStateCopyWith<$Return> {
+  // ignore: unused_field
+  final ShipsAlignmentState _value;
+
+  // ignore: unused_field
+  final $Return Function(ShipsAlignmentState) _callback;
+
+  $ShipsAlignmentStateCopyWith(this._value, this._callback);
+
+  $GameBoardCopyWith<$Return> get gameBoard => $GameBoardCopyWith<$Return>(
+      _value.gameBoard,
+      (value) => _callback(_value.copyWith(gameBoard: value)));
+
+  $ShipCounterCopyWith<$Return> get shipCounter =>
+      $ShipCounterCopyWith<$Return>(_value.shipCounter,
+          (value) => _callback(_value.copyWith(shipCounter: value)));
+
+  $Return call({
+    GameBoard? gameBoard,
+    ShipCounter? shipCounter,
+    bool? isAlignmentComplited,
+  }) =>
+      _callback(ShipsAlignmentState(
+        gameBoard: gameBoard ?? _value.gameBoard,
+        shipCounter: shipCounter ?? _value.shipCounter,
+        isAlignmentComplited:
+            isAlignmentComplited ?? _value.isAlignmentComplited,
+      ));
+}
+
+/// @nodoc
+class $ShipsAlignmentStateCopyWithNull<$Return> {
+  // ignore: unused_field
+  final ShipsAlignmentState _value;
+  // ignore: unused_field
+  final $Return Function(ShipsAlignmentState) _callback;
+
+  $ShipsAlignmentStateCopyWithNull(this._value, this._callback);
+
+  $GameBoardCopyWithNull<$Return> get gameBoard =>
+      $GameBoardCopyWithNull<$Return>(_value.gameBoard,
+          (value) => _callback(_value.copyWith(gameBoard: value)));
+
+  $ShipCounterCopyWithNull<$Return> get shipCounter =>
+      $ShipCounterCopyWithNull<$Return>(_value.shipCounter,
+          (value) => _callback(_value.copyWith(shipCounter: value)));
+}
+
+// coverage:ignore-end
+
+// coverage:ignore-start
+/// @nodoc
 extension $ShipCounterCopyWithExtension on ShipCounter {
   $ShipCounterCopyWith<ShipCounter> get copyWith =>
       $ShipCounterCopyWith<ShipCounter>(this, (value) => value);
@@ -97,6 +159,18 @@ class $ShipCounterCopyWithNull<$Return> {
 List<Object?> _$DraggableShipProps(DraggableShip instance,
         {List<Object?>? superProps}) =>
     [instance.ship, instance.offset, ...?superProps];
+// coverage:ignore-end
+
+// coverage:ignore-start
+/// @nodoc
+List<Object?> _$ShipsAlignmentStateProps(ShipsAlignmentState instance,
+        {List<Object?>? superProps}) =>
+    [
+      instance.gameBoard,
+      instance.shipCounter,
+      instance.isAlignmentComplited,
+      ...?superProps
+    ];
 // coverage:ignore-end
 
 // coverage:ignore-start

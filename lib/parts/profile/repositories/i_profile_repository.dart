@@ -8,4 +8,7 @@ abstract class IProfileRepository {
   Future<void> createProfile({required Profile profile});
 
   Future<bool> isNicknameInUse({required String nickname});
+
+  Future<void> updateProfileStatistic(
+      {required bool isWinner, required String id});
 }

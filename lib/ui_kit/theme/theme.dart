@@ -108,6 +108,9 @@ class AppTheme {
         headlineSmall: headlineSmall,
         titleMedium: titleMedium,
       ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: colorScheme.activeButtonColor,
+      ),
     );
   }
 }
