@@ -39,5 +39,10 @@
     "joinGame": "Unirse al juego",
     "waitingForPlayer": "Esperando al jugador",
     "yourTurn": "Tu turno",
-    "enemyTurn": "Turno del enemigo"
+    "enemyTurn": "Turno del enemigo",
+    "gameSessionHasBeenDeleted": "La sesión de juego ha sido eliminada",
+    "youWon": "Ganaste",
+    "youLost": "Perdiste",
+    "leaveTheSession": "Abandonar la sesión",
+    "logout": "Cerrar sesión"
 }

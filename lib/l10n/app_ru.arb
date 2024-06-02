@@ -39,5 +39,10 @@
     "joinGame": "Приоединиться к игре",
     "waitingForPlayer": "Ожидаем другого игрока",
     "yourTurn": "Ваш ход",
-    "enemyTurn": "Ход противника"
+    "enemyTurn": "Ход противника",
+    "gameSessionHasBeenDeleted": "Игровая сессия была удалена",
+    "youWon": "Вы выиграли",
+    "youLost": "Вы проиграли",
+    "leaveTheSession": "Покинуть сессию",
+    "logout": "Выйти из профиля"
 }

@@ -81,6 +81,7 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
   Widget build(BuildContext context) {
     final userId = context.readAuthBloc.state.user.id;
     final locale = context.l10n;
+    final colors = context.theme.colors;
     return BlocProvider(
       create: (context) => GameSessionBloc(
         gameSessionRepository:
@@ -207,11 +208,12 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                                               width: double.infinity,
                                               decoration: BoxDecoration(
                                                 border: Border.all(
-                                                  color: Colors.black,
+                                                  color: colors.firstTextColor,
                                                 ),
                                                 borderRadius:
                                                     BorderRadius.circular(25),
-                                                color: Colors.white,
+                                                color: colors
+                                                    .scaffoldBackgroundColor,
                                               ),
                                               child: Padding(
                                                 padding:
@@ -224,14 +226,14 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                                                       MainAxisSize.min,
                                                   children: [
                                                     Text(state.isUserWon
-                                                        ? 'You won'
-                                                        : 'You lost'),
+                                                        ? locale.youWon
+                                                        : locale.youLost),
                                                     const SizedBox(height: 40),
                                                     ElevatedButton(
                                                       onPressed: () =>
                                                           _goToHome(),
-                                                      child: const Text(
-                                                          'Leave the session'),
+                                                      child: Text(locale
+                                                          .leaveTheSession),
                                                     ),
                                                   ],
                                                 ),
@@ -255,10 +257,13 @@ class _GameSessionScreenState extends State<GameSessionScreen> {
                                 _onSessionClose();
                                 _goToHome();
                               },
-                              child: const SizedBox(
+                              child: SizedBox(
                                 width: 30,
                                 height: 30,
-                                child: Icon(Icons.close),
+                                child: Icon(
+                                  Icons.close,
+                                  color: colors.firstTextColor,
+                                ),
                               ),
                             ),
                           ),

@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () {
                   context.readAuthBloc.add(AuthLoggedOut());
                 },
-                child: const Text('LogOut'),
+                child: Text(locale.logout),
               ),
             ],
           ),
