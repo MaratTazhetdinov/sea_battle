@@ -18,7 +18,7 @@ class GameSession {
   });
 
   /// Getter for determining how many players are currently in the session.
-  bool get isWaitingForPlayer => gameBoards.length == 1;
+  bool get isWaitingForPlayer => gameBoards.length != 2;
 
   /// Factory constructor from [DtoGameSession].
   factory GameSession.fromDto(DtoGameSession dtoGameSession) => GameSession(
