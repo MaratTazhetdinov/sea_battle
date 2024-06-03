@@ -1,5 +1,15 @@
 part of '../ui_kit_part.dart';
 
+/// [ThemeStyle].
+enum ThemeStyle {
+  dark('dark'),
+  light('light');
+
+  final String title;
+
+  const ThemeStyle(this.title);
+}
+
 class AppTheme {
   final AppColors colorScheme;
 
