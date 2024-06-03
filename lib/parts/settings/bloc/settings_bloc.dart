@@ -5,10 +5,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   SettingsBloc({required this.settingsRepository})
       : super(SettingsState.init()) {
-    add(_SettingsLoaded());
     on<_SettingsLoaded>(_onSettingsLoaded);
     on<LocaleSet>(_onLocaleSet);
     on<ThemeSet>(_onThemeSet);
+    add(_SettingsLoaded());
   }
 
   Future<void> _onSettingsLoaded(
