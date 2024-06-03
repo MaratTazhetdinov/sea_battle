@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:boilerplate_annotations/boilerplate_annotations.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -15,3 +18,5 @@ part 'data_providers/i_settings_data_provider.dart';
 part 'data_providers/shared_pref_data_provider.dart';
 part 'repositories/i_settings_repository.dart';
 part 'repositories/settings_repository.dart';
+
+part 'settings_part.g.dart';

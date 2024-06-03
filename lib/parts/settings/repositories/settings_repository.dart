@@ -8,11 +8,15 @@ class SettingsRepository extends ISettingsRepository {
   SettingsRepository({required this.dataProvider});
 
   @override
-  Future<Locale> getLocale() async {
-    final stringLocale = await dataProvider.getLocale();
+  Locale getLocale() {
+    final stringLocale = dataProvider.getLocale();
     final locale = L10n.languages[stringLocale];
     if (locale case final locale?) {
       return locale;
+    }
+    final deviceLocale = Locale(Platform.localeName.substring(0, 3));
+    if (L10n.languages.values.contains(deviceLocale)) {
+      return deviceLocale;
     }
     return L10n.languages.values.first;
   }
@@ -26,8 +30,8 @@ class SettingsRepository extends ISettingsRepository {
   }
 
   @override
-  Future<ThemeStyle> getTheme() async {
-    final themeString = await dataProvider.getTheme();
+  ThemeStyle getTheme() {
+    final themeString = dataProvider.getTheme();
     return ThemeStyle.values
             .firstWhereOrNull((theme) => theme.title == themeString) ??
         ThemeStyle.light;

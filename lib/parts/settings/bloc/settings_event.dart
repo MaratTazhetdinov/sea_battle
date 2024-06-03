@@ -2,16 +2,19 @@ part of '../settings_part.dart';
 
 class SettingsEvent {}
 
-/// Changes app locale.
-class LanguagedChanged extends SettingsEvent {
+/// Loads settings from local database.
+class _SettingsLoaded extends SettingsEvent {}
+
+/// Saves locale to local database.
+class LocaleSet extends SettingsEvent {
   final Locale locale;
 
-  LanguagedChanged(this.locale);
+  LocaleSet(this.locale);
 }
 
-/// Changes theme style.
-class ThemeChanged extends SettingsEvent {
+/// Saves theme to local database.
+class ThemeSet extends SettingsEvent {
   final ThemeStyle theme;
 
-  ThemeChanged(this.theme);
+  ThemeSet(this.theme);
 }
