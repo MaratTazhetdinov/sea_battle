@@ -108,7 +108,12 @@ class MyApp extends StatelessWidget {
               ],
               locale: state.locale,
               supportedLocales: L10n.all,
-              theme: AppTheme(colorScheme: AppColors.light()).theme,
+              theme: AppTheme(
+                colorScheme: switch (state.theme) {
+                  ThemeStyle.light => AppColors.light(),
+                  ThemeStyle.dark => AppColors.dark(),
+                },
+              ).theme,
             );
           },
         ),
