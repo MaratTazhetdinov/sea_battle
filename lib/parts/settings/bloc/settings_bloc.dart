@@ -28,3 +28,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(state.copyWith(theme: event.theme));
   }
 }
+
+/// Context extension for quick access to [SettingsBloc].
+extension SettingsBlocBuildContextX on BuildContext {
+  /// Instance of [SettingsBloc].
+  SettingsBloc get readSettingsBloc => read<SettingsBloc>();
+}

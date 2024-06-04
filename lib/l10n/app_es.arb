@@ -44,5 +44,10 @@
     "youWon": "Ganaste",
     "youLost": "Perdiste",
     "leaveTheSession": "Abandonar la sesión",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "settings": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark"
 }
