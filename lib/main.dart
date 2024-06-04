@@ -11,29 +11,34 @@ import 'package:sea_battle/parts/auth/auth_part.dart';
 import 'package:sea_battle/parts/game_session/game_session_part.dart';
 import 'package:sea_battle/parts/profile/profile_part.dart';
 import 'package:sea_battle/parts/router/router_part.dart';
+import 'package:sea_battle/parts/settings/settings_part.dart';
 import 'package:sea_battle/ui_kit/ui_kit_part.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  _runApp();
+  await _runApp();
 }
 
-void _runApp() {
+Future<void> _runApp() async {
   final authDataProvider =
       FirebaseAuthDataProvider(firebaseAuth: FirebaseAuth.instance);
   final profileDataProvider =
       FirestoreProfileDataProvider(db: FirebaseFirestore.instance);
   final gameSessionDataProvider =
       FbDbGameSessionDataProvider(db: FirebaseDatabase.instance);
+  final prefs = await SharedPreferences.getInstance();
+  final settingsDataProvider = SharedPrefDataProvider(prefs);
   final appRouter = AppRouter();
   runApp(MyApp(
     iAuthDataProvider: authDataProvider,
     iProfileDataProvider: profileDataProvider,
     iGameSessionDataProvider: gameSessionDataProvider,
+    iSettingsDataProvider: settingsDataProvider,
     appRouter: appRouter,
   ));
 }
@@ -42,6 +47,7 @@ class MyApp extends StatelessWidget {
   final IAuthDataProvider iAuthDataProvider;
   final IProfileDataProvider iProfileDataProvider;
   final IGameSessionDataProvider iGameSessionDataProvider;
+  final ISettingsDataProvider iSettingsDataProvider;
   final AppRouter appRouter;
 
   const MyApp({
@@ -49,6 +55,7 @@ class MyApp extends StatelessWidget {
     required this.iAuthDataProvider,
     required this.iProfileDataProvider,
     required this.iGameSessionDataProvider,
+    required this.iSettingsDataProvider,
     required this.appRouter,
   });
 
@@ -68,6 +75,10 @@ class MyApp extends StatelessWidget {
           create: (context) => GameSessionRepository(
               gameSessionDataProvider: iGameSessionDataProvider),
         ),
+        RepositoryProvider<ISettingsRepository>(
+          create: (context) =>
+              SettingsRepository(settingsDataProvider: iSettingsDataProvider),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -78,17 +89,33 @@ class MyApp extends StatelessWidget {
                   RepositoryProvider.of<IProfileRepository>(context),
             ),
           ),
+          BlocProvider(
+            create: (context) => SettingsBloc(
+              settingsRepository:
+                  RepositoryProvider.of<ISettingsRepository>(context),
+            ),
+          ),
         ],
-        child: MaterialApp.router(
-          routerConfig: appRouter.config(),
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            AppLocalizations.delegate,
-          ],
-          supportedLocales: L10n.all,
-          theme: AppTheme(colorScheme: AppColors.light()).theme,
+        child: BlocBuilder<SettingsBloc, SettingsState>(
+          builder: (context, state) {
+            return MaterialApp.router(
+              routerConfig: appRouter.config(),
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                AppLocalizations.delegate,
+              ],
+              locale: state.locale,
+              supportedLocales: L10n.all,
+              theme: AppTheme(
+                colorScheme: switch (state.theme) {
+                  ThemeStyle.light => AppColors.light(),
+                  ThemeStyle.dark => AppColors.dark(),
+                },
+              ).theme,
+            );
+          },
         ),
       ),
     );

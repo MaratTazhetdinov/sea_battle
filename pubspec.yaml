@@ -24,6 +24,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: 0.18.1
+  shared_preferences: 2.2.3
   json_serializable: 6.7.1
   boilerplate_annotations:
   json_annotation: 4.8.1

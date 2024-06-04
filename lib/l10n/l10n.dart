@@ -11,4 +11,10 @@ class L10n {
     Locale('ru'),
     Locale('es'),
   ];
+
+  static Map<String, Locale> languages = {
+    'English': all[0],
+    'Русский': all[1],
+    'Español': all[2],
+  };
 }
