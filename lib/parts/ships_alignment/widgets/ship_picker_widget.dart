@@ -40,6 +40,7 @@ class _ShipPickerWidgetState extends State<ShipPickerWidget> {
     final locale = context.l10n;
     final shipType = widget.shipType;
     final cellHeight = widget.cellHeight;
+    final theme = context.theme;
     return SizedBox(
       height: widget.widgetHeight,
       child: BlocBuilder<ShipsAlignmentBloc, ShipsAlignmentState>(
@@ -69,7 +70,10 @@ class _ShipPickerWidgetState extends State<ShipPickerWidget> {
                     if (shipType != ShipType.one)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(locale.or),
+                        child: Text(
+                          locale.or,
+                          style: theme.textTheme.titleMedium,
+                        ),
                       ),
                     if (shipType != ShipType.one)
                       GestureDetector(
@@ -87,7 +91,10 @@ class _ShipPickerWidgetState extends State<ShipPickerWidget> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Text('x $count'),
+                  child: Text(
+                    'x $count',
+                    style: theme.textTheme.titleMedium,
+                  ),
                 ),
               ],
             ),

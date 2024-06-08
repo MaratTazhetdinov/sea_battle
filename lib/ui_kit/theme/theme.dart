@@ -34,6 +34,12 @@ class AppTheme {
       fontWeight: FontWeight.w400,
       color: colorScheme.firstTextColor,
     );
+    final titleLarge = TextStyle(
+      fontSize: 18,
+      fontFamily: FontFamily.roboto,
+      fontWeight: FontWeight.w400,
+      color: colorScheme.firstTextColor,
+    );
     final titleMedium = TextStyle(
       fontSize: 16,
       fontFamily: FontFamily.roboto,
@@ -70,7 +76,7 @@ class AppTheme {
                   states.contains(MaterialState.pressed)) {
                 return 0;
               } else {
-                return 10;
+                return 5;
               }
             },
           ),
@@ -116,10 +122,19 @@ class AppTheme {
         displayLarge: displayLarge,
         headlineMedium: headlineMedium,
         headlineSmall: headlineSmall,
+        titleLarge: titleLarge,
         titleMedium: titleMedium,
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.activeButtonColor,
+        iconTheme: IconThemeData(
+          color: colorScheme.white,
+        ),
+        titleTextStyle: const TextStyle(
+          fontSize: 24,
+          fontFamily: FontFamily.roboto,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }

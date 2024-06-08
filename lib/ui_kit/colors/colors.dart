@@ -14,6 +14,7 @@ class AppColors {
   final Color buttonTextColor;
   final Color alignedShipColor;
   final Color possibleShipAlignmentColor;
+  final Color white;
 
   AppColors.light()
       : firstTextColor = Colors.black,
@@ -28,7 +29,8 @@ class AppColors {
         errorInputBorderColor = Colors.red,
         buttonTextColor = Colors.white,
         alignedShipColor = Colors.blue,
-        possibleShipAlignmentColor = Colors.amber;
+        possibleShipAlignmentColor = Colors.amber,
+        white = Colors.white;
 
   AppColors.dark()
       : firstTextColor = Colors.white,
@@ -37,11 +39,12 @@ class AppColors {
         scaffoldBackgroundColor = Colors.black,
         activeButtonColor = Colors.purple,
         disabledButtonColor = Colors.grey,
-        buttonShadowColor = Colors.white,
+        buttonShadowColor = Colors.yellow,
         inputBorderColor = Colors.grey,
         focusedInputBorderColor = Colors.white,
         errorInputBorderColor = Colors.red,
         buttonTextColor = Colors.white,
         alignedShipColor = Colors.blue,
-        possibleShipAlignmentColor = Colors.amber;
+        possibleShipAlignmentColor = Colors.amber,
+        white = Colors.white;
 }
